@@ -1,12 +1,13 @@
-from wtforms import Form, StringField, IntegerField
+from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired, length, Email, Regexp, ValidationError
 
 from app.libs.enums import ClientTypeEnum
 from app.models.user import User
+from app.validators.base import BaseForm
 
 
-class ClientForm(Form):
-    account = StringField(validators=[DataRequired(message='不允许为空'), length(
+class ClientForm(BaseForm):
+    account = StringField(validators=[DataRequired(message='账号不能为空'), length(
         min=5, max=32
     )])
     secret = StringField()
@@ -22,7 +23,7 @@ class ClientForm(Form):
 
 class UserEmailForm(ClientForm):
     account = StringField(validators=[
-        Email(message='invalidate email')
+        Email(message='邮箱格式不正确')
     ])
     secret = StringField(validators=[
         DataRequired(),

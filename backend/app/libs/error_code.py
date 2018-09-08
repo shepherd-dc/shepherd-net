@@ -7,3 +7,10 @@ class ClientTypeError(APIException):
     error_code = 1006
     description = (
     )
+
+
+class ParameterException(APIException):
+    code = 400
+    msg = 'invalid parameter'
+    error_code = 1000
+
