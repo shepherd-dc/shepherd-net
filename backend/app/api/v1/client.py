@@ -1,6 +1,7 @@
 from flask import request
 
 from app.libs.enums import ClientTypeEnum
+from app.libs.error_code import Success
 from app.libs.redprint import Redprint
 from app.models.base import db
 from app.models.user import User
@@ -11,20 +12,17 @@ api = Redprint('client')
 
 @api.route('/register', methods=['POST'])
 def create_client():
-    data = request.json
-    form = ClientForm(data=data)
-    form.validate_for_api()
+    form = ClientForm().validate_for_api()
     promise = {
         ClientTypeEnum.USER_EMAIL: __register_user_by_email
     }
     promise[form.type.data]()
 
-    return 'client register'
+    return Success()
 
 
 def __register_user_by_email():
-    form = UserEmailForm(data=request.json)
-    form.validate_for_api()
+    form = UserEmailForm().validate_for_api()
     with db.auto_commit():
         user = User()
         user.nickname = form.nickname.data
