@@ -4,6 +4,7 @@ import os
 
 DEBUG = True
 SECRET_KEY = os.urandom(24)
+TOKEN_EXPIRATION = 7 * 24 * 3600
 REMEMBER_COOKIE_DURATION = timedelta(days=7)
 PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 
