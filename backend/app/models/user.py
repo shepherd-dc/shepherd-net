@@ -30,7 +30,14 @@ class User(Base):
             raise NotFound(msg='用户不存在')
         if not user.check_password(password):
             raise AuthFailed(msg='密码不正确')
-        return {'uid': user.id}
+
+        if user.auth == 2:
+            scope = 'AdminScope'
+        # elif user.auth == 3:
+        #     scope = 'SuperScope'
+        else:
+            scope = 'UserScope'
+        return {'uid': user.id, 'scope': scope}
 
     def check_password(self, raw):
         if not self._password:

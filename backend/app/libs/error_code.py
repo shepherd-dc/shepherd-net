@@ -7,6 +7,11 @@ class Success(APIException):
     error_code = 0
 
 
+class DeleteSuccess(Success):
+    code = 202
+    error_code = -1
+
+
 class ServerException(APIException):
     code = 500
     msg = 'sorry, we made a mistake (*￣︶￣)!'
@@ -37,6 +42,12 @@ class AuthFailed(APIException):
     code = 401
     error_code = 1005
     msg = 'authorization failed'
+
+
+class Forbidden(APIException):
+    code = 403
+    error_code = 1004
+    msg = 'forbidden, not in scope'
 
 
 
