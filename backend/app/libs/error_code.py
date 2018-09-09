@@ -50,4 +50,11 @@ class Forbidden(APIException):
     msg = 'forbidden, not in scope'
 
 
+class DuplicateGift(APIException):
+    code = 400
+    error_code = 2001
+    msg = 'the current book has already in gift'
+
+
+
 
