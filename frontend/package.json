@@ -1,7 +1,7 @@
 {
   "name": "shepherdnet",
   "version": "1.0.0",
-  "description": "Shepherd net ",
+  "description": "Shepherd net",
   "author": "shepherd_nt <shepherd_nt@aliyun.com>",
   "private": true,
   "scripts": {
@@ -10,7 +10,9 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
+    "lint": "eslint --ext .js,.vue,.jsx src test/unit test/e2e/specs",
+    "lint-fix": "eslint --fix --ext .js,.vue,.jsx src test/unit test/e2e/specs",
+    "precommit": "npm run lint-",
     "build": "node build/build.js"
   },
   "dependencies": {
