@@ -1,0 +1,35 @@
+{
+  "name": "nodeend",
+  "version": "1.0.0",
+  "description": "koa2 mongoose",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/shepherd-dc/shepherd-net.git"
+  },
+  "keywords": [
+    "koa2",
+    "mongoose"
+  ],
+  "author": "shepherd",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shepherd-dc/shepherd-net/issues"
+  },
+  "homepage": "https://github.com/shepherd-dc/shepherd-net#readme",
+  "dependencies": {
+    "koa": "^2.5.3",
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.1.4"
+  },
+  "devDependencies": {
+    "ejs": "^2.6.1",
+    "mongoose": "^5.2.15",
+    "nodemon": "^1.18.4",
+    "path": "^0.12.7"
+  }
+}
