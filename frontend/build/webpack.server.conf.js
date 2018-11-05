@@ -1,11 +1,7 @@
 const path = require('path')
 const ExtractPlugin = require('extract-text-webpack-plugin')
 const webpack = require('webpack')
-const merge = require('webpack-merge')
-const baseConfig = require('./webpack.config.base')
 const VueServerPlugin = require('vue-server-renderer/server-plugin')
-
-let config
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -21,7 +17,7 @@ if (isDev) {
   plugins.push(new VueServerPlugin())
 }
 
-config = merge(baseConfig, {
+let config = {
   target: 'node',
   entry: path.join(__dirname, '../client/server-entry.js'),
   devtool: 'source-map',
@@ -52,12 +48,12 @@ config = merge(baseConfig, {
     ]
   },
   plugins
-})
-
-config.resolve = {
-  alias: {
-    'model': path.join(__dirname, '../client/model/server-model.js')
-  }
 }
+
+// config.resolve = {
+//   alias: {
+//     'model': path.join(__dirname, '../client/model/server-model.js')
+//   }
+// }
 
 module.exports = config
