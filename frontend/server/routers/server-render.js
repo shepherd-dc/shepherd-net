@@ -10,7 +10,7 @@ module.exports = async (ctx, renderer, template) => {
 
     const html = ejs.render(template, {
       appString,
-      style: context.renderStyles(),
+      styles: context.renderStyles(),
       scripts: context.renderScripts()
     })
     ctx.body = html

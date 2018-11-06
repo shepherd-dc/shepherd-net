@@ -19,13 +19,13 @@ Vue.use(Vuex)
 
 export default () => {
   const router = createRouter()
-//   const store = createStore()
+  // const store = createStore()
 
   const app = new Vue({
     router,
-    store,
+    // store,
     render: h => h(App)
   })
 
-  return { app, router, store }
+  return { app, router }
 }
