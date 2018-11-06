@@ -31,7 +31,7 @@ app.use(async (ctx, next) => {
 app.use(pageRouter.routes()).use(pageRouter.allowedMethods())
 
 const HOST = process.env.HOST || '127.0.0.1'
-const PORT = process.env.PORT || 3333
+const PORT = process.env.PORT || 3300
 
 app.listen(PORT, HOST, () => {
   console.log(`server is listening on ${HOST}:${PORT}`)

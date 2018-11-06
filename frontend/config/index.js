@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: 'http://127.0.0.1:8000/',
+    assetsPublicPath: 'http://127.0.0.1:8080/',
     proxyTable: {
       '/api': { // 此处并非一定和url一致。
         target: SERVER_URL,

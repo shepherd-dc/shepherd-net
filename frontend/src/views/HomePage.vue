@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Demo</h1>
+    <h1>Demos</h1>
     <button class="btn btn-success">按钮</button>
     <p v-for="(item, index) in tasks" :key="index">{{item.title}}</p>
   </div>
