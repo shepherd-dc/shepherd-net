@@ -8,6 +8,9 @@
 <script>
 // import { get } from '../utils/http'
 export default {
+  metaInfo: {
+    title: 'Shepherd network'
+  },
   data () {
     return {
       tasks: []
