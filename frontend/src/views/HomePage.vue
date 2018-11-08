@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-// import { get } from '../utils/http'
+import { get } from '../utils/http'
 export default {
   metaInfo: {
     title: 'Shepherd network'
@@ -17,12 +17,12 @@ export default {
     }
   },
   created () {
-    // get('http://172.16.5.54:5050/api/test').then(data => {
-    //   // console.log(data)
-    //   this.tasks = data.tasks
-    // }).catch(err => {
-    //   console.log(err)
-    // })
+    get('https://shepherdnet.top/api/test').then(data => {
+      // console.log(data)
+      this.tasks = data.tasks
+    }).catch(err => {
+      console.log(err)
+    })
   },
   mounted () {
   }
