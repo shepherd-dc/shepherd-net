@@ -24,7 +24,7 @@ export default context => {
       //       })
       //     }
       //   })).then(data => {
-      //     context.meta = app.$meta()
+      context.meta = app.$meta()
       //     context.state = store.state
       //     context.router = router
       resolve(app)
