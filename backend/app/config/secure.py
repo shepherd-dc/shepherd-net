@@ -12,10 +12,10 @@ PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 DIALECT = 'mysql'
 DRIVER = 'cymysql'
 USERNAME = 'root'
-PASSWORD = 'Pr@ject1302'
+PASSWORD = '123456'
 HOST = '127.0.0.1'
 PORT = '3306'
-DATABASE = 'fisher'
+DATABASE = 'ginger'
 
 SQLALCHEMY_DATABASE_URI = '{}+{}://{}:{}@{}:{}/{}?charset=utf8'\
     .format(DIALECT, DRIVER, USERNAME, PASSWORD, HOST, PORT, DATABASE)
