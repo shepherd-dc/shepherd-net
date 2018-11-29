@@ -1,8 +1,18 @@
 <template>
   <div>
+    <nav-header/>
     <nuxt/>
   </div>
 </template>
+
+<script>
+  import NavHeader from '~/components/NavHeader'
+  export default {
+    components: {
+      NavHeader
+    }
+  }
+</script>
 
 <style>
 html {

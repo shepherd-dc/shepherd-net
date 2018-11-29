@@ -27,7 +27,7 @@ export default {
   },
   async asyncData ({ app }) {
     let { data } = await app.$axios.get(`${SERVER_URL}/test`)
-    console.log(data)
+    // console.log(data)
     return {
       tasks: data.tasks
     }
