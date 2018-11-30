@@ -6,7 +6,7 @@
         nuxtssr
       </h1>
       <h2 class="subtitle">
-        shepherd net
+        Shepherd Net
       </h2>
       <div class="links">
         <p
@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
 import { SERVER_URL } from '~/globalurl'
+import Logo from '~/components/Logo.vue'
 
 export default {
   components: {

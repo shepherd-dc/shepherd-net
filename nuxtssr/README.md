@@ -1,6 +1,6 @@
 # nuxtssr
 
-> shepherd net
+> Shepherd Net
 
 ## Build Setup
 

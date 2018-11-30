@@ -1,0 +1,73 @@
+<template>
+  <el-menu
+    :default-active="activeIndex"
+    :mode="mymode"
+    class="el-menu-demo"
+    background-color="#333"
+    text-color="#fff"
+    active-text-color="#ffd04b"
+  >
+    <el-menu-item index="1">首页</el-menu-item>
+    <el-submenu index="2">
+      <template slot="title">前端框架</template>
+      <el-submenu index="2-1">
+        <template slot="title">Vue</template>
+        <el-menu-item index="2-1-1">Vue.js</el-menu-item>
+        <el-menu-item index="2-1-2">Mpvue</el-menu-item>
+        <el-menu-item index="2-1-3">Nuxt</el-menu-item>
+      </el-submenu>
+      <el-menu-item index="2-2">React</el-menu-item>
+      <el-menu-item index="2-3">Angular</el-menu-item>
+    </el-submenu>
+    <el-submenu index="3">
+      <template slot="title">后端开发</template>
+      <el-submenu index="3-1">
+        <template slot="title">Python</template>
+        <el-menu-item index="3-1-1">Flask</el-menu-item>
+      </el-submenu>
+      <el-submenu index="3-2">
+        <template slot="title">PHP</template>
+        <el-menu-item index="3-2-1">ThinkPHP</el-menu-item>
+      </el-submenu>
+    </el-submenu>
+    <el-submenu index="4">
+      <template slot="title">Node框架</template>
+      <el-menu-item index="4-1">Koa</el-menu-item>
+    </el-submenu>
+    <el-submenu index="5">
+      <template slot="title">数据库</template>
+      <el-menu-item index="5-1">MySQL</el-menu-item>
+      <el-menu-item index="5-2">MongoDB</el-menu-item>
+      <el-menu-item index="5-3">Redis</el-menu-item>
+    </el-submenu>
+    <el-menu-item index="6">部署运维</el-menu-item>
+    <el-submenu index="7">
+      <template slot="title">UI库</template>
+      <el-menu-item index="7-1">Element-ui</el-menu-item>
+      <el-menu-item index="7-2">iView</el-menu-item>
+      <el-menu-item index="7-3">Vux</el-menu-item>
+    </el-submenu>
+    <el-submenu index="8">
+      <template slot="title">UI设计</template>
+      <el-menu-item index="8-1">Photoshop</el-menu-item>
+      <el-menu-item index="8-2">Illustrator</el-menu-item>
+      <el-menu-item index="8-3">Axure</el-menu-item>
+    </el-submenu>
+  </el-menu>
+</template>
+
+<script>
+export default {
+  props: {
+    mymode: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      activeIndex: "1"
+    }
+  },
+}
+</script>

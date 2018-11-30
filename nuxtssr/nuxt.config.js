@@ -27,13 +27,14 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '~/assets/cssreset.css'
+    'element-ui/lib/theme-chalk/index.css'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '@/plugins/element-ui'
   ],
 
   /*
@@ -41,20 +42,13 @@ module.exports = {
   */
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
-    '@nuxtjs/axios',
-    // Doc: https://bootstrap-vue.js.org/docs/
-    'bootstrap-vue/nuxt'
+    '@nuxtjs/axios'
   ],
   /*
   ** Axios module configuration
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    // prefix: '/api/',
-    // proxy: true // Can be also an object with default options
-  },
-  proxy: {
-    // '/api/': { target: 'http://localhost:8080', pathRewrite: {'^/api/': ''} }
   },
 
   /*
