@@ -1,9 +1,9 @@
 <template>
   <div class="header">
-    <div class="logo">
-      Shepherd Net
-    </div>
     <nav>
+      <div class="logo">
+        <i><b>SN</b></i>
+      </div>
       <el-row
         v-if="width > 1080"
         :gutter="10">
@@ -31,6 +31,9 @@
         </el-col>
       </el-row>
     </nav>
+    <div class="logo">
+      Shepherd Net
+    </div>
   </div>
 
 </template>
@@ -79,14 +82,14 @@
     height: 60px;
     display:flex;
     .logo {
-      border-right:1px #fff solid;
+      // border-right:1px #fff solid;
       padding: 0 20px;
       line-height: 60px;
     }
     nav {
       flex:1;
       display: flex;
-      justify-content: flex-end;
+      // justify-content: flex-end;
       position:relative;
       .menu {
         font-size:30px;
