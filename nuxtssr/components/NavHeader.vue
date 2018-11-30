@@ -5,7 +5,7 @@
     </div>
     <nav>
       <el-row
-        v-if="width >= 1200"
+        v-if="width > 1080"
         :gutter="10">
         <el-col
           :xs="12"
@@ -17,7 +17,7 @@
         </el-col>
       </el-row>
       <el-row
-        v-if="width < 1200"
+        v-if="width <= 1080 && !width == ''"
         :gutter="10">
         <el-col>
           <el-dropdown trigger="click">

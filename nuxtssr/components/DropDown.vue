@@ -5,7 +5,7 @@
     class="el-menu-demo"
     background-color="#333"
     text-color="#fff"
-    active-text-color="#ffd04b"
+    active-text-color="#41b883"
   >
     <el-menu-item index="1">首页</el-menu-item>
     <el-submenu index="2">
