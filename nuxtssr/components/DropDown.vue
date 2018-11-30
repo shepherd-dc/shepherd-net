@@ -9,7 +9,7 @@
   >
     <el-menu-item index="1">首页</el-menu-item>
     <el-submenu index="2">
-      <template slot="title">前端框架</template>
+      <template slot="title">前端</template>
       <el-submenu index="2-1">
         <template slot="title">Vue</template>
         <el-menu-item index="2-1-1">Vue.js</el-menu-item>
@@ -20,7 +20,7 @@
       <el-menu-item index="2-3">Angular</el-menu-item>
     </el-submenu>
     <el-submenu index="3">
-      <template slot="title">后端开发</template>
+      <template slot="title">后端</template>
       <el-submenu index="3-1">
         <template slot="title">Python</template>
         <el-menu-item index="3-1-1">Flask</el-menu-item>
@@ -31,7 +31,7 @@
       </el-submenu>
     </el-submenu>
     <el-submenu index="4">
-      <template slot="title">Node框架</template>
+      <template slot="title">Node</template>
       <el-menu-item index="4-1">Koa</el-menu-item>
     </el-submenu>
     <el-submenu index="5">
