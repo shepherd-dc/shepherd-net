@@ -5,7 +5,7 @@
     </div>
     <nav>
       <el-row
-        v-if="width >= 1024"
+        v-if="width >= 1200"
         :gutter="10">
         <el-col
           :xs="12"
@@ -17,7 +17,7 @@
         </el-col>
       </el-row>
       <el-row
-        v-if="width < 1024"
+        v-if="width < 1200"
         :gutter="10">
         <el-col>
           <el-dropdown trigger="click">
@@ -44,7 +44,7 @@
     data() {
       return {
         activeIndex: '1',
-        width: 1024,
+        width: '',
         isfold: false
       }
     },
