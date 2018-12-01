@@ -28,6 +28,11 @@ html {
   overflow-x: hidden;
 }
 
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
 *,
 *:before,
 *:after {

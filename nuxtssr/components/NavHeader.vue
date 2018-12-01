@@ -1,9 +1,11 @@
 <template>
   <div class="header">
     <nav>
-      <div class="logo">
-        <i><b>SN</b></i>
-      </div>
+      <a href="/">
+        <div class="logo">
+          <i><b>SN</b></i>
+        </div>
+      </a>
       <el-row
         v-if="width > 1080"
         :gutter="10">

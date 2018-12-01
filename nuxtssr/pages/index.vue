@@ -1,6 +1,7 @@
 <template>
   <section class="container">
     <div>
+      <vue-swiper/>
       <logo/>
       <h1 class="title">
         nuxtssr
@@ -19,11 +20,13 @@
 
 <script>
 import { SERVER_URL } from '~/globalurl'
+import VueSwiper from '~/components/VueSwiper'
 import Logo from '~/components/Logo.vue'
 
 export default {
   components: {
-    Logo
+    Logo,
+    VueSwiper
   },
   async asyncData ({ app }) {
     let { data } = await app.$axios.get(`${SERVER_URL}/test`)
