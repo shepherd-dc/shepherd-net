@@ -19,10 +19,10 @@
       class="swiper-pagination"></div>
     <div
       slot="button-prev"
-      class="swiper-button-prev"></div>
+      class="swiper-button-prev swiper-button-white"></div>
     <div
       slot="button-next"
-      class="swiper-button-next"></div>
+      class="swiper-button-next swiper-button-white"></div>
   </div>
 </template>
 
@@ -37,7 +37,8 @@ export default {
       // 所有配置均为可选（同Swiper配置）
       swiperOption: {
         loop: true,
-        speed: 50,
+        speed: 500,
+        height: 100,
         // notNextTick是一个组件自有属性，如果notNextTick设置为true，组件则不会通过NextTick来实例化swiper，也就意味着你可以在第一时间获取到swiper对象，假如你需要刚加载遍使用获取swiper对象来做什么事，那么这个属性一定要是true
         notNextTick: true,
         slidesPerView: "auto",
@@ -59,7 +60,7 @@ export default {
           }
         },
         autoplay: {
-          delay: 5000,
+          delay: 3000,
           disableOnInteraction: false
         },
         autoplayDisableOnInteraction: false,
@@ -85,9 +86,20 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
   .swiper-pagination-bullet-active {
     background-color: #41b883!important;
   }
+  .swiper-wrapper {
+    img {
+      margin-left: 50%;
+      transform: translate(-50%)
+    }
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    background-size: 20px 20px;
+  }
+
 </style>
 
