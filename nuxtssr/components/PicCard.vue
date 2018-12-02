@@ -1,7 +1,9 @@
 <template>
   <el-row>
     <el-col>
-      <el-card :body-style="{ padding: '0px' }">
+      <el-card 
+        :body-style="{ padding: '0px' }" 
+        shadow="hover">
         <img
           src="/card.jpg"
           class="image">

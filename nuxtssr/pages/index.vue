@@ -7,20 +7,18 @@
           :gutter="10"
           type="flex">
           <el-col :span="18">
-            <div
-              v-for="o in 2"
-              :key="o"
-              class="card-margin">
-              <main-card/>
-            </div>
+            <main-card
+              v-for="(title, index) in card_title"
+              :key="index"
+              :card_title="title"
+              class="card-margin"/>
           </el-col>
           <el-col :span="6">
-            <div
-              v-for="o in 3"
-              :key="o"
-              class="card-margin">
-              <aside-card/>
-            </div>
+            <aside-card
+              v-for="(title, index) in aside_title"
+              :key="index"
+              :aside_title="title"
+              class="card-margin" />
           </el-col>
         </el-row>
       </div>
@@ -39,6 +37,19 @@ export default {
     VueSwiper,
     MainCard,
     AsideCard
+  },
+  data () {
+    return {
+      card_title: [
+        '前台',
+        '后台'
+      ],
+      aside_title: [
+        '最新',
+        '推荐',
+        '友链'
+      ]
+    }
   },
   async asyncData ({ app }) {
     let { data } = await app.$axios.get(`${SERVER_URL}/test`)
