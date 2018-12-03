@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-header/>
+    <nav-header class="position-fixed"/>
     <nuxt/>
   </div>
 </template>
@@ -67,5 +67,12 @@ a {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+
+.position-fixed {
+  position: fixed;
+  z-index: 999;
+  background-color: #333;
+  width: 100%;
 }
 </style>

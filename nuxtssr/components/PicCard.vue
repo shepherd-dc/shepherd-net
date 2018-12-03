@@ -5,12 +5,12 @@
         :body-style="{ padding: '0px' }"
         shadow="hover">
         <img
-          src="/card.jpg"
+          :src="sub_data.pic"
           class="image">
         <div style="padding: 14px;">
-          <span>古灯</span>
+          <span>{{ sub_data.title }}</span>
           <div class="bottom clearfix">
-            <time class="time">{{ currentDate }}</time>
+            <time class="time">{{ sub_data.time }}</time>
             <el-button
               type="text"
               class="button">更多</el-button>
@@ -20,6 +20,22 @@
     </el-col>
   </el-row>
 </template>
+
+<script>
+export default {
+  props: {
+    sub_data: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  data() {
+    return {
+      currentDate: new Date()
+    }
+  },
+}
+</script>
 
 <style>
   .time {
@@ -52,13 +68,3 @@
       clear: both
   }
 </style>
-
-<script>
-export default {
-  data() {
-    return {
-      currentDate: new Date()
-    };
-  }
-}
-</script>

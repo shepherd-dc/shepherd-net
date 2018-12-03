@@ -11,10 +11,12 @@
     <div class="text item">
       <el-row type="felx">
         <el-col
-          v-for="o in 3"
-          :key="o"
+          v-for="(item, index) in card_data"
+          :key="index"
           :span="width > 1080 ? 8 : 24">
-          <pic-card class="card-margin"/>
+          <pic-card
+            :sub_data="item"
+            class="card-margin"/>
         </el-col>
       </el-row>
     </div>
@@ -31,6 +33,10 @@ export default {
     card_title: {
       type: String,
       default: ''
+    },
+    card_data: {
+      type: Array,
+      default: () => {}
     }
   },
   data () {

@@ -1,6 +1,6 @@
 <template>
-  <section class="container">
-    <div>
+  <section>
+    <div class="container">
       <slogan/>
       <!-- <vue-swiper/> -->
       <div class="content">
@@ -9,9 +9,10 @@
           type="flex">
           <el-col :span="width > 1080 ? 18 : 24">
             <main-card
-              v-for="(title, index) in card_title"
+              v-for="(item, index) in card_data"
               :key="index"
-              :card_title="title"
+              :card_title="item.column"
+              :card_data="item.data"
               class="card-margin"/>
           </el-col>
           <el-col
@@ -46,9 +47,47 @@ export default {
   data () {
     return {
       width: '',
-      card_title: [
-        '前台',
-        '后台'
+      card_data: [
+        {
+          "column": "前端",
+          "data": [
+            {
+              "pic": "/card.jpg",
+              "title": "标题1",
+              "time": "2018-12-3 17:40:50"
+            },
+             {
+              "pic": "/card.jpg",
+              "title": "标题2",
+              "time": "2018-12-3 17:41:51"
+            },
+             {
+              "pic": "/card.jpg",
+              "title": "标题3",
+              "time": "2018-12-3 17:42:52"
+            }
+          ]
+        },
+        {
+          "column": "后端",
+          "data": [
+            {
+              "pic": "/card.jpg",
+              "title": "标题1",
+              "time": "2018-12-3 17:40:50"
+            },
+             {
+              "pic": "/card.jpg",
+              "title": "标题2",
+              "time": "2018-12-3 17:41:51"
+            },
+             {
+              "pic": "/card.jpg",
+              "title": "标题3",
+              "time": "2018-12-3 17:42:52"
+            }
+          ]
+        }
       ],
       aside_title: [
         '最新',
@@ -77,6 +116,9 @@ export default {
 </script>
 
 <style>
+  .container {
+    padding-top: 60px;
+  }
   .content {
     max-width: 1280px;
     margin: 10px auto;
