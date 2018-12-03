@@ -13,8 +13,8 @@
         <el-col
           v-for="o in 3"
           :key="o"
-          :span="8">
-          <pic-card/>
+          :span="width > 1080 ? 8 : 24">
+          <pic-card class="card-margin"/>
         </el-col>
       </el-row>
     </div>
@@ -33,6 +33,20 @@ export default {
       default: ''
     }
   },
+  data () {
+    return {
+      width: ''
+    }
+  },
+  watch: {
+    width () {
+      this.width = window.innerWidth
+    }
+  },
+  mounted() {
+    let width = window.innerWidth
+    this.width = width
+  }
 }
 </script>
 
@@ -56,5 +70,9 @@ export default {
 
 .box-card {
   width: 100%;
+}
+
+.card-margin {
+  margin-bottom: 20px;
 }
 </style>
