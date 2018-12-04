@@ -2,14 +2,17 @@
   <div>
     <nav-header class="position-fixed"/>
     <nuxt/>
+    <common-footer/>
   </div>
 </template>
 
 <script>
   import NavHeader from '~/components/NavHeader'
+  import CommonFooter from '~/components/CommonFooter'
   export default {
     components: {
-      NavHeader
+      NavHeader,
+      CommonFooter
     }
   }
 </script>

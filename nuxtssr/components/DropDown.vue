@@ -7,7 +7,7 @@
     text-color="#fff"
     active-text-color="#41b883"
   >
-    <el-menu-item index="1">首页</el-menu-item>
+    <el-menu-item index="1"><nuxt-link to="/">首页</nuxt-link></el-menu-item>
     <el-submenu index="2">
       <template slot="title">前端</template>
       <el-submenu index="2-1">

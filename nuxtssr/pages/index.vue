@@ -52,16 +52,19 @@ export default {
           "column": "前端",
           "data": [
             {
+              "id": 1,
               "pic": "/card.jpg",
               "title": "标题1",
               "time": "2018-12-3 17:40:50"
             },
-             {
+            {
+              "id": 2,
               "pic": "/card.jpg",
               "title": "标题2",
               "time": "2018-12-3 17:41:51"
             },
-             {
+            {
+              "id": 3,
               "pic": "/card.jpg",
               "title": "标题3",
               "time": "2018-12-3 17:42:52"
@@ -72,16 +75,19 @@ export default {
           "column": "后端",
           "data": [
             {
+              "id": 1,
               "pic": "/card.jpg",
               "title": "标题1",
               "time": "2018-12-3 17:40:50"
             },
-             {
+            {
+              "id": 2,
               "pic": "/card.jpg",
               "title": "标题2",
               "time": "2018-12-3 17:41:51"
             },
-             {
+            {
+              "id": 3,
               "pic": "/card.jpg",
               "title": "标题3",
               "time": "2018-12-3 17:42:52"

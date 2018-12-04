@@ -8,7 +8,9 @@
           :src="sub_data.pic"
           class="image">
         <div style="padding: 14px;">
-          <span>{{ sub_data.title }}</span>
+          <h4
+            class="detail-title"
+            @click="routerTo(sub_data.id)">{{ sub_data.title }}</h4>
           <div class="bottom clearfix">
             <time class="time">{{ sub_data.time }}</time>
             <el-button
@@ -34,10 +36,24 @@ export default {
       currentDate: new Date()
     }
   },
+  methods: {
+    routerTo (id) {
+      this.$router.push({
+        path: `/detail/${id}`
+      })
+    }
+  }
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+  .detail-title {
+    cursor: pointer;
+    &:hover {
+      color: #41b883;
+    }
+  }
+
   .time {
     font-size: 13px;
     color: #999;
