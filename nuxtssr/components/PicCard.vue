@@ -6,8 +6,9 @@
         shadow="hover">
         <img
           :src="sub_data.pic"
-          class="image">
-        <div style="padding: 14px;">
+          class="image"
+          @click="routerTo(sub_data.id)">
+        <div class="text-info">
           <h4
             class="detail-title"
             @click="routerTo(sub_data.id)">{{ sub_data.title }}</h4>
@@ -47,6 +48,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .text-info {
+    padding: 14px;
+  }
   .detail-title {
     cursor: pointer;
     &:hover {
@@ -72,6 +76,7 @@ export default {
   .image {
     width: 100%;
     display: block;
+    cursor: pointer;
   }
 
   .clearfix:before,

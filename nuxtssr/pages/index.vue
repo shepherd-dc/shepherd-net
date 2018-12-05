@@ -11,8 +11,7 @@
             <main-card
               v-for="(item, index) in card_data"
               :key="index"
-              :card_title="item.column"
-              :card_data="item.data"
+              :card_data="item"
               class="card-margin"/>
           </el-col>
           <el-col
@@ -49,6 +48,7 @@ export default {
       width: '',
       card_data: [
         {
+          "columnid": 1,
           "column": "前端",
           "data": [
             {
@@ -72,6 +72,7 @@ export default {
           ]
         },
         {
+          "columnid": 2,
           "column": "后端",
           "data": [
             {

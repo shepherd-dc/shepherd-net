@@ -1,13 +1,13 @@
 <template>
   <div>
-    <detail/>
+    <list/>
   </div>
 </template>
 <script>
-  import detail from './detail'
+  import list from './list'
   export default {
     components: {
-      detail
+      list
     }
   }
 </script>

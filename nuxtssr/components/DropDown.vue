@@ -7,28 +7,28 @@
     text-color="#fff"
     active-text-color="#41b883"
   >
-    <el-menu-item index="1"><nuxt-link to="/">首页</nuxt-link></el-menu-item>
-    <el-submenu index="2">
+    <el-menu-item index="0"><nuxt-link to="/">首页</nuxt-link></el-menu-item>
+    <el-submenu
+      v-for="(submenu, index) in menu"
+      :key="index"
+      :index="index+1">
+      <template slot="title">{{ submenu.column }}</template>
+      <el-menu-item
+        v-for="(subcol, subindex) in submenu.subcol"
+        :key="subindex"
+        :index="(index+1)+'-'+(subindex+1)"
+        @click="routerTo(subcol.path)">{{ subcol.name }}</el-menu-item>
+    </el-submenu>
+    <!-- <el-submenu index="2">
       <template slot="title">前端</template>
-      <el-submenu index="2-1">
-        <template slot="title">Vue</template>
-        <el-menu-item index="2-1-1">Vue.js</el-menu-item>
-        <el-menu-item index="2-1-2">Mpvue</el-menu-item>
-        <el-menu-item index="2-1-3">Nuxt</el-menu-item>
-      </el-submenu>
+      <el-menu-item index="2-1">Vue</el-menu-item>
       <el-menu-item index="2-2">React</el-menu-item>
       <el-menu-item index="2-3">Angular</el-menu-item>
     </el-submenu>
     <el-submenu index="3">
       <template slot="title">后端</template>
-      <el-submenu index="3-1">
-        <template slot="title">Python</template>
-        <el-menu-item index="3-1-1">Flask</el-menu-item>
-      </el-submenu>
-      <el-submenu index="3-2">
-        <template slot="title">PHP</template>
-        <el-menu-item index="3-2-1">ThinkPHP</el-menu-item>
-      </el-submenu>
+      <el-menu-item index="3-1">Python</el-menu-item>
+      <el-menu-item index="3-2">PHP</el-menu-item>
     </el-submenu>
     <el-submenu index="4">
       <template slot="title">Node</template>
@@ -52,7 +52,7 @@
       <el-menu-item index="8-1">Photoshop</el-menu-item>
       <el-menu-item index="8-2">Illustrator</el-menu-item>
       <el-menu-item index="8-3">Axure</el-menu-item>
-    </el-submenu>
+    </el-submenu> -->
   </el-menu>
 </template>
 
@@ -66,9 +66,50 @@ export default {
   },
   data() {
     return {
-      activeIndex: "1"
+      activeIndex: "0",
+      menu: [
+        {
+          "columnid": 1,
+          "column": "前端",
+          "subcol": [
+            {
+              name: "Vue",
+              path: "/frontend/vue"
+            },
+            {
+              name: "React",
+              path: "/frontend/react"
+            },
+            {
+              name: "Angular",
+              path: "/frontend/angular"
+            }
+          ]
+        },
+        {
+          "columnid": 2,
+          "column": "后端",
+          "subcol": [
+            {
+              name: "Python",
+              path: "/backend/python"
+            },
+            {
+              name: "PHP",
+              path: "/frontend/php"
+            }
+          ]
+        }
+      ]
     }
   },
+  methods: {
+    routerTo (path) {
+      this.$router.push({
+        path: path
+      })
+    }
+  }
 }
 </script>
 

@@ -3,15 +3,17 @@
     <div
       slot="header"
       class="clearfix">
-      <span>{{ card_title }}</span>
+      <span>{{ card_data.column }}</span>
       <el-button
+        v-if="!islist"
         style="float: right; padding: 3px 0"
-        type="text">更多</el-button>
+        type="text"
+        @click="routerTo(card_data.columnid)">更多</el-button>
     </div>
     <div class="text item">
       <el-row type="felx">
         <el-col
-          v-for="(item, index) in card_data"
+          v-for="(item, index) in card_data.data"
           :key="index"
           :span="width > 1080 ? 8 : 24">
           <pic-card
@@ -30,12 +32,12 @@ export default {
     PicCard
   },
   props: {
-    card_title: {
-      type: String,
-      default: ''
+    islist: {
+      type: Number,
+      default: 0
     },
     card_data: {
-      type: Array,
+      type: Object,
       default: () => {}
     }
   },
@@ -52,6 +54,13 @@ export default {
   mounted() {
     let width = window.innerWidth
     this.width = width
+  },
+  methods: {
+    routerTo (id) {
+      this.$router.push({
+        path: `/list/${id}`
+      })
+    }
   }
 }
 </script>
