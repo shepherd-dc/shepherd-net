@@ -52,9 +52,14 @@ module.exports = {
   /*
   ** Axios module configuration
   */
-  axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+ axios: {
+  // See https://github.com/nuxt-community/axios-module#options
+    // prefix: '/api/',
+    // proxy: true // Can be also an object with default options
   },
+  // proxy: {
+  //   '/api/': { target: 'https://shepherdnet.top', pathRewrite: {'^/api/': ''} }
+  // },
 
   /*
   ** Build configuration

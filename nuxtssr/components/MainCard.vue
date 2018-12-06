@@ -33,8 +33,8 @@ export default {
   },
   props: {
     islist: {
-      type: Number,
-      default: 0
+      type: String,
+      default: '0'
     },
     card_data: {
       type: Object,

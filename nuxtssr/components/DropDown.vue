@@ -9,12 +9,12 @@
   >
     <el-menu-item index="0"><nuxt-link to="/">首页</nuxt-link></el-menu-item>
     <el-submenu
-      v-for="(submenu, index) in menu"
+      v-for="(menu, index) in menus"
       :key="index"
-      :index="index+1">
-      <template slot="title">{{ submenu.column }}</template>
+      :index="(index+1).toString()">
+      <template slot="title">{{ menu.name }}</template>
       <el-menu-item
-        v-for="(subcol, subindex) in submenu.subcol"
+        v-for="(subcol, subindex) in menu.submenu"
         :key="subindex"
         :index="(index+1)+'-'+(subindex+1)"
         @click="routerTo(subcol.path)">{{ subcol.name }}</el-menu-item>
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { SERVER_URL, LOCAL_URL } from '~/globalurl'
 export default {
   props: {
     mymode: {
@@ -67,41 +68,13 @@ export default {
   data() {
     return {
       activeIndex: "0",
-      menu: [
-        {
-          "columnid": 1,
-          "column": "前端",
-          "subcol": [
-            {
-              name: "Vue",
-              path: "/frontend/vue"
-            },
-            {
-              name: "React",
-              path: "/frontend/react"
-            },
-            {
-              name: "Angular",
-              path: "/frontend/angular"
-            }
-          ]
-        },
-        {
-          "columnid": 2,
-          "column": "后端",
-          "subcol": [
-            {
-              name: "Python",
-              path: "/backend/python"
-            },
-            {
-              name: "PHP",
-              path: "/backend/php"
-            }
-          ]
-        }
-      ]
+      menus: []
     }
+  },
+  async created () {
+    let { data } = await this.$axios.get(`${LOCAL_URL}/menu`)
+    console.log(data)
+    this.menus = data
   },
   methods: {
     routerTo (path) {

@@ -1,3 +1,4 @@
+from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
 from app import create_app
@@ -5,6 +6,8 @@ from app.libs.error import APIException
 from app.libs.error_code import ServerException
 
 app = create_app()
+
+CORS(app, resources=r'/*')
 
 
 @app.errorhandler(Exception)
