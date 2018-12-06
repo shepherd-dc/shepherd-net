@@ -45,3 +45,12 @@ class TokenForm(BaseForm):
     token = StringField(validators=[DataRequired()])
 
 
+class MenuForm(BaseForm):
+    name = StringField(validators=[DataRequired()])
+
+
+class SubmenuForm(MenuForm):
+    path = StringField(validators=[DataRequired()])
+    mid = IntegerField(validators=[DataRequired()])
+
+
