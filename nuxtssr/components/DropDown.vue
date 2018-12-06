@@ -96,7 +96,7 @@ export default {
             },
             {
               name: "PHP",
-              path: "/frontend/php"
+              path: "/backend/php"
             }
           ]
         }
