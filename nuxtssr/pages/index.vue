@@ -104,10 +104,10 @@ export default {
     }
   },
   async asyncData ({ app }) {
-    let { data } = await app.$axios.get(`${SERVER_URL}/test`)
-    // console.log(data)
+    let { data } = await app.$axios.get(`${SERVER_URL}/menu`)
+    console.log(data)
     return {
-      tasks: data.tasks
+      data: data
     }
   },
   watch: {
