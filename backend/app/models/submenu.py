@@ -15,4 +15,4 @@ class Submenu(Base):
 
     @orm.reconstructor
     def __init__(self):
-        self.fields = ['name', 'path', 'pic']
+        self.fields = ['id', 'name', 'path', 'pic']

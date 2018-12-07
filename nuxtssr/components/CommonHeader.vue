@@ -15,7 +15,7 @@
           :md="24"
           :lg="24"
           :xl="24">
-          <drop-down mymode="horizontal"/>
+          <common-nav mymode="horizontal"/>
         </el-col>
       </el-row>
       <el-row
@@ -27,7 +27,7 @@
               <i class="el-icon-menu"/>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <drop-down/>
+              <common-nav/>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -41,10 +41,10 @@
 </template>
 
 <script>
-  import DropDown from '~/components/DropDown.vue'
+  import CommonNav from './CommonNav'
   export default {
     components: {
-      DropDown
+      CommonNav
     },
     data() {
       return {

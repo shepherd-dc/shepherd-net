@@ -11,9 +11,9 @@
         <div class="text-info">
           <h4
             class="detail-title"
-            @click="routerTo(sub_data.id)">{{ sub_data.title }}</h4>
+            @click="routerTo(sub_data.id)">{{ sub_data.name }}</h4>
           <div class="bottom clearfix">
-            <time class="time">{{ sub_data.time }}</time>
+            <time class="time">2018-12-7</time>
             <el-button
               type="text"
               class="button">更多</el-button>

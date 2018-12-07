@@ -8,7 +8,7 @@
           <el-col :span="width > 1080 ? 18 : 24">
             <main-card
               :card_data="card_data"
-              islist="0"/>
+              :islist="islist"/>
           </el-col>
           <el-col
             v-if="width > 1080"
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import URL from '~/globalurl'
 import MainCard from '~/components/MainCard'
 import AsideCard from '~/components/AsideCard'
 
@@ -37,29 +38,8 @@ export default {
   data () {
     return {
       width: '',
-      card_data: {
-        "column": "前端",
-        "data": [
-          {
-            "id": 1,
-            "pic": "/card.jpg",
-            "title": "标题1",
-            "time": "2018-12-3 17:40:50"
-          },
-          {
-            "id": 2,
-            "pic": "/card.jpg",
-            "title": "标题2",
-            "time": "2018-12-3 17:41:51"
-          },
-          {
-            "id": 3,
-            "pic": "/card.jpg",
-            "title": "标题3",
-            "time": "2018-12-3 17:42:52"
-          }
-        ]
-      },
+      islist: false,
+      card_data: {},
       aside_title: [
         '最新',
         '推荐',
@@ -71,6 +51,11 @@ export default {
     width () {
       this.width = window.innerWidth
     }
+  },
+  async created() {
+    let { data } = await this.$axios.get(`${URL}/menu/list/${this.$route.params.columnid}`)
+    console.log(data)
+    this.card_data = data
   },
   mounted() {
     let width = window.innerWidth

@@ -3,17 +3,17 @@
     <div
       slot="header"
       class="clearfix">
-      <span>{{ card_data.column }}</span>
+      <span>{{ card_data.name }}</span>
       <el-button
-        v-if="!islist"
+        v-if="islist"
         style="float: right; padding: 3px 0"
         type="text"
-        @click="routerTo(card_data.columnid)">更多</el-button>
+        @click="routerTo(card_data.id)">更多</el-button>
     </div>
     <div class="text item">
       <el-row type="felx">
         <el-col
-          v-for="(item, index) in card_data.data"
+          v-for="(item, index) in card_data.submenu"
           :key="index"
           :span="width > 1080 ? 8 : 24">
           <pic-card
@@ -33,8 +33,8 @@ export default {
   },
   props: {
     islist: {
-      type: String,
-      default: '0'
+      type: Boolean,
+      default: true
     },
     card_data: {
       type: Object,

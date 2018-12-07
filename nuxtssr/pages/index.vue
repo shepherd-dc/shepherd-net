@@ -25,19 +25,11 @@
           </el-col>
         </el-row>
       </div>
-      <div
-        v-for="(item, index) in data"
-        :key="index">{{ item.name }}
-        <p
-          v-for="(sub, i) in item.submenu"
-          :key="i">{{ sub }}</p>
-      </div>
-    </div>
-  </section>
+  </div></section>
 </template>
 
 <script>
-import { SERVER_URL } from '~/globalurl'
+import URL from '~/globalurl'
 import Slogan from '~/components/Slogan'
 // import VueSwiper from '~/components/VueSwiper'
 import MainCard from '~/components/MainCard'
@@ -53,56 +45,6 @@ export default {
   data () {
     return {
       width: '',
-      card_data: [
-        {
-          "columnid": 1,
-          "column": "前端",
-          "data": [
-            {
-              "id": 1,
-              "pic": "/card.jpg",
-              "title": "标题1",
-              "time": "2018-12-3 17:40:50"
-            },
-            {
-              "id": 2,
-              "pic": "/card.jpg",
-              "title": "标题2",
-              "time": "2018-12-3 17:41:51"
-            },
-            {
-              "id": 3,
-              "pic": "/card.jpg",
-              "title": "标题3",
-              "time": "2018-12-3 17:42:52"
-            }
-          ]
-        },
-        {
-          "columnid": 2,
-          "column": "后端",
-          "data": [
-            {
-              "id": 1,
-              "pic": "/card.jpg",
-              "title": "标题1",
-              "time": "2018-12-3 17:40:50"
-            },
-            {
-              "id": 2,
-              "pic": "/card.jpg",
-              "title": "标题2",
-              "time": "2018-12-3 17:41:51"
-            },
-            {
-              "id": 3,
-              "pic": "/card.jpg",
-              "title": "标题3",
-              "time": "2018-12-3 17:42:52"
-            }
-          ]
-        }
-      ],
       aside_title: [
         '最新',
         '推荐',
@@ -111,10 +53,19 @@ export default {
     }
   },
   async asyncData ({ app }) {
-    let { data } = await app.$axios.get(`${SERVER_URL}/menu`)
-    console.log(data)
+    let { data } = await app.$axios.get(`${URL}/menu`)
+    // console.log(data)
     return {
-      data: data
+      card_data: data
+    }
+  },
+  async fetch ({ app }) {
+    let { data } = await app.$axios.get(`${URL}/menu`)
+    await app.store.commit('ADD_MENUS', data)
+  },
+  computed: {
+    menus () {
+      return this.$store.state.menus
     }
   },
   watch: {
@@ -125,6 +76,7 @@ export default {
   mounted() {
     let width = window.innerWidth
     this.width = width
+    console.log(this.menus)
   }
 }
 </script>

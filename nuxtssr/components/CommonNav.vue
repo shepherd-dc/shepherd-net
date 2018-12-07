@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { SERVER_URL, LOCAL_URL } from '~/globalurl'
+import URL from '~/globalurl'
 export default {
   props: {
     mymode: {
@@ -71,16 +71,9 @@ export default {
       menus: []
     }
   },
-  async asyncData ({ app }) {
-    let { data } = await app.$axios.get(`${SERVER_URL}/menu`)
-    console.log(data)
-    return {
-      data: data
-    }
-  },
   async created () {
-    let { data } = await this.$axios.get(`${SERVER_URL}/menu`)
-    console.log(data)
+    let { data } = await this.$axios.get(`${URL}/menu?nav=nav`)
+    // console.log(data)
     this.menus = data
   },
   methods: {
