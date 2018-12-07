@@ -51,6 +51,7 @@ class MenuForm(BaseForm):
 
 class SubmenuForm(MenuForm):
     path = StringField(validators=[DataRequired()])
+    pic = StringField(validators=[DataRequired()])
     mid = IntegerField(validators=[DataRequired()])
 
 

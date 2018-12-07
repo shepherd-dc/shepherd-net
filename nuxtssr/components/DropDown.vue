@@ -71,8 +71,15 @@ export default {
       menus: []
     }
   },
+  async asyncData ({ app }) {
+    let { data } = await app.$axios.get(`${SERVER_URL}/menu`)
+    console.log(data)
+    return {
+      data: data
+    }
+  },
   async created () {
-    let { data } = await this.$axios.get(`${LOCAL_URL}/menu`)
+    let { data } = await this.$axios.get(`${SERVER_URL}/menu`)
     console.log(data)
     this.menus = data
   },

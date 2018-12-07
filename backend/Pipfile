@@ -11,6 +11,8 @@ flask-httpauth = "*"
 flask-wtf = "*"
 requests = "*"
 flask-sqlalchemy = "*"
+flask-script = "*"
+flask-migrate = "*"
 
 [dev-packages]
 

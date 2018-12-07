@@ -25,6 +25,13 @@
           </el-col>
         </el-row>
       </div>
+      <div
+        v-for="(item, index) in data"
+        :key="index">{{ item.name }}
+        <p
+          v-for="(sub, i) in item.submenu"
+          :key="i">{{ sub }}</p>
+      </div>
     </div>
   </section>
 </template>
