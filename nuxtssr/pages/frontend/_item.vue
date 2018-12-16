@@ -1,13 +1,13 @@
 <template>
   <div>
-    <frontend/>
+    <sub-list/>
   </div>
 </template>
 <script>
-  import frontend from './index'
+  import SubList from '~/components/SubList'
   export default {
     components: {
-      frontend
+      SubList
     }
   }
 </script>

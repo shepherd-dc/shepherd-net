@@ -29,11 +29,16 @@
 import URL from '~/globalurl'
 import MainCard from '~/components/MainCard'
 import AsideCard from '~/components/AsideCard'
-
 export default {
   components: {
     MainCard,
     AsideCard
+  },
+  props: {
+    en_name: {
+      type: String,
+      default: ''
+    }
   },
   data () {
     return {
@@ -53,8 +58,8 @@ export default {
     }
   },
   async created() {
-    let { data } = await this.$axios.get(`${URL}/menu/list/${this.$route.params.columnid}`)
-    console.log(data)
+    let { data } = await this.$axios.get(`${URL}/menu/list/${this.en_name}`)
+    // console.log(data)
     this.card_data = data
   },
   mounted() {

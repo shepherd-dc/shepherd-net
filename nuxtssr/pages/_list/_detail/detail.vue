@@ -10,8 +10,9 @@
             class="head">
             <el-breadcrumb separator=">">
               <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-              <el-breadcrumb-item><a href="/">前端</a></el-breadcrumb-item>
-              <el-breadcrumb-item>详情</el-breadcrumb-item>
+              <el-breadcrumb-item><a :href="'/'+menu">{{ menu }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item v-if="submenu"><a :href="'/'+menu+'/'+submenu">{{ submenu }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           <div class="content">
@@ -60,6 +61,8 @@
     data () {
       return {
         width: '',
+        menu: '',
+        submenu: '',
         title: '瑞幸咖啡、连咖啡、星巴克必有一战',
         author: '李小白',
         updatetime: '6天前',
@@ -71,6 +74,11 @@
       width () {
         this.width = window.innerWidth
       }
+    },
+    created () {
+      // console.log(this.$route)
+      this.menu = this.$route.params.list
+      this.submenu = this.$route.params.detail
     },
     mounted() {
       let width = window.innerWidth

@@ -7,17 +7,20 @@
     text-color="#fff"
     active-text-color="#41b883"
   >
-    <el-menu-item index="0"><nuxt-link to="/">首页</nuxt-link></el-menu-item>
-    <el-submenu
-      v-for="(menu, index) in menus"
-      :key="index"
+    <el-menu-item index="0">
+      <nuxt-link to="/">首页</nuxt-link>
+    </el-menu-item>
+    <el-submenu 
+      v-for="(menu, index) in menus" 
+      :key="index" 
       :index="(index+1).toString()">
-      <template slot="title">{{ menu.name }}</template>
+      <template slot="title">{{ menu.menu_name }}</template>
       <el-menu-item
         v-for="(subcol, subindex) in menu.submenu"
         :key="subindex"
         :index="(index+1)+'-'+(subindex+1)"
-        @click="routerTo(subcol.path)">{{ subcol.name }}</el-menu-item>
+        @click="routerTo(subcol.path, subcol.name)"
+      >{{ subcol.name }}</el-menu-item>
     </el-submenu>
     <!-- <el-submenu index="2">
       <template slot="title">前端</template>
@@ -52,43 +55,43 @@
       <el-menu-item index="8-1">Photoshop</el-menu-item>
       <el-menu-item index="8-2">Illustrator</el-menu-item>
       <el-menu-item index="8-3">Axure</el-menu-item>
-    </el-submenu> -->
+    </el-submenu>-->
   </el-menu>
 </template>
 
 <script>
-import URL from '~/globalurl'
+import URL from "~/globalurl";
 export default {
   props: {
     mymode: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   data() {
     return {
       activeIndex: "0",
       menus: []
-    }
+    };
   },
-  async created () {
-    let { data } = await this.$axios.get(`${URL}/menu?nav=nav`)
+  async created() {
+    let { data } = await this.$axios.get(`${URL}/menu?nav=nav`);
     // console.log(data)
-    this.menus = data
+    this.menus = data;
   },
   methods: {
-    routerTo (path) {
+    routerTo(path, name) {
       this.$router.push({
-        path: path
-      })
+        path: `/${path}/${name}`
+      });
     }
   }
-}
+};
 </script>
 
 <style>
-  .el-menu.el-menu--horizontal {
-    border-bottom: none!important;
-  }
+.el-menu.el-menu--horizontal {
+  border-bottom: none !important;
+}
 </style>
 

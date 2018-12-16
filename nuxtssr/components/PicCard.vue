@@ -7,16 +7,19 @@
         <img
           :src="sub_data.pic"
           class="image"
-          @click="routerTo(sub_data.id)">
+          @click="routerTo(sub_data.path, sub_data.name)">
         <div class="text-info">
           <h4
             class="detail-title"
-            @click="routerTo(sub_data.id)">{{ sub_data.name }}</h4>
+            @click="routerTo(sub_data.path, sub_data.name)">{{ sub_data.name }}</h4>
           <div class="bottom clearfix">
             <time class="time">2018-12-7</time>
             <el-button
+              v-if="issublist"
               type="text"
-              class="button">更多</el-button>
+              class="button"
+              @click="routerTo(sub_data.path, sub_data.name)"
+            >更多</el-button>
           </div>
         </div>
       </el-card>
@@ -27,6 +30,10 @@
 <script>
 export default {
   props: {
+    issublist: {
+      type: Boolean,
+      default: true
+    },
     sub_data: {
       type: Object,
       default: () => {}
@@ -38,9 +45,9 @@ export default {
     }
   },
   methods: {
-    routerTo (id) {
+    routerTo (path, name) {
       this.$router.push({
-        path: `/detail/${id}`
+        path: `/${path}/${name}`
       })
     }
   }

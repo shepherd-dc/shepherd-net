@@ -12,7 +12,7 @@ const store = () => new Vuex.Store({
   mutations: {
     ADD_MENUS: (state, data) => {
       state.menus = data
-      console.log(data)
+      // console.log(data)
     }
   },
   getters,

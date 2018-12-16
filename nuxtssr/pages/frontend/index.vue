@@ -1,76 +1,18 @@
 <template>
-  <section>
-    <div class="container">
-      <div class="content">
-        <el-row
-          :gutter="width > 1080 ? 10 : 0"
-          type="flex">
-          <el-col :span="width > 1080 ? 18 : 24">
-            <main-card
-              :card_data="card_data"
-              :islist="islist"/>
-          </el-col>
-          <el-col
-            v-if="width > 1080"
-            :span="6">
-            <aside-card
-              v-for="(title, index) in aside_title"
-              :key="index"
-              :aside_title="title"
-              class="card-margin" />
-          </el-col>
-        </el-row>
-      </div>
-    </div>
-  </section>
+  <div>
+    <list :en_name="en_name"/>
+  </div>
 </template>
-
 <script>
-import URL from '~/globalurl'
-import MainCard from '~/components/MainCard'
-import AsideCard from '~/components/AsideCard'
-
-export default {
-  components: {
-    MainCard,
-    AsideCard
-  },
-  data () {
-    return {
-      width: '',
-      islist: false,
-      card_data: {},
-      aside_title: [
-        '最新',
-        '推荐',
-        '友链'
-      ]
+  import list from '~/components/CommonList'
+  export default {
+    components: {
+      list
+    },
+    data () {
+      return {
+        en_name: 'frontend'
+      }  
     }
-  },
-  watch: {
-    width () {
-      this.width = window.innerWidth
-    }
-  },
-  async created() {
-    let { data } = await this.$axios.get(`${URL}/menu/list/1`)
-    console.log(data)
-    this.card_data = data
-  },
-  mounted() {
-    let width = window.innerWidth
-    this.width = width
   }
-}
 </script>
-
-<style>
-  .container {
-    padding-top: 60px;
-  }
-  .content {
-    max-width: 1280px;
-    margin: 10px auto;
-    padding-top: 10px;
-  }
-</style>

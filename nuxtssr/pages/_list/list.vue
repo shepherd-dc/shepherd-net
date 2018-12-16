@@ -1,13 +1,13 @@
 <template>
   <div>
-    <sub-list/>
+    <list/>
   </div>
 </template>
 <script>
-  import SubList from '~/components/SubList'
+  import list from '~/components/CommonList'
   export default {
     components: {
-      SubList
+      list
     }
   }
 </script>

@@ -3,12 +3,12 @@
     <div
       slot="header"
       class="clearfix">
-      <span>{{ card_data.name }}</span>
+      <span>{{ card_data.menu_name }}</span>
       <el-button
         v-if="islist"
         style="float: right; padding: 3px 0"
         type="text"
-        @click="routerTo(card_data.id)">更多</el-button>
+        @click="routerTo(card_data.en_name)">更多</el-button>
     </div>
     <div class="text item">
       <el-row type="felx">
@@ -56,9 +56,9 @@ export default {
     this.width = width
   },
   methods: {
-    routerTo (id) {
+    routerTo (path) {
       this.$router.push({
-        path: `/list/${id}`
+        path: `/${path}`
       })
     }
   }

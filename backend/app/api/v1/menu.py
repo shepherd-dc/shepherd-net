@@ -26,17 +26,25 @@ def get_menu():
 
     return jsonify(menus)
 
-@api.route('/list/<id>')
-def get_list(id):
-    list = Menu.query.filter_by(id=id).first_or_404()
+@api.route('/list/<en_name>')
+def get_list(en_name):
+    list = Menu.query.filter_by(en_name=en_name).first_or_404()
     return jsonify(list)
+
+@api.route('/sublist/<name>')
+def get_sublist(name):
+    sublist =Submenu.query.filter_by(name=name).first_or_404()
+    sublist.menu_name = sublist.menu.menu_name
+    # print(sublist.__dict__)
+    return jsonify(sublist)
 
 @api.route('/add/menu', methods=['POST'])
 def add_menu():
     form = MenuForm().validate_for_api()
     with db.auto_commit():
         menu = Menu()
-        menu.name = form.name.data
+        menu.menu_name = form.menu_name.data
+        menu.en_name = form.en_name.data
         db.session.add(menu)
     return Success()
 

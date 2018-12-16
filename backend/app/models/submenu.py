@@ -9,10 +9,11 @@ class Submenu(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
+    menu_name = Column(String(50))
     path = Column(String(50), nullable=False)
     pic = Column(String(50), nullable=False)
     mid = Column(Integer, ForeignKey('menu.id'))
 
     @orm.reconstructor
     def __init__(self):
-        self.fields = ['id', 'name', 'path', 'pic']
+        self.fields = ['id', 'name', 'path', 'pic', 'menu_name']
