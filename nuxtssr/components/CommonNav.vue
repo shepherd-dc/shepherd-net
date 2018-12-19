@@ -10,9 +10,9 @@
     <el-menu-item index="0">
       <nuxt-link to="/">首页</nuxt-link>
     </el-menu-item>
-    <el-submenu 
-      v-for="(menu, index) in menus" 
-      :key="index" 
+    <el-submenu
+      v-for="(menu, index) in menus"
+      :key="index"
       :index="(index+1).toString()">
       <template slot="title">{{ menu.menu_name }}</template>
       <el-menu-item
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import URL from "~/globalurl";
+import URL from "~/globalurl"
 export default {
   props: {
     mymode: {
@@ -72,10 +72,10 @@ export default {
     return {
       activeIndex: "0",
       menus: []
-    };
+    }
   },
   async created() {
-    let { data } = await this.$axios.get(`${URL}/menu?nav=nav`);
+    let { data } = await this.$axios.get(`${URL}/menu?nav=nav`)
     // console.log(data)
     this.menus = data;
   },
@@ -83,10 +83,10 @@ export default {
     routerTo(path, name) {
       this.$router.push({
         path: `/${path}/${name}`
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>

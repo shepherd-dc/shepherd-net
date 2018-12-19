@@ -33,8 +33,13 @@
         </el-col>
       </el-row>
     </nav>
-    <div class="logo">
-      Shepherd Net
+    <div class="login">
+      <div>
+        <span @click="routerToLogin()">登录</span> | <span @click="routerToRegister()">注册</span>
+      </div>
+      <div v-if="islogin">
+        <span>Shepherd</span> | <span @click="routerToLogout()">退出</span>
+      </div>
     </div>
   </div>
 
@@ -50,7 +55,8 @@
       return {
         activeIndex: '1',
         width: '',
-        isfold: false
+        isfold: false,
+        islogin: false
       }
     },
     watch: {
@@ -72,6 +78,19 @@
       },
       mouseleaveHandler () {
         this.isfold = false
+      },
+      routerToLogin () {
+        this.$router.push({
+          path: `/login`
+        })
+      },
+      routerToRegister () {
+        this.$router.push({
+          path: `/register`
+        })
+      },
+      routerToLogout () {
+
       }
     }
   }
@@ -99,6 +118,17 @@
         line-height: 60px;
         padding-right: 20px;
         cursor: pointer;
+      }
+    }
+    .login {
+      font-size: 14px;
+      padding: 0 20px;
+      line-height: 60px;
+      span {
+        cursor: pointer;
+        &:hover {
+          color: #41b883
+        }
       }
     }
   }

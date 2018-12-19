@@ -76,7 +76,7 @@ export default {
   mounted() {
     let width = window.innerWidth
     this.width = width
-    console.log(this.menus)
+    // console.log(this.menus)
   }
 }
 </script>
