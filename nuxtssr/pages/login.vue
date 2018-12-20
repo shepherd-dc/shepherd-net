@@ -10,18 +10,19 @@
             class="clearfix login-head">
             <span>登录</span>
           </div>
-          <div class="text item">
+          <div class="item-body">
             <el-form
               ref="ruleForm2"
               :model="ruleForm2"
               :rules="rules2"
-              status-icon
               label-width="100px"
               class="demo-ruleForm">
               <el-form-item
                 label="用户名"
                 prop="user">
-                <el-input v-model="ruleForm2.user"></el-input>
+                <el-input
+                  v-model="ruleForm2.user"
+                  placeholder="请输入用户名或邮箱"></el-input>
               </el-form-item>
               <el-form-item
                 label="密码"
@@ -29,15 +30,15 @@
                 <el-input
                   v-model="ruleForm2.pass"
                   type="password"
+                  placeholder="请输入密码"
                   autocomplete="off"></el-input>
               </el-form-item>
               <!-- <el-form-item
-                label="确认密码"
-                prop="checkPass">
+                label="验证码"
+                prop="vcode">
                 <el-input
-                  v-model="ruleForm2.checkPass"
-                  type="password"
-                  autocomplete="off"></el-input>
+                  v-model="ruleForm2.vcode"
+                  placeholder="请输入验证码"></el-input>
               </el-form-item> -->
               <el-form-item>
                 <el-button
@@ -57,27 +58,36 @@
 
 <script>
   export default {
+
     data() {
       var checkUser = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('用户名不能为空'));
+        } else {
+          callback()
         }
       }
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
         } else {
-          if (this.ruleForm2.checkPass !== '') {
-            this.$refs.ruleForm2.validateField('checkPass');
-          }
-          callback();
+          callback()
         }
       }
+      // var validateCode = (rule, value, callback) => {
+      //   if (!value) {
+      //     return callback(new Error('验证码不能为空'));
+      //   } else {
+      //     callback()
+      //   }
+      // }
+
       return {
         width: '',
         ruleForm2: {
           pass: '',
-          user: ''
+          user: '',
+          // vcode: ''
         },
         rules2: {
           pass: [
@@ -85,7 +95,10 @@
           ],
           user: [
             { validator: checkUser, trigger: 'blur' }
-          ]
+          ],
+          // vcode: [
+          //   { validator: validateCode, trigger: 'blur'}
+          // ]
         }
       }
     },
@@ -128,6 +141,9 @@
       font-size: 18px;
       font-weight: bold;
       text-align: center;
+    }
+    .item-body {
+      padding-right: 30px;
     }
   }
 </style>
