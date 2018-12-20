@@ -19,26 +19,26 @@
               label-width="100px"
               class="demo-ruleForm">
               <el-form-item
-                prop="email"
+                prop="account"
                 label="邮箱">
                 <el-input
-                  v-model="ruleForm.email"
+                  v-model="ruleForm.account"
                   placeholder="请输入邮箱"
                   type="email"></el-input>
               </el-form-item>
               <el-form-item
-                prop="user"
+                prop="nickname"
                 label="用户名">
                 <el-input
-                  v-model="ruleForm.user"
+                  v-model="ruleForm.nickname"
                   placeholder="请输入用户名"
                   type="text"></el-input>
               </el-form-item>
               <el-form-item
                 label="密码"
-                prop="pass">
+                prop="secret">
                 <el-input
-                  v-model="ruleForm.pass"
+                  v-model="ruleForm.secret"
                   placeholder="请输入密码"
                   type="password"
                   autocomplete="off"></el-input>
@@ -69,12 +69,15 @@
 </template>
 
 <script>
+  import URL from '~/globalurl'
   export default {
     data() {
 
       var checkUser = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('用户名不能为空'));
+        } else {
+          callback()
         }
       }
       var validatePass = (rule, value, callback) => {
@@ -84,38 +87,38 @@
           if (this.ruleForm.checkPass !== '') {
             this.$refs.ruleForm.validateField('checkPass');
           }
-          callback();
+          callback()
         }
       }
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
-        } else if (value !== this.ruleForm.pass) {
+        } else if (value !== this.ruleForm.secret) {
           callback(new Error('两次输入密码不一致!'));
         } else {
-          callback();
+          callback()
         }
       }
 
       return {
         width: '',
         ruleForm: {
-          pass: '',
+          secret: '',
           checkPass: '',
-          user: '',
-          email: ''
+          nickname: '',
+          account: ''
         },
         rules: {
-          pass: [
+          secret: [
             { required: true, validator: validatePass, trigger: 'blur' }
           ],
           checkPass: [
             { required: true, validator: validatePass2, trigger: 'blur' }
           ],
-          user: [
+          nickname: [
             { required: true, validator: checkUser, trigger: 'blur' }
           ],
-          email: [
+          account: [
             { required: true, message: '请输入邮箱地址', trigger: 'blur' },
             { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
           ]
@@ -136,15 +139,22 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            delete this.ruleForm.checkPass
+            this.ruleForm.type = 100
+            this.$axios.post(`${URL}/client/register`,this.ruleForm)
+              .then( res => {
+                console.log(res)
+              }).catch( err => {
+                console.log(err)
+              })
           } else {
             console.log('error submit!!');
             return false;
           }
-        });
+        })
       },
       resetForm(formName) {
-        this.$refs[formName].resetFields();
+        this.$refs[formName].resetFields()
       }
     }
   }
