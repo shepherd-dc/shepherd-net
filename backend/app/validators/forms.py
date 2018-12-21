@@ -34,7 +34,21 @@ class UserEmailForm(ClientForm):
 
     def validate_account(self, value):
         if User.query.filter_by(email=value.data).first():
-            raise ValidationError()
+            raise ValidationError(message='邮箱已注册')
+
+    def validate_nickname(self, value):
+        if User.query.filter_by(nickname=value.data).first():
+            raise ValidationError(message='昵称已注册')
+
+
+class EmailForm(BaseForm):
+    email = StringField(validators=[
+        Email(message='邮箱格式不正确')
+    ])
+
+
+class NicknameForm(BaseForm):
+    nickname = StringField(validators=[DataRequired()])
 
 
 class BookSearchForm(BaseForm):

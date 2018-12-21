@@ -1,7 +1,10 @@
 # from flask import Blueprint
-from flask import jsonify, g
+import json
 
-from app.libs.error_code import DeleteSuccess
+from flask import jsonify, g, request
+from wtforms.validators import email
+
+from app.libs.error_code import DeleteSuccess, Success
 from app.libs.redprint import Redprint
 from app.libs.token_auth import auth
 from app.models.base import db
@@ -9,6 +12,8 @@ from app.models.base import db
 from app.models.user import User
 
 # user = Blueprint('user', __name__)
+from app.validators.forms import NicknameForm, EmailForm
+
 api = Redprint('user')
 
 
@@ -25,6 +30,36 @@ def get_user():
 def super_get_user(uid):
     user = User.query.filter_by(id=uid).first_or_404()
     return jsonify(user)
+
+
+@api.route('/email', methods=['POST'])
+def get_email():
+    form = EmailForm().validate_for_api()
+    email = form.email.data
+    user = User.query.filter_by(email=email).first()
+    if user:
+        data = {
+            "error_code": 100,
+            "msg": "邮箱已注册"
+        }
+        return jsonify(data)
+    else:
+        return Success()
+
+
+@api.route('/nickname', methods=['POST'])
+def get_nickname():
+    form = NicknameForm().validate_for_api()
+    nickname = form.nickname.data
+    user = User.query.filter_by(nickname=nickname).first()
+    if user:
+        data = {
+            "error_code": 101,
+            "msg": "昵称已注册"
+        }
+        return jsonify(data)
+    else:
+        return Success()
 
 
 @api.route('', methods=['DELETE'])

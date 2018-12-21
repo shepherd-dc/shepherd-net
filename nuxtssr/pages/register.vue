@@ -19,20 +19,20 @@
               label-width="100px"
               class="demo-ruleForm">
               <el-form-item
+                prop="nickname"
+                label="昵称">
+                <el-input
+                  v-model="ruleForm.nickname"
+                  placeholder="请输入昵称"
+                  type="text"></el-input>
+              </el-form-item>
+              <el-form-item
                 prop="account"
                 label="邮箱">
                 <el-input
                   v-model="ruleForm.account"
                   placeholder="请输入邮箱"
                   type="email"></el-input>
-              </el-form-item>
-              <el-form-item
-                prop="nickname"
-                label="用户名">
-                <el-input
-                  v-model="ruleForm.nickname"
-                  placeholder="请输入用户名"
-                  type="text"></el-input>
               </el-form-item>
               <el-form-item
                 label="密码"
@@ -75,9 +75,39 @@
 
       var checkUser = (rule, value, callback) => {
         if (!value) {
-          return callback(new Error('用户名不能为空'));
+          return callback(new Error('昵称不能为空'));
         } else {
-          callback()
+          this.$axios.post(`${URL}/user/nickname`, {
+            nickname: this.ruleForm.nickname
+          }).then( res => {
+            let { data } = res
+            if ( data.error_code === 0) {
+              callback()
+            } else if ( data.error_code === 101) {
+              return callback(new Error('昵称已注册'))
+            }
+          }).catch( err => {
+            console.log(err)
+          })
+        }
+      }
+      var checkEmail = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('邮箱不能为空'));
+        } else {
+          this.$axios.post(`${URL}/user/email`, {
+            email: this.ruleForm.account
+          }).then( res => {
+            let { data } = res
+            // console.log(data)
+            if ( data.error_code === 0 ) {
+              callback()
+            } else if ( data.error_code === 100) {
+              return callback(new Error('邮箱已注册'))
+            }
+          }).catch( err => {
+            console.log(err)
+          })
         }
       }
       var validatePass = (rule, value, callback) => {
@@ -119,7 +149,7 @@
             { required: true, validator: checkUser, trigger: 'blur' }
           ],
           account: [
-            { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+            { required: true, validator: checkEmail, trigger: 'blur' },
             { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
           ]
         }
@@ -147,9 +177,10 @@
               }).catch( err => {
                 console.log(err)
               })
+            this.$router.push('/login')
           } else {
             console.log('error submit!!');
-            return false;
+            return false
           }
         })
       },
