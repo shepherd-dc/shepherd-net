@@ -79,6 +79,11 @@ export default {
     // console.log(data)
     this.menus = data;
   },
+  // computed: {
+  //   menus () {
+  //     return this.$store.state.menus
+  //   }
+  // },
   methods: {
     routerTo(path, name) {
       this.$router.push({

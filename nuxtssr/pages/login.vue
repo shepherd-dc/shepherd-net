@@ -19,16 +19,16 @@
               class="demo-ruleForm">
               <el-form-item
                 label="用户名"
-                prop="user">
+                prop="account">
                 <el-input
-                  v-model="ruleForm2.user"
+                  v-model="ruleForm2.account"
                   placeholder="请输入用户名或邮箱"></el-input>
               </el-form-item>
               <el-form-item
                 label="密码"
-                prop="pass">
+                prop="secret">
                 <el-input
-                  v-model="ruleForm2.pass"
+                  v-model="ruleForm2.secret"
                   type="password"
                   placeholder="请输入密码"
                   autocomplete="off"></el-input>
@@ -57,19 +57,20 @@
 </template>
 
 <script>
+  import URL from '~/globalurl'
   export default {
 
     data() {
       var checkUser = (rule, value, callback) => {
         if (!value) {
-          return callback(new Error('用户名不能为空'));
+          return callback(new Error('用户名不能为空'))
         } else {
           callback()
         }
       }
       var validatePass = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入密码'));
+          callback(new Error('请输入密码'))
         } else {
           callback()
         }
@@ -85,15 +86,15 @@
       return {
         width: '',
         ruleForm2: {
-          pass: '',
-          user: '',
+          secret: '',
+          account: '',
           // vcode: ''
         },
         rules2: {
-          pass: [
+          secret: [
             { validator: validatePass, trigger: 'blur' }
           ],
-          user: [
+          account: [
             { validator: checkUser, trigger: 'blur' }
           ],
           // vcode: [
@@ -116,15 +117,27 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+             this.$axios.post(`${URL}/client/login`,this.ruleForm2)
+              .then( res => {
+                let { data } = res
+                // console.log(data)
+                if ( data.error_code === 0 ) {
+                  this.$router.push('/')
+                  this.$store.dispatch('USER_INFO', data)
+                } else if (data.error_code === 1003) {
+                  alert(data.msg)
+                }
+              }).catch( err => {
+                console.log(err)
+              })
           } else {
-            console.log('error submit!!');
+            console.log('error submit!!')
             return false;
           }
         })
       },
       resetForm(formName) {
-        this.$refs[formName].resetFields();
+        this.$refs[formName].resetFields()
       }
     }
   }

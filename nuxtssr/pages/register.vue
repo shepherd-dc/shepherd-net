@@ -173,11 +173,15 @@
             this.ruleForm.type = 100
             this.$axios.post(`${URL}/client/register`,this.ruleForm)
               .then( res => {
-                console.log(res)
+                let { data } = res
+                if ( data.error_code === 0 ) {
+                  this.$router.push('/login')
+                } else {
+                  alert('注册失败，请稍后再试')
+                }
               }).catch( err => {
                 console.log(err)
               })
-            this.$router.push('/login')
           } else {
             console.log('error submit!!');
             return false

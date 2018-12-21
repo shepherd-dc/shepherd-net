@@ -71,3 +71,7 @@ class SubmenuForm(BaseForm):
     mid = IntegerField(validators=[DataRequired()])
 
 
+class LoginForm(BaseForm):
+    account = StringField(validators=[DataRequired()])
+    secret = StringField(validators=[DataRequired()])
+

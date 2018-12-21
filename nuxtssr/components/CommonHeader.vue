@@ -34,10 +34,10 @@
       </el-row>
     </nav>
     <div class="login">
-      <div>
+      <div v-if="!userInfo.isLogin">
         <span @click="routerToLogin()">登录</span> | <span @click="routerToRegister()">注册</span>
       </div>
-      <div v-if="islogin">
+      <div v-if="userInfo.isLogin">
         <span>Shepherd</span> | <span @click="routerToLogout()">退出</span>
       </div>
     </div>
@@ -55,8 +55,12 @@
       return {
         activeIndex: '1',
         width: '',
-        isfold: false,
-        islogin: false
+        isfold: false
+      }
+    },
+    computed: {
+      userInfo () {
+        return this.$store.state.userInfo.userInfo
       }
     },
     watch: {
@@ -90,7 +94,10 @@
         })
       },
       routerToLogout () {
-
+        this.$store.commit('LOGOUT')
+        this.$router.push({
+          path: `/`
+        })
       }
     }
   }
