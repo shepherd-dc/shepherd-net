@@ -115,24 +115,18 @@
     },
     methods: {
       submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
+        this.$refs[formName].validate( async (valid) => {
           if (valid) {
-             this.$axios.post(`${URL}/client/login`,this.ruleForm2)
-              .then( res => {
-                let { data } = res
-                // console.log(data)
-                if ( data.error_code === 0 ) {
-                  this.$router.push('/')
-                  this.$store.dispatch('USER_INFO', data)
-                } else if (data.error_code === 1003) {
-                  alert(data.msg)
-                }
-              }).catch( err => {
-                console.log(err)
-              })
+          let { data } = await this.$axios.post(`${URL}/client/login`,this.ruleForm2)
+            if ( data.error_code === 0 ) {
+              this.$store.dispatch('USER_INFO', data)
+              this.$router.go(-1)
+            } else if (data.error_code === 1003) {
+              alert(data.msg)
+            }
           } else {
             console.log('error submit!!')
-            return false;
+            return false
           }
         })
       },

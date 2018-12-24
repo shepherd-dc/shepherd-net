@@ -73,41 +73,32 @@
   export default {
     data() {
 
-      var checkUser = (rule, value, callback) => {
+      var checkUser = async (rule, value, callback) => {
         if (!value) {
           return callback(new Error('昵称不能为空'));
         } else {
-          this.$axios.post(`${URL}/user/nickname`, {
+          let { data } = await this.$axios.post(`${URL}/user/nickname`, {
             nickname: this.ruleForm.nickname
-          }).then( res => {
-            let { data } = res
-            if ( data.error_code === 0) {
-              callback()
-            } else if ( data.error_code === 101) {
-              return callback(new Error('昵称已注册'))
-            }
-          }).catch( err => {
-            console.log(err)
           })
+          if ( data.error_code === 0) {
+            callback()
+          } else if ( data.error_code === 101) {
+            return callback(new Error('昵称已注册'))
+          }
         }
       }
-      var checkEmail = (rule, value, callback) => {
+      var checkEmail = async (rule, value, callback) => {
         if (!value) {
           return callback(new Error('邮箱不能为空'));
         } else {
-          this.$axios.post(`${URL}/user/email`, {
+          let { data } = await this.$axios.post(`${URL}/user/email`, {
             email: this.ruleForm.account
-          }).then( res => {
-            let { data } = res
-            // console.log(data)
-            if ( data.error_code === 0 ) {
-              callback()
-            } else if ( data.error_code === 100) {
-              return callback(new Error('邮箱已注册'))
-            }
-          }).catch( err => {
-            console.log(err)
           })
+          if ( data.error_code === 0 ) {
+            callback()
+          } else if ( data.error_code === 100) {
+            return callback(new Error('邮箱已注册'))
+          }
         }
       }
       var validatePass = (rule, value, callback) => {
@@ -167,21 +158,14 @@
     },
     methods: {
       submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
+        this.$refs[formName].validate( async (valid) => {
           if (valid) {
             delete this.ruleForm.checkPass
             this.ruleForm.type = 100
-            this.$axios.post(`${URL}/client/register`,this.ruleForm)
-              .then( res => {
-                let { data } = res
-                if ( data.error_code === 0 ) {
-                  this.$router.push('/login')
-                } else {
-                  alert('注册失败，请稍后再试')
-                }
-              }).catch( err => {
-                console.log(err)
-              })
+            let { data } = await this.$axios.post(`${URL}/client/register`,this.ruleForm)
+            if ( data.error_code === 0 ) {
+              this.$router.push('/login')
+            }
           } else {
             console.log('error submit!!');
             return false

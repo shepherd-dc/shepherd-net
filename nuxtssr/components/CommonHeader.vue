@@ -34,11 +34,11 @@
       </el-row>
     </nav>
     <div class="login">
-      <div v-if="!userInfo.isLogin">
+      <div v-if="!token && !userInfo.token">
         <span @click="routerToLogin()">登录</span> | <span @click="routerToRegister()">注册</span>
       </div>
-      <div v-if="userInfo.isLogin">
-        <span>Shepherd</span> | <span @click="routerToLogout()">退出</span>
+      <div v-if="token || userInfo.token">
+        <span>{{ userInfo.nickname || nickname }}</span> | <span @click="routerToLogout()">退出</span>
       </div>
     </div>
   </div>
@@ -51,11 +51,13 @@
     components: {
       CommonNav
     },
-    data() {
+    data () {
       return {
         activeIndex: '1',
         width: '',
-        isfold: false
+        isfold: false,
+        token: '',
+        nickname: ''
       }
     },
     computed: {
@@ -66,11 +68,16 @@
     watch: {
       width () {
         this.width = window.innerWidth
+      },
+      token () {
+        this.token = localStorage.getItem('currentUser_token')
       }
     },
     mounted() {
       let width = window.innerWidth
       this.width = width
+      this.token = localStorage.getItem('currentUser_token')
+      this.nickname = localStorage.getItem('currentUser_name')
       // window.onresize =  () => {
       //   this.width = width
       //   console.log(width)
@@ -95,9 +102,8 @@
       },
       routerToLogout () {
         this.$store.commit('LOGOUT')
-        this.$router.push({
-          path: `/`
-        })
+        this.token = ''
+        location = '/'
       }
     }
   }
