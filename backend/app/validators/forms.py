@@ -8,7 +8,7 @@ from app.validators.base import BaseForm
 
 class ClientForm(BaseForm):
     account = StringField(validators=[DataRequired(message='账号不能为空'), length(
-        min=5, max=32
+        min=2, max=32
     )])
     secret = StringField()
     type = IntegerField(validators=[DataRequired()])

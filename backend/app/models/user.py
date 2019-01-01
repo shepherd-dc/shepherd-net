@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, SmallInteger, orm
+from sqlalchemy import Column, Integer, String, SmallInteger, orm, or_
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app.libs.error_code import NotFound, AuthFailed
+from app.libs.error_code import NotFound, AuthFailed, UsernameFailed, PasswordFailed
 from app.models.base import Base
 
 
@@ -25,12 +25,12 @@ class User(Base):
         self._password = generate_password_hash(raw)
 
     @staticmethod
-    def verify(email, password):
-        user = User.query.filter_by(email=email).first()
+    def verify(account, password):
+        user = User.query.filter(or_(User.nickname==account, User.email==account)).first()
         if not user:
-            raise NotFound(msg='用户不存在')
+            raise UsernameFailed()
         if not user.check_password(password):
-            raise AuthFailed(msg='密码不正确')
+            raise PasswordFailed()
 
         if user.auth == 2:
             scope = 'AdminScope'
@@ -38,7 +38,11 @@ class User(Base):
         #     scope = 'SuperScope'
         else:
             scope = 'UserScope'
-        return {'uid': user.id, 'scope': scope}
+        return {
+            'uid': user.id,
+            'nickname': user.nickname,
+            'scope': scope
+        }
 
     def check_password(self, raw):
         if not self._password:

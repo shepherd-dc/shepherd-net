@@ -117,11 +117,13 @@
       submitForm(formName) {
         this.$refs[formName].validate( async (valid) => {
           if (valid) {
-          let { data } = await this.$axios.post(`${URL}/client/login`,this.ruleForm2)
+            this.ruleForm2.type = 100
+            let { data } = await this.$axios.post(`${URL}/token`,this.ruleForm2)
             if ( data.error_code === 0 ) {
+              localStorage.setItem('token', data.data.token)
               this.$store.dispatch('USER_INFO', data)
               this.$router.go(-1)
-            } else if (data.error_code === 1003) {
+            } else if (data.error_code === 1002 || data.error_code === 1003) {
               alert(data.msg)
             }
           } else {

@@ -1,3 +1,5 @@
+import URL from '~/globalurl'
+
 const userInfo = {
   state: {
     userInfo: {
@@ -6,21 +8,27 @@ const userInfo = {
     }
   },
   mutations: {
-    ADD_USER_INFO: (state, { data }) => {
-      localStorage.setItem('currentUser_name', data.nickname)
-      localStorage.setItem('currentUser_token', data.email)
+    TOKEN: (state, data) => {
+      state.userInfo.token = data.token
+    },
+    ADD_USER_INFO: (state, data) => {
+      // console.log(data.nickname)
       state.userInfo.nickname = data.nickname
-      state.userInfo.token = data.email
     },
     LOGOUT: (state) => {
-      localStorage.removeItem('currentUser_name')
-      localStorage.removeItem('currentUser_token')
+      localStorage.removeItem('token')
       state.userInfo = {}
     }
   },
   actions: {
-    USER_INFO ({ commit }, data) {
-      commit('ADD_USER_INFO', data)
+    USER_INFO ({ commit }, { data }) {
+      commit('TOKEN', data)
+      this.$axios.post(`${URL}/token/secret`,{
+        "token": data.token
+      }).then( res => {
+        // console.log(res.data)
+        commit('ADD_USER_INFO', res.data)
+      })
     }
   }
 }

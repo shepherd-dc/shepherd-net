@@ -46,6 +46,7 @@
 </template>
 
 <script>
+  import URL from '~/globalurl'
   import CommonNav from './CommonNav'
   export default {
     components: {
@@ -68,16 +69,16 @@
     watch: {
       width () {
         this.width = window.innerWidth
-      },
-      token () {
-        this.token = localStorage.getItem('currentUser_token')
       }
     },
-    mounted() {
+    async mounted () {
       let width = window.innerWidth
       this.width = width
-      this.token = localStorage.getItem('currentUser_token')
-      this.nickname = localStorage.getItem('currentUser_name')
+      this.token = localStorage.getItem('token')
+      let { data } = await this.$axios.post(`${URL}/token/secret`,{
+        "token": this.token
+      })
+      this.nickname = data.nickname
       // window.onresize =  () => {
       //   this.width = width
       //   console.log(width)

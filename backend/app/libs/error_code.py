@@ -7,15 +7,27 @@ class Success(APIException):
     error_code = 0
 
 
+class DeleteSuccess(Success):
+    code = 202
+    error_code = -1
+
+
+class UsernameFailed(APIException):
+    code = 202
+    msg = '用户不存在'
+    error_code = 1002
+
+
+class PasswordFailed(APIException):
+    code = 202
+    msg = '密码错误'
+    error_code = 1003
+
+
 class LoginFailed(APIException):
     code = 202
     msg = '用户名或密码错误'
     error_code = 1003
-
-
-class DeleteSuccess(Success):
-    code = 202
-    error_code = -1
 
 
 class ServerException(APIException):

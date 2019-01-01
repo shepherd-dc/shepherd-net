@@ -164,10 +164,10 @@
             this.ruleForm.type = 100
             let { data } = await this.$axios.post(`${URL}/client/register`,this.ruleForm)
             if ( data.error_code === 0 ) {
-              this.$router.push('/login')
+              this.$router.replace('/login')
             }
           } else {
-            console.log('error submit!!');
+            console.log('error submit!!')
             return false
           }
         })
