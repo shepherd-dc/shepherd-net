@@ -2,20 +2,20 @@
   <section>
     <div class="container">
       <div class="content">
-        <el-row 
-          :gutter="width > 1080 ? 10 : 0" 
+        <el-row
+          :gutter="width > 1080 ? 10 : 0"
           type="flex">
           <el-col :span="width > 1080 ? 18 : 24">
             <el-card class="box-card">
-              <div 
-                slot="header" 
+              <div
+                slot="header"
                 class="clearfix">
                 <span>{{ sub_data.menu_name }}</span>
               </div>
               <div class="text item">
                 <el-row type="felx">
                   <el-col :span="width > 1080 ? 8 : 24">
-                    <pic-card 
+                    <pic-card
                       :sub_data="sub_data"
                       :issublist="issublist"/>
                   </el-col>
@@ -23,8 +23,8 @@
               </div>
             </el-card>
           </el-col>
-          <el-col 
-            v-if="width > 1080" 
+          <el-col
+            v-if="width > 1080"
             :span="6">
             <aside-card
               v-for="(title, index) in aside_title"
@@ -66,7 +66,7 @@ export default {
     let { data } = await this.$axios.get(
       `${URL}/menu/sublist/${this.$route.params.item}`
     )
-    console.log(data)
+    // console.log(data)
     this.sub_data = data
   },
   mounted() {

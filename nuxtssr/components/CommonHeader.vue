@@ -75,10 +75,12 @@
       let width = window.innerWidth
       this.width = width
       this.token = localStorage.getItem('token')
-      let { data } = await this.$axios.post(`${URL}/token/secret`,{
-        "token": this.token
-      })
-      this.nickname = data.nickname
+      if (this.token) {
+        let { data } = await this.$axios.post(`${URL}/token/secret`,{
+          "token": this.token
+        })
+        this.nickname = data.nickname
+      }
       // window.onresize =  () => {
       //   this.width = width
       //   console.log(width)

@@ -37,7 +37,6 @@ def get_token_info():
     s = Serializer(current_app.config['SECRET_KEY'])
     try:
         data = s.loads(form.token.data, return_header=True)
-        print(data)
     except SignatureExpired:
         raise AuthFailed(msg='token is expired', error_code=1003)
     except BadSignature:
