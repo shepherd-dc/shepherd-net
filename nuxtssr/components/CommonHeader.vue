@@ -38,6 +38,9 @@
         <span @click="routerToLogin()">登录</span> | <span @click="routerToRegister()">注册</span>
       </div>
       <div v-if="token || userInfo.token">
+        <span
+          class="publish-btn"
+          @click="routerToPublish()">发帖</span>
         <span>{{ userInfo.nickname || nickname }}</span> | <span @click="routerToLogout()">退出</span>
       </div>
     </div>
@@ -107,6 +110,11 @@
         this.$store.commit('LOGOUT')
         this.token = ''
         location = '/'
+      },
+      routerToPublish () {
+        this.$router.push({
+          path: `/publish`
+        })
       }
     }
   }
@@ -144,6 +152,15 @@
         cursor: pointer;
         &:hover {
           color: #41b883
+        }
+      }
+      .publish-btn {
+        padding: 4px 16px 6px;
+        border: 1px solid #fff;
+        border-radius: 24px;
+        margin-right: 10px;
+        &:hover {
+          border-color: #41b883
         }
       }
     }

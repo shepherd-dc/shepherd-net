@@ -66,6 +66,9 @@ export default {
   computed: {
     menus () {
       return this.$store.state.menus
+    },
+    token () {
+      return this.$store.state.userInfo.userInfo.token
     }
   },
   watch: {
@@ -73,10 +76,13 @@ export default {
       this.width = window.innerWidth
     }
   },
-  mounted() {
+  async mounted() {
     let width = window.innerWidth
     this.width = width
-    // console.log(this.menus)
+    // let { data } = await this.$axios.get(`${URL}/user`,{
+    //   "token": this.token
+    // })
+    // console.log(this.token)
   }
 }
 </script>

@@ -26,8 +26,10 @@ const userInfo = {
       this.$axios.post(`${URL}/token/secret`,{
         "token": data.token
       }).then( res => {
-        // console.log(res.data)
-        commit('ADD_USER_INFO', res.data)
+        if (res) {
+          console.log(res)
+        }
+        // commit('ADD_USER_INFO', res.data)
       })
     }
   }

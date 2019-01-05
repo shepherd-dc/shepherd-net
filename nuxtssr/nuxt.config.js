@@ -28,7 +28,10 @@ module.exports = {
   */
   css: [
     'element-ui/lib/theme-chalk/index.css',
-    { src: "swiper/dist/css/swiper.css" }
+    'swiper/dist/css/swiper.css',
+    'quill/dist/quill.snow.css',
+    'quill/dist/quill.bubble.css',
+    'quill/dist/quill.core.css'
   ],
 
   /*
@@ -38,6 +41,10 @@ module.exports = {
     '@/plugins/element-ui',
     {
       src: "~/plugins/vue-swiper.js",
+      ssr: false
+    },
+    {
+      src: "~plugins/nuxt-quill-plugin.js",
       ssr: false
     }
   ],

@@ -8,7 +8,9 @@
     active-text-color="#41b883"
   >
     <el-menu-item index="0">
-      <nuxt-link to="/">首页</nuxt-link>
+      <nuxt-link 
+        class="homepage"
+        to="/">首页</nuxt-link>
     </el-menu-item>
     <el-submenu
       v-for="(menu, index) in menus"
@@ -97,6 +99,10 @@ export default {
 <style>
 .el-menu.el-menu--horizontal {
   border-bottom: none !important;
+}
+.homepage {
+  display:block;
+  line-height: 60px;
 }
 </style>
 
