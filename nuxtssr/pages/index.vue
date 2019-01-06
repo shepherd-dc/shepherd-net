@@ -76,7 +76,7 @@ export default {
       this.width = window.innerWidth
     }
   },
-  async mounted() {
+  mounted() {
     let width = window.innerWidth
     this.width = width
     // let { data } = await this.$axios.get(`${URL}/user`,{

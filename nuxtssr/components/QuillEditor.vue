@@ -43,24 +43,25 @@
       }
     },
     mounted() {
-      console.log('app init, my quill insrance object is:', this.myQuillEditor)
+      // console.log('app init, my quill insrance object is:', this.myQuillEditor)
       setTimeout(() => {
         this.content = 'i am changed'
       }, 3000)
     },
     methods: {
       onEditorBlur(editor) {
-        console.log('editor blur!', editor)
+        // console.log('editor blur!', editor)
       },
       onEditorFocus(editor) {
-        console.log('editor focus!', editor)
+        // console.log('editor focus!', editor)
       },
       onEditorReady(editor) {
-        console.log('editor ready!', editor)
+        // console.log('editor ready!', editor)
       },
-      onEditorChange({ editor, html, text }) {
-        console.log('editor change!', editor, html, text)
+      onEditorChange({ quill, html, text }) {
+        console.log('editor change!', quill, html, text)
         this.content = html
+        this.$emit('deliverContent', html)
       }
     }
   }

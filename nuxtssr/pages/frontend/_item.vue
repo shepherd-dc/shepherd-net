@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-  import SubList from '~/components/SubList'
+  import SubList from '~/pages/article/index'
   export default {
     components: {
       SubList
