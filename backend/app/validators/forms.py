@@ -75,3 +75,10 @@ class LoginForm(BaseForm):
     account = StringField(validators=[DataRequired()])
     secret = StringField(validators=[DataRequired()])
 
+
+class ArticleForm(BaseForm):
+    title = StringField(validators=[DataRequired()])
+    author = StringField()
+    content = StringField(validators=[DataRequired()])
+    column_id = IntegerField(validators=[DataRequired()])
+
