@@ -9,7 +9,8 @@ class Article(Base):
     author = Column(String(30))
     content = Column(Text())
     column_id = Column(Integer)
+    route_path = Column(String(50))
 
     @orm.reconstructor
     def __init__(self):
-        self.fields = ['id', 'title', 'author', 'content', 'column_id']
+        self.fields = ['id', 'title', 'author', 'content', 'column_id', 'route_path']

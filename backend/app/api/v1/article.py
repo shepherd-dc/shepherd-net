@@ -13,7 +13,6 @@ api = Redprint('article')
 @api.route('', methods=['GET'])
 def article_list():
     articles = Article.query.all()
-    print(articles)
     return jsonify(articles)
 
 
@@ -41,6 +40,7 @@ def publish_article():
             article.author = form.author.data
             article.content = form.content.data
             article.column_id = form.column_id.data
+            article.route_path = form.path.data
             db.session.add(article)
         return Success()
 

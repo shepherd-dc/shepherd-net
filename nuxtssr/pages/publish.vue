@@ -37,7 +37,7 @@
                       v-for="item in group.submenu"
                       :key="item.id"
                       :label="item.name"
-                      :value="item.id">
+                      :value="item.id+'-'+item.path">
                     </el-option>
                   </el-option-group>
                 </el-select>
@@ -110,12 +110,16 @@
     mounted() {
       let width = window.innerWidth
       this.width = width
-      // console.log(this.menus)
+      console.log(this.menus)
     },
     methods: {
       async onSubmit() {
-        // console.log(this.form)
-        let { data } = await this.$axios.post(`${URL}/article/publish`, this.form)
+        let formData = this.form
+        let column = formData.column_id.split('-')
+        formData.column_id = column[0]
+        formData.path = column[1]
+        console.log(formData)
+        let { data } = await this.$axios.post(`${URL}/article/publish`, formData)
         // console.log(data)
         if (data.error_code === 0) {
           this.$router.go(-1)

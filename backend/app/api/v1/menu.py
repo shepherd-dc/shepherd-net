@@ -16,6 +16,10 @@ def get_menu():
     nav = request.values.get('nav', '')
     menus = Menu.query.all()
 
+    for menu in menus:
+        for submenu in menu.submenu:
+            submenu.hide('menu_name')
+
     if nav=='nav':
         for menu in menus:
             for submenu in menu.submenu:

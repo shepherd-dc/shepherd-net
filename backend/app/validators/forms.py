@@ -81,4 +81,6 @@ class ArticleForm(BaseForm):
     author = StringField()
     content = StringField(validators=[DataRequired()])
     column_id = IntegerField(validators=[DataRequired()])
+    path = StringField(validators=[DataRequired()])
+
 
