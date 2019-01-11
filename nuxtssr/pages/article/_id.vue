@@ -10,8 +10,8 @@
             class="head">
             <el-breadcrumb separator=">">
               <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-              <el-breadcrumb-item><a :href="'/'+menu">{{ menuBread }}</a></el-breadcrumb-item>
-              <el-breadcrumb-item><a :href="'/'+menu+'/'+submenu">{{ submenuBread }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item><a :href="'/'+menuBread">{{ menuBread }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item><a :href="'/'+menuBread+'/'+submenuBread">{{ submenuBread }}</a></el-breadcrumb-item>
               <el-breadcrumb-item>{{ article.title }}</el-breadcrumb-item>
             </el-breadcrumb>
           </div>

@@ -8,7 +8,7 @@
     active-text-color="#41b883"
   >
     <el-menu-item index="0">
-      <nuxt-link 
+      <nuxt-link
         class="homepage"
         to="/">首页</nuxt-link>
     </el-menu-item>
@@ -88,8 +88,9 @@ export default {
   // },
   methods: {
     routerTo(path, name) {
+      let menu = path.split('/')[0]
       this.$router.push({
-        path: `/${path}/${name}`
+        path: `/${menu}/${name}`
       })
     }
   }

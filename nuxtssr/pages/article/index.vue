@@ -10,10 +10,11 @@
           <div
             slot="header"
             class="clearfix">
-            <span>文章列表</span>
-            <el-button
-              style="float: right; padding: 3px 0"
-              type="text">更多</el-button>
+            <el-breadcrumb separator=">">
+              <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+              <el-breadcrumb-item><a :href="'/'+menu">{{ menu }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item>{{ submenu }}</el-breadcrumb-item>
+            </el-breadcrumb>
           </div>
           <div
             v-for="article in articles"
@@ -44,7 +45,9 @@
     data () {
       return {
         width: '',
-        articles: []
+        articles: [],
+        menu: '',
+        submenu: ''
       }
     },
     watch: {
@@ -54,7 +57,9 @@
     },
     async created () {
       let { data } = await this.$axios.get(`${URL}/article`)
-      console.log(data)
+      let path = this.$route.fullPath
+      this.menu = path.split('/')[1]
+      this.submenu = path.split('/')[2]
       this.articles = data
     },
     mounted() {

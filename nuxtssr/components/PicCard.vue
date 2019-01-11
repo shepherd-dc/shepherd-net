@@ -46,8 +46,9 @@ export default {
   },
   methods: {
     routerTo (path, name) {
+      let menu = path.split('/')[0]
       this.$router.push({
-        path: `/${path}/${name}`
+        path: `/${menu}/${name}`
       })
     }
   }
