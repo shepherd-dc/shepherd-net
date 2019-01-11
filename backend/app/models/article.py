@@ -7,10 +7,12 @@ class Article(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(50), nullable=False)
     author = Column(String(30))
-    content = Column(Text())
-    column_id = Column(Integer)
-    route_path = Column(String(50))
+    content = Column(Text(), nullable=False)
+    column_id = Column(Integer, nullable=False)
+    column_name = Column(String(10))
+    menu_id = Column(Integer, nullable=False)
+    menu_name = Column(String(10))
 
     @orm.reconstructor
     def __init__(self):
-        self.fields = ['id', 'title', 'author', 'content', 'column_id', 'route_path']
+        self.fields = ['id', 'title', 'author', 'content', 'column_id', 'column_name', 'menu_id', 'menu_name']

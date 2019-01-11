@@ -68,7 +68,7 @@ class SubmenuForm(BaseForm):
     name = StringField(validators=[DataRequired()])
     path = StringField(validators=[DataRequired()])
     pic = StringField(validators=[DataRequired()])
-    mid = IntegerField(validators=[DataRequired()])
+    menu_id = IntegerField(validators=[DataRequired()])
 
 
 class LoginForm(BaseForm):
@@ -81,6 +81,8 @@ class ArticleForm(BaseForm):
     author = StringField()
     content = StringField(validators=[DataRequired()])
     column_id = IntegerField(validators=[DataRequired()])
-    path = StringField(validators=[DataRequired()])
+    menu_id = IntegerField(validators=[DataRequired()])
+    column_name = StringField()
+    menu_name = StringField()
 
 

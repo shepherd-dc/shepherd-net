@@ -87,8 +87,8 @@
       let { data } = await this.$axios.get(`${URL}/article/${this.$route.params.id}`)
       // console.log(data)
       this.article = data
-      this.menuBread = data.route_path.split('/')[0]
-      this.submenuBread = data.route_path.split('/')[1]
+      this.menuBread = data.menu_name
+      this.submenuBread = data.column_name
       // this.menu = this.$route.params.list
       // this.submenu = this.$route.params.detail
     },

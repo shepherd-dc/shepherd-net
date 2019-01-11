@@ -12,7 +12,7 @@ class Submenu(Base):
     menu_name = Column(String(50))
     path = Column(String(50), nullable=False)
     pic = Column(String(50), nullable=False)
-    mid = Column(Integer, ForeignKey('menu.id'))
+    menu_id = Column(Integer, ForeignKey('menu.id'))
 
     @orm.reconstructor
     def __init__(self):

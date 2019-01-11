@@ -60,6 +60,6 @@ def add_submenu():
         submenu.name = form.name.data
         submenu.path= form.path.data
         submenu.pic = form.pic.data
-        submenu.mid= form.mid.data
+        submenu.menu_id= form.menu_id.data
         db.session.add(submenu)
     return Success()

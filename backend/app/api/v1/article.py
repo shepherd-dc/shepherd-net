@@ -1,10 +1,11 @@
-from flask import jsonify
+from flask import jsonify, request
 
 from app.libs.error_code import Success, DeleteSuccess
 from app.libs.redprint import Redprint
 from app.libs.token_auth import auth
 from app.models.article import Article
 from app.models.base import db
+from app.models.submenu import Submenu
 from app.validators.forms import ArticleForm
 
 api = Redprint('article')
@@ -12,6 +13,13 @@ api = Redprint('article')
 
 @api.route('', methods=['GET'])
 def article_list():
+    column_id = request.values.get('column_id', '')
+    if column_id:
+        submenu = Submenu.query.filter_by(id=column_id).first_or_404()
+        if submenu:
+            articles = Article.query.filter_by(column_id=column_id).all()
+            return jsonify(articles)
+
     articles = Article.query.all()
     return jsonify(articles)
 
@@ -40,7 +48,7 @@ def publish_article():
             article.author = form.author.data
             article.content = form.content.data
             article.column_id = form.column_id.data
-            article.route_path = form.path.data
+            article.menu_id = form.menu_id.data
             db.session.add(article)
         return Success()
 
