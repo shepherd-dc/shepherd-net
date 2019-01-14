@@ -10,8 +10,8 @@
             class="head">
             <el-breadcrumb separator=">">
               <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-              <el-breadcrumb-item><a :href="'/'+menuBread">{{ menuBread }}</a></el-breadcrumb-item>
-              <el-breadcrumb-item><a :href="'/'+menuBread+'/'+submenuBread">{{ submenuBread }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item><a :href="'/'+menu">{{ menuBread }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item><a :href="'/'+menu+'/'+submenuBread">{{ submenuBread }}</a></el-breadcrumb-item>
               <el-breadcrumb-item>{{ article.title }}</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
@@ -85,12 +85,11 @@
     async created () {
       // console.log(this.$route)
       let { data } = await this.$axios.get(`${URL}/article/${this.$route.params.id}`)
-      // console.log(data)
+      console.log(data)
       this.article = data
       this.menuBread = data.menu_name
       this.submenuBread = data.column_name
-      // this.menu = this.$route.params.list
-      // this.submenu = this.$route.params.detail
+      this.menu = data.en_name
     },
     mounted() {
       let width = window.innerWidth

@@ -1,16 +1,16 @@
 <template>
   <div>
-    <sub-list
+    <single-column
       :column_data="column_data"
       :articles_data="articles_data"/>
   </div>
 </template>
 <script>
   import URL from '~/globalurl'
-  import SubList from '~/components/SingleColumn'
+  import SingleColumn from '~/components/SingleColumn'
   export default {
     components: {
-      SubList
+      SingleColumn
     },
     async asyncData ( context ) {
       let column = await context.$axios.get(`${URL}/menu/sublist/${context.params.item}`)

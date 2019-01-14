@@ -110,19 +110,20 @@
     mounted() {
       let width = window.innerWidth
       this.width = width
-      console.log(this.menus)
+      // console.log(this.menus)
     },
     methods: {
       async onSubmit() {
         let formData = this.form
         let column = formData.column_id.split('-')
         formData.column_id = column[0]
-        formData.path = column[1]
-        console.log(formData)
+        let routePath = column[1]
         let { data } = await this.$axios.post(`${URL}/article/publish`, formData)
         // console.log(data)
         if (data.error_code === 0) {
-          this.$router.go(-1)
+          this.$router.replace({
+            path: `/${routePath}`
+          })
         }
       },
       handleContent (html) {

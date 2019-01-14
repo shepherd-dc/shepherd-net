@@ -81,8 +81,5 @@ class ArticleForm(BaseForm):
     author = StringField()
     content = StringField(validators=[DataRequired()])
     column_id = IntegerField(validators=[DataRequired()])
-    menu_id = IntegerField(validators=[DataRequired()])
-    column_name = StringField()
-    menu_name = StringField()
 
 

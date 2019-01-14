@@ -33,9 +33,14 @@ def get_article(aid):
 @api.route('/publish', methods=['POST'])
 def publish_article():
     form = ArticleForm().validate_for_api()
+
     title = form.title.data
-    article = Article.query.filter_by(title=title).first()
-    if article:
+    article_title = Article.query.filter_by(title=title).first()
+
+    column_id = form.column_id.data
+    column = Submenu.query.filter_by(id=column_id).first()
+
+    if article_title:
         data = {
             "error_code": 100,
             "msg": "文章标题重复"
@@ -48,7 +53,10 @@ def publish_article():
             article.author = form.author.data
             article.content = form.content.data
             article.column_id = form.column_id.data
-            article.menu_id = form.menu_id.data
+            article.column_name = column.name
+            article.menu_id = column.menu_id
+            article.en_name = column.menu.en_name
+            article.menu_name = column.menu.menu_name
             db.session.add(article)
         return Success()
 

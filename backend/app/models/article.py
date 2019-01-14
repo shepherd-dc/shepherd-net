@@ -12,7 +12,8 @@ class Article(Base):
     column_name = Column(String(10))
     menu_id = Column(Integer, nullable=False)
     menu_name = Column(String(10))
+    en_name = Column(String(10))
 
     @orm.reconstructor
     def __init__(self):
-        self.fields = ['id', 'title', 'author', 'content', 'column_id', 'column_name', 'menu_id', 'menu_name']
+        self.fields = ['id', 'title', 'author', 'content', 'column_id', 'column_name', 'menu_id', 'menu_name', 'en_name']

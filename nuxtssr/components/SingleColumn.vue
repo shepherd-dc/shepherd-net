@@ -12,7 +12,7 @@
                 class="clearfix">
                 <el-breadcrumb separator=">">
                   <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                  <el-breadcrumb-item><a :href="'/'">{{ column_data.menu_name }}</a></el-breadcrumb-item>
+                  <el-breadcrumb-item><a :href="'/'+column_data.path.split('/')[0]">{{ column_data.menu_name }}</a></el-breadcrumb-item>
                   <el-breadcrumb-item>{{ column_data.name }}</el-breadcrumb-item>
                 </el-breadcrumb>
               </div>
@@ -108,6 +108,7 @@ export default {
   mounted() {
     let width = window.innerWidth
     this.width = width
+    console.log(this.column_data)
   },
   methods: {
     routerToDetail (id) {
