@@ -1,3 +1,5 @@
+import time
+
 from flask import jsonify, request
 
 from app.libs.error_code import Success, DeleteSuccess
@@ -17,10 +19,10 @@ def article_list():
     if column_id:
         submenu = Submenu.query.filter_by(id=column_id).first_or_404()
         if submenu:
-            articles = Article.query.filter_by(column_id=column_id).all()
+            articles = Article.query.filter_by(column_id=column_id).order_by(Article.create_time.desc()).all()
             return jsonify(articles)
 
-    articles = Article.query.all()
+    articles = Article.query.order_by(Article.create_time.desc()).all()
     return jsonify(articles)
 
 
@@ -57,6 +59,7 @@ def publish_article():
             article.menu_id = column.menu_id
             article.en_name = column.menu.en_name
             article.menu_name = column.menu.menu_name
+            article.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
             db.session.add(article)
         return Success()
 

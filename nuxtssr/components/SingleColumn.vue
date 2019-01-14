@@ -56,9 +56,8 @@
             v-if="width > 1080"
             :span="6">
             <aside-card
-              v-for="(title, index) in aside_title"
-              :key="index"
-              :aside_title="title"
+              :aside_title="title1"
+              :aside_data="articles_data"
               class="card-margin"
             />
           </el-col>
@@ -90,8 +89,8 @@ export default {
   },
   data() {
     return {
-      width: "",
-      aside_title: ["最新", "推荐", "友链"]
+      width: '',
+      title1: '最新'
     }
   },
   watch: {
@@ -108,7 +107,7 @@ export default {
   mounted() {
     let width = window.innerWidth
     this.width = width
-    console.log(this.column_data)
+    // console.log(this.column_data)
   },
   methods: {
     routerToDetail (id) {
@@ -120,7 +119,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
 .container {
   padding-top: 60px;
 }
@@ -131,6 +130,18 @@ export default {
 }
 .box-card {
   margin-bottom: 10px;
+}
+.item {
+  cursor: pointer;
+  &:hover {
+    color: #41b883;
+  }
+}
+.el-breadcrumb__inner.is-link:hover, .el-breadcrumb__inner a:hover {
+  color: #41b883;
+}
+.el-breadcrumb {
+  line-height: 22px;
 }
 </style>
 

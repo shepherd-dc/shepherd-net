@@ -9,10 +9,11 @@
         type="text">更多</el-button>
     </div>
     <div
-      v-for="o in 4"
-      :key="o"
-      class="text item">
-      {{ '列表内容 ' + o }}
+      v-for="data in aside_data"
+      :key="data.id"
+      class="text item"
+      @click="routerToDetail(data.id)">
+      {{ data.title }}
     </div>
   </el-card>
 </template>
@@ -23,8 +24,19 @@ export default {
     aside_title: {
       type: String,
       default: ''
+    },
+    aside_data: {
+      type: Array,
+      default: () => {}
     }
   },
+  methods: {
+    routerToDetail (id) {
+      this.$router.push({
+        path: `/article/${id}`
+      })
+    }
+  }
 }
 </script>
 

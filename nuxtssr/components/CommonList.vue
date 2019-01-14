@@ -14,10 +14,10 @@
             v-if="width > 1080"
             :span="6">
             <aside-card
-              v-for="(title, index) in aside_title"
-              :key="index"
-              :aside_title="title"
-              class="card-margin" />
+              :aside_title="title1"
+              :aside_data="articles_data"
+              class="card-margin"
+            />
           </el-col>
         </el-row>
       </div>
@@ -45,11 +45,7 @@ export default {
       width: '',
       islist: false,
       card_data: {},
-      aside_title: [
-        '最新',
-        '推荐',
-        '友链'
-      ]
+      title1: '最新'
     }
   },
   watch: {

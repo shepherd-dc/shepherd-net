@@ -1,9 +1,10 @@
+import time
 from contextlib import contextmanager
 from datetime import datetime
 
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy as _SQLAlchemy, BaseQuery
-from sqlalchemy import Integer, SmallInteger, Column
+from sqlalchemy import Integer, SmallInteger, Column, String
 
 from app.libs.error_code import NotFound
 
@@ -44,11 +45,11 @@ db = SQLAlchemy(query_class=MyQuery)
 
 class Base(db.Model):
     __abstract__ = True
-    create_time = Column('create_time', Integer)
+    create_time = Column('create_time', String(50))
     status = Column(SmallInteger, default=1)
 
     def __init__(self):
-        self.create_time = int(datetime.now().timestamp())
+        self.create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     def __getitem__(self, item):
         return getattr(self, item)

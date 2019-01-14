@@ -18,9 +18,8 @@
             v-if="width > 1080"
             :span="6">
             <aside-card
-              v-for="(title, index) in aside_title"
-              :key="index"
-              :aside_title="title"
+              :aside_title="title1"
+              :aside_data="articles_data"
               class="card-margin" />
           </el-col>
         </el-row>
@@ -45,18 +44,15 @@ export default {
   data () {
     return {
       width: '',
-      aside_title: [
-        '最新',
-        '推荐',
-        '友链'
-      ]
+      title1: '最新'
     }
   },
   async asyncData ({ app }) {
     let { data } = await app.$axios.get(`${URL}/menu`)
-    // console.log(data)
+    let articles = await app.$axios.get(`${URL}/article`)
     return {
-      card_data: data
+      card_data: data,
+      articles_data: articles.data
     }
   },
   async fetch ({ app }) {
@@ -98,5 +94,8 @@ export default {
   }
   .card-margin {
     margin-bottom: 10px;
+  }
+  .el-button--text {
+    color: #41b883;
   }
 </style>

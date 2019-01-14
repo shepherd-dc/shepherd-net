@@ -31,70 +31,51 @@
       <el-col
         v-if="width > 1080"
         :span="6">
-        <el-card class="box-card">
-          <div
-            slot="header"
-            class="clearfix">
-            <span>推荐</span>
-            <el-button
-              style="float: right; padding: 3px 0"
-              type="text">更多</el-button>
-          </div>
-          <div
-            v-for="o in 10"
-            :key="o"
-            class="text item">
-            {{ '列表内容 ' + o }}
-          </div>
-        </el-card>
+        <aside-card
+          :aside_title="title1"
+          :aside_data="articles_data"
+          class="card-margin"
+        />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-  // import AsideCard from '~/components/AsideCard'
+  import AsideCard from '~/components/AsideCard'
   import URL from "~/globalurl"
 
   export default {
     components: {
-      // AsideCard
+      AsideCard
     },
     data () {
       return {
         width: '',
-        menu: '',
-        submenu: '',
-        article: '',
-        menuBread: '',
-        submenuBread: ''
+        title1: '最新'
       }
     },
-    // async asyncData ({ app }) {
-    //   let { data } = await app.$axios.get(`${URL}/article/${this.$route.params.id}`)
-    //   console.log(data)
-    //   return {
-    //     article: data
-    //   }
-    // },
+    async asyncData (context) {
+      let { data } = await context.$axios.get(`${URL}/article/${context.params.id}`)
+      // console.log(data)
+      let articles = await context.$axios.get(`${URL}/article`)
+      return {
+        article: data,
+        menuBread: data.menu_name,
+        submenuBread: data.column_name,
+        menu: data.en_name,
+        articles_data: articles.data
+      }
+    },
     watch: {
       width () {
         this.width = window.innerWidth
       }
     },
-    async created () {
-      // console.log(this.$route)
-      let { data } = await this.$axios.get(`${URL}/article/${this.$route.params.id}`)
-      console.log(data)
-      this.article = data
-      this.menuBread = data.menu_name
-      this.submenuBread = data.column_name
-      this.menu = data.en_name
-    },
     mounted() {
       let width = window.innerWidth
       this.width = width
-      console.log(this.menuBread)
+      // console.log(this.menuBread)
     }
   }
 </script>
@@ -106,7 +87,7 @@
     margin: 0 auto;
   }
   .head {
-    padding: 4px 30px;
+    padding: 0 30px;
     font-size: 14px;
   }
   .title {
@@ -139,6 +120,20 @@
   .item {
     margin-bottom: 18px;
   }
+
+  .el-breadcrumb {
+    line-height: 22px;
+  }
+  .el-button--text {
+    color:#41b883;
+  }
+  .item {
+  cursor: pointer;
+  &:hover {
+    color: #41b883;
+  }
+}
+
 
   .clearfix:before,
   .clearfix:after {

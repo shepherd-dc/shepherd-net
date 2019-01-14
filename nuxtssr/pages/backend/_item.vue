@@ -12,7 +12,7 @@
     components: {
       SingleColumn
     },
-    async asyncData ( context ) {
+    async asyncData (context) {
       let column = await context.$axios.get(`${URL}/menu/sublist/${context.params.item}`)
       let column_id = column.data.id
       let { data } = await context.$axios.get(`${URL}/article?column_id=${column_id}`)

@@ -1,3 +1,5 @@
+import time
+
 from flask import request, session, jsonify
 from flask_login import login_user
 from sqlalchemy import or_
@@ -31,6 +33,7 @@ def __register_user_by_email():
         user.nickname = form.nickname.data
         user.email = form.account.data
         user.password = form.secret.data
+        user.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         db.session.add(user)
 
 

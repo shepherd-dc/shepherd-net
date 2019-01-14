@@ -1,3 +1,5 @@
+import time
+
 from flask import jsonify, request
 from sqlalchemy import inspect
 
@@ -49,6 +51,7 @@ def add_menu():
         menu = Menu()
         menu.menu_name = form.menu_name.data
         menu.en_name = form.en_name.data
+        menu.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         db.session.add(menu)
     return Success()
 
@@ -61,5 +64,6 @@ def add_submenu():
         submenu.path= form.path.data
         submenu.pic = form.pic.data
         submenu.menu_id= form.menu_id.data
+        submenu.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         db.session.add(submenu)
     return Success()
