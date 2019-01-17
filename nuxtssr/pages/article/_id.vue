@@ -10,8 +10,8 @@
             class="head">
             <el-breadcrumb separator=">">
               <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-              <el-breadcrumb-item><a :href="'/'+menu">{{ menuBread }}</a></el-breadcrumb-item>
-              <el-breadcrumb-item><a :href="'/'+menu+'/'+submenuBread">{{ submenuBread }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item><a @click.stop="routerBreadMenu">{{ menuBread }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item><a @click.stop="routerBreadSubmenu">{{ submenuBread }}</a></el-breadcrumb-item>
               <el-breadcrumb-item>{{ article.title }}</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
@@ -34,7 +34,6 @@
         <aside-card
           :aside_title="title1"
           :aside_data="articles_data"
-          class="card-margin"
         />
       </el-col>
     </el-row>
@@ -76,7 +75,19 @@
       let width = window.innerWidth
       this.width = width
       // console.log(this.menuBread)
-    }
+    },
+    methods: {
+      routerBreadMenu () {
+        this.$router.push({
+          path: `/${this.menu}`
+        })
+      },
+      routerBreadSubmenu () {
+        this.$router.push({
+          path: `/${this.menu}/${this.submenuBread}`
+        })
+      }
+    },
   }
 </script>
 

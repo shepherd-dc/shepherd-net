@@ -7,6 +7,7 @@ from app.libs.redprint import Redprint
 from app.libs.token_auth import auth
 from app.models.article import Article
 from app.models.base import db
+from app.models.menu import Menu
 from app.models.submenu import Submenu
 from app.validators.forms import ArticleForm
 
@@ -15,7 +16,14 @@ api = Redprint('article')
 
 @api.route('', methods=['GET'])
 def article_list():
+    menu_id = request.values.get('menu_id', '')
     column_id = request.values.get('column_id', '')
+    if menu_id and not column_id:
+        menu = Menu.query.filter_by(id=menu_id).first_or_404()
+        if menu:
+            articles = Article.query.filter_by(menu_id=menu_id).order_by(Article.create_time.desc()).all()
+            return jsonify(articles)
+
     if column_id:
         submenu = Submenu.query.filter_by(id=column_id).first_or_404()
         if submenu:

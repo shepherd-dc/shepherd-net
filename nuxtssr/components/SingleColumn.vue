@@ -12,7 +12,7 @@
                 class="clearfix">
                 <el-breadcrumb separator=">">
                   <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                  <el-breadcrumb-item><a :href="'/'+column_data.path.split('/')[0]">{{ column_data.menu_name }}</a></el-breadcrumb-item>
+                  <el-breadcrumb-item><a @click.stop="routerBread">{{ column_data.menu_name }}</a></el-breadcrumb-item>
                   <el-breadcrumb-item>{{ column_data.name }}</el-breadcrumb-item>
                 </el-breadcrumb>
               </div>
@@ -37,29 +37,14 @@
                 </el-row>
               </div>
             </el-card>
-            <el-card class="box-card">
-              <div
-                slot="header"
-                class="clearfix">
-                <span>文章列表</span>
-              </div>
-              <div
-                v-for="article in articles_data"
-                :key="article.id"
-                class="text item"
-                @click="routerToDetail(article.id)">
-                {{ article.title }}
-              </div>
-            </el-card>
+            <article-list :articles_data="articles_data"/>
           </el-col>
           <el-col
             v-if="width > 1080"
             :span="6">
             <aside-card
               :aside_title="title1"
-              :aside_data="articles_data"
-              class="card-margin"
-            />
+              :aside_data="articles_data"/>
           </el-col>
         </el-row>
       </div>
@@ -71,11 +56,13 @@
 import URL from "~/globalurl"
 import PicCard from "~/components/PicCard"
 import AsideCard from "~/components/AsideCard"
+import ArticleList from "~/components/ArticleList"
 
 export default {
   components: {
     PicCard,
-    AsideCard
+    AsideCard,
+    ArticleList
   },
   props: {
     column_data: {
@@ -113,6 +100,11 @@ export default {
     routerToDetail (id) {
       this.$router.push({
         path: `/article/${id}`
+      })
+    },
+    routerBread () {
+      this.$router.push({
+        path: `/${this.column_data.path.split('/')[0]}`
       })
     }
   },

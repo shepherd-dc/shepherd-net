@@ -29,9 +29,7 @@
             <aside-card
               v-for="(title, index) in aside_title"
               :key="index"
-              :aside_title="title"
-              class="card-margin"
-            />
+              :aside_title="title"/>
           </el-col>
         </el-row>
       </div>

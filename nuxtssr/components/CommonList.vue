@@ -9,15 +9,14 @@
             <main-card
               :card_data="card_data"
               :islist="islist"/>
+            <article-list :articles_data="articles_data"/>
           </el-col>
           <el-col
             v-if="width > 1080"
             :span="6">
             <aside-card
               :aside_title="title1"
-              :aside_data="articles_data"
-              class="card-margin"
-            />
+              :aside_data="articles_data"/>
           </el-col>
         </el-row>
       </div>
@@ -29,22 +28,27 @@
 import URL from '~/globalurl'
 import MainCard from '~/components/MainCard'
 import AsideCard from '~/components/AsideCard'
+import ArticleList from '~/components/ArticleList'
 export default {
   components: {
     MainCard,
-    AsideCard
+    AsideCard,
+    ArticleList
   },
   props: {
-    en_name: {
-      type: String,
-      default: ''
+    card_data: {
+      type: Object,
+      default: () => {}
+    },
+    articles_data: {
+      type: Array,
+      default: () => {}
     }
   },
   data () {
     return {
       width: '',
       islist: false,
-      card_data: {},
       title1: '最新'
     }
   },
@@ -52,11 +56,6 @@ export default {
     width () {
       this.width = window.innerWidth
     }
-  },
-  async created() {
-    let { data } = await this.$axios.get(`${URL}/menu/list/${this.en_name}`)
-    // console.log(data)
-    this.card_data = data
   },
   mounted() {
     let width = window.innerWidth

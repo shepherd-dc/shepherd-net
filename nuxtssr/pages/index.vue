@@ -11,16 +11,14 @@
             <main-card
               v-for="(item, index) in card_data"
               :key="index"
-              :card_data="item"
-              class="card-margin"/>
+              :card_data="item"/>
           </el-col>
           <el-col
             v-if="width > 1080"
             :span="6">
             <aside-card
               :aside_title="title1"
-              :aside_data="articles_data"
-              class="card-margin" />
+              :aside_data="articles_data"/>
           </el-col>
         </el-row>
       </div>
@@ -91,9 +89,6 @@ export default {
     max-width: 1280px;
     margin: 10px auto;
     padding-top: 10px;
-  }
-  .card-margin {
-    margin-bottom: 10px;
   }
   .el-button--text {
     color: #41b883;

@@ -85,6 +85,7 @@ export default {
 
 .box-card {
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .card-margin {

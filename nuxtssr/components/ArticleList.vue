@@ -3,17 +3,14 @@
     <div
       slot="header"
       class="clearfix">
-      <span>{{ aside_title }}</span>
-      <el-button
-        style="float: right; padding: 3px 0"
-        type="text">更多</el-button>
+      <span>文章列表</span>
     </div>
     <div
-      v-for="data in aside_data"
-      :key="data.id"
+      v-for="article in articles_data"
+      :key="article.id"
       class="text item"
-      @click="routerToDetail(data.id)">
-      {{ data.title }}
+      @click="routerToDetail(article.id)">
+      {{ article.title }}
     </div>
   </el-card>
 </template>
@@ -21,11 +18,7 @@
 <script>
 export default {
   props: {
-    aside_title: {
-      type: String,
-      default: ''
-    },
-    aside_data: {
+    articles_data: {
       type: Array,
       default: () => {}
     }
@@ -64,6 +57,5 @@ export default {
 
 .box-card {
   width: 100%;
-  margin-bottom: 10px;
 }
 </style>

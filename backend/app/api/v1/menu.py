@@ -40,8 +40,6 @@ def get_list(en_name):
 @api.route('/sublist/<name>')
 def get_sublist(name):
     sublist =Submenu.query.filter_by(name=name).first_or_404()
-    sublist.menu_name = sublist.menu.menu_name
-    # print(sublist.__dict__)
     return jsonify(sublist)
 
 @api.route('/add/menu', methods=['POST'])
@@ -58,12 +56,14 @@ def add_menu():
 @api.route('/add/submenu', methods=['POST'])
 def add_submenu():
     form = SubmenuForm().validate_for_api()
+    menu = Menu.query.filter_by(id=form.menu_id.data).first_or_404()
     with db.auto_commit():
         submenu = Submenu()
         submenu.name = form.name.data
-        submenu.path= form.path.data
+        submenu.path = form.path.data
         submenu.pic = form.pic.data
-        submenu.menu_id= form.menu_id.data
+        submenu.menu_id = form.menu_id.data
+        submenu.menu_name = menu.menu_name
         submenu.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         db.session.add(submenu)
     return Success()
