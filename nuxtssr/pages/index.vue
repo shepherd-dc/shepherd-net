@@ -9,7 +9,7 @@
           type="flex">
           <el-col :span="width > 1080 ? 18 : 24">
             <main-card
-              v-for="(item, index) in card_data"
+              v-for="(item, index) in menus"
               :key="index"
               :card_data="item"/>
           </el-col>
@@ -46,23 +46,20 @@ export default {
     }
   },
   async asyncData ({ app }) {
-    let { data } = await app.$axios.get(`${URL}/menu`)
+    // let { data } = await app.$axios.get(`${URL}/menu`)
     let articles = await app.$axios.get(`${URL}/article`)
     return {
-      card_data: data,
+      // card_data: data,
       articles_data: articles.data
     }
   },
-  async fetch ({ app }) {
-    let { data } = await app.$axios.get(`${URL}/menu`)
-    await app.store.commit('ADD_MENUS', data)
-  },
+  // async fetch ({ app }) {
+  //   let { data } = await app.$axios.get(`${URL}/menu`)
+  //   await app.store.commit('ADD_MENUS', data)
+  // },
   computed: {
     menus () {
       return this.$store.state.menus
-    },
-    token () {
-      return this.$store.state.userInfo.userInfo.token
     }
   },
   watch: {
@@ -73,10 +70,6 @@ export default {
   mounted() {
     let width = window.innerWidth
     this.width = width
-    // let { data } = await this.$axios.get(`${URL}/user`,{
-    //   "token": this.token
-    // })
-    // console.log(this.token)
   }
 }
 </script>

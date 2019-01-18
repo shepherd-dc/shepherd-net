@@ -93,10 +93,10 @@
         }
       }
     },
-    async fetch ({ app }) {
-      let { data } = await app.$axios.get(`${URL}/menu`)
-      await app.store.commit('ADD_MENUS', data)
-    },
+    // async fetch ({ app }) {
+    //   let { data } = await app.$axios.get(`${URL}/menu`)
+    //   await app.store.commit('ADD_MENUS', data)
+    // },
     computed: {
       menus () {
         return this.$store.state.menus

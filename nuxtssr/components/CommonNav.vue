@@ -73,19 +73,18 @@ export default {
   data() {
     return {
       activeIndex: "0",
-      menus: []
+      // menus: []
     }
   },
-  async created() {
-    let { data } = await this.$axios.get(`${URL}/menu?nav=nav`)
-    // console.log(data)
-    this.menus = data;
-  },
-  // computed: {
-  //   menus () {
-  //     return this.$store.state.menus
-  //   }
+  // async created() {
+  //   let { data } = await this.$axios.get(`${URL}/menu?nav=nav`)
+  //   this.menus = data;
   // },
+  computed: {
+    menus () {
+      return this.$store.state.menus
+    }
+  },
   methods: {
     routerTo(path, name) {
       let menu = path.split('/')[0]
