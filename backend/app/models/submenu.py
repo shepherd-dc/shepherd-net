@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, orm
+from sqlalchemy import Column, Integer, String, ForeignKey, orm, Text
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base
@@ -13,7 +13,9 @@ class Submenu(Base):
     path = Column(String(50), nullable=False)
     pic = Column(String(50), nullable=False)
     menu_id = Column(Integer, ForeignKey('menu.id'))
+    description = Column(Text(), nullable=False)
+    official_doc = Column(String(100), nullable=False)
 
     @orm.reconstructor
     def __init__(self):
-        self.fields = ['id', 'name', 'path', 'pic', 'menu_name']
+        self.fields = ['id', 'name', 'path', 'pic', 'menu_name', 'description', 'official_doc']

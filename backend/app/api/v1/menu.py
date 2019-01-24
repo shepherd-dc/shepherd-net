@@ -64,6 +64,8 @@ def add_submenu():
         submenu.pic = form.pic.data
         submenu.menu_id = form.menu_id.data
         submenu.menu_name = menu.menu_name
+        submenu.description = form.description.data
+        submenu.official_doc = form.official_doc.data
         submenu.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         db.session.add(submenu)
     return Success()

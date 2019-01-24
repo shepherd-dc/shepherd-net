@@ -19,8 +19,8 @@ const store = () => new Vuex.Store({
   },
   actions: {
     async nuxtServerInit({ commit }, context) {
-      let { data } = await await context.$axios.get(`${URL}/menu`)
-      await commit('ADD_MENUS', data)
+      let { data } = await context.$axios.get(`${URL}/menu`)
+      commit('ADD_MENUS', data)
     }
   },
   getters,

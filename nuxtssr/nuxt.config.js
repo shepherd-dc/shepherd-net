@@ -46,7 +46,8 @@ module.exports = {
     {
       src: "~plugins/nuxt-quill-plugin.js",
       ssr: false
-    }
+    },
+    '~plugins/filters.js'
   ],
 
   /*

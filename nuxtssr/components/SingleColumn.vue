@@ -16,23 +16,40 @@
                   <el-breadcrumb-item>{{ column_data.name }}</el-breadcrumb-item>
                 </el-breadcrumb>
               </div>
-              <div class="text item">
+              <div class="text">
                 <el-row type="felx">
                   <el-col :span="width > 1080 ? 8 : 24">
-                    <el-card
-                      :body-style="{ padding: '0px' }"
-                      shadow="hover">
-                      <img
-                        :src="column_data.pic"
-                        class="image">
-                      <div class="text-info">
-                        <h4
-                          class="detail-title">{{ column_data.name }}</h4>
-                        <div class="bottom clearfix">
-                          <time class="time">2018-12-7</time>
-                        </div>
+                    <a
+                      :href="column_data.official_doc"
+                      target="_blank">
+                      <div class="image">
+                        <img :src="column_data.pic">
                       </div>
-                    </el-card>
+                      <a/>
+                  </a></el-col>
+                  <el-col :span="width > 1080 ? 16 : 24">
+                    <div class="text-info">
+                      <h4 class="detail-title">{{ column_data.name | capitalize }}
+                        <a
+                          :href="column_data.official_doc"
+                          target="_blank">
+                          <el-button
+                            style="float: right; padding: 5px 0"
+                            type="text">官方文档</el-button>
+                        </a>
+                      </h4>
+                      <div class="clearfix">
+                        <p class="description">{{ column_data.description }}
+                          <a
+                            :href="column_data.official_doc"
+                            target="_blank">
+                            <el-button
+                              style="float: right; padding: 5px 0"
+                              type="text"> 更多 >></el-button>
+                          </a>
+                        </p>
+                      </div>
+                    </div>
                   </el-col>
                 </el-row>
               </div>
@@ -123,50 +140,41 @@ export default {
 .box-card {
   margin-bottom: 10px;
 }
-.item {
-  cursor: pointer;
-  &:hover {
-    color: #41b883;
-  }
-}
 .el-breadcrumb__inner.is-link:hover, .el-breadcrumb__inner a:hover {
   color: #41b883;
 }
 .el-breadcrumb {
   line-height: 22px;
 }
+.el-button--text {
+  color: #41b883;
+}
 </style>
 
 <style lang="less" scoped>
   .text-info {
-    padding: 14px;
+    padding: 0 0 0 20px;
   }
   .detail-title {
-    cursor: pointer;
-    &:hover {
-      color: #41b883;
-    }
+    font-size: 18px;
   }
 
-  .time {
-    font-size: 13px;
+  .description {
+    font-size: 14px;
     color: #999;
-  }
-
-  .bottom {
-    margin-top: 13px;
-    line-height: 12px;
-  }
-
-  .button {
-    padding: 0;
-    float: right;
+    line-height: 28px;
+    margin: 16px 0;
   }
 
   .image {
-    width: 100%;
-    display: block;
+    height: 150px;
+    border-radius: 6px;
+    overflow: hidden;
     cursor: pointer;
+    img {
+      display: block;
+      width: 100%;
+    }
   }
 
   .clearfix:before,
