@@ -12,10 +12,6 @@
     components: {
       list
     },
-    data () {
-      return {
-      }
-    },
     async asyncData(context) {
       let menu = await context.$axios.get(`${URL}/menu/list/frontend`)
       let menu_id = menu.data.id

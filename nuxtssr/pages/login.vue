@@ -84,7 +84,6 @@
       // }
 
       return {
-        width: '',
         ruleForm2: {
           secret: '',
           account: '',
@@ -103,15 +102,10 @@
         }
       }
     },
-    watch: {
+    computed: {
       width () {
-        this.width = window.innerWidth
+        return this.$store.state.width
       }
-    },
-    mounted() {
-      let width = window.innerWidth
-      this.width = width
-      // console.log(this.menus)
     },
     methods: {
       submitForm(formName) {

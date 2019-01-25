@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import URL from '~/globalurl'
 import Slogan from '~/components/Slogan'
 // import VueSwiper from '~/components/VueSwiper'
@@ -41,7 +42,6 @@ export default {
   },
   data () {
     return {
-      width: '',
       title1: '最新'
     }
   },
@@ -58,18 +58,10 @@ export default {
   //   await app.store.commit('ADD_MENUS', data)
   // },
   computed: {
-    menus () {
-      return this.$store.state.menus
-    }
-  },
-  watch: {
-    width () {
-      this.width = window.innerWidth
-    }
-  },
-  mounted() {
-    let width = window.innerWidth
-    this.width = width
+    ...mapGetters([
+      'menus',
+      'width'
+    ])
   }
 }
 </script>

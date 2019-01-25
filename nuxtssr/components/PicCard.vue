@@ -39,11 +39,6 @@ export default {
       default: () => {}
     }
   },
-  data() {
-    return {
-      currentDate: new Date()
-    }
-  },
   methods: {
     routerTo (path, name) {
       let menu = path.split('/')[0]

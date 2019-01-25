@@ -50,7 +50,6 @@
     },
     data () {
       return {
-        width: '',
         title1: '最新'
       }
     },
@@ -66,15 +65,10 @@
         articles_data: articles.data
       }
     },
-    watch: {
+    computed: {
       width () {
-        this.width = window.innerWidth
+        return this.$store.state.width
       }
-    },
-    mounted() {
-      let width = window.innerWidth
-      this.width = width
-      // console.log(this.menuBread)
     },
     methods: {
       routerBreadMenu () {

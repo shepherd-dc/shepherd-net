@@ -58,7 +58,6 @@
     data () {
       return {
         activeIndex: '1',
-        width: '',
         isfold: false,
         token: '',
         nickname: ''
@@ -67,16 +66,14 @@
     computed: {
       userInfo () {
         return this.$store.state.userInfo.userInfo
-      }
-    },
-    watch: {
+      },
       width () {
-        this.width = window.innerWidth
+        return this.$store.state.width
       }
     },
     async mounted () {
-      let width = window.innerWidth
-      this.width = width
+      let Width = window.innerWidth
+      this.$store.dispatch('SetWidth', Width)
       this.token = localStorage.getItem('token')
       if (this.token) {
         let { data } = await this.$axios.post(`${URL}/token/secret`,{
@@ -84,10 +81,6 @@
         })
         this.nickname = data.nickname
       }
-      // window.onresize =  () => {
-      //   this.width = width
-      //   console.log(width)
-      // }
     },
     methods: {
       mouseenterHandler () {

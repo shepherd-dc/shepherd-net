@@ -76,6 +76,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import URL from '~/globalurl'
   import QuillEditor from '~/components/QuillEditor'
 
@@ -85,7 +86,6 @@
     },
     data() {
       return {
-        width: '',
         form: {
           title: '',
           column_id: '',
@@ -98,19 +98,10 @@
     //   await app.store.commit('ADD_MENUS', data)
     // },
     computed: {
-      menus () {
-        return this.$store.state.menus
-      }
-    },
-    watch: {
-      width () {
-        this.width = window.innerWidth
-      }
-    },
-    mounted() {
-      let width = window.innerWidth
-      this.width = width
-      // console.log(this.menus)
+      ...mapGetters([
+        'menus',
+        'width'
+      ])
     },
     methods: {
       async onSubmit() {

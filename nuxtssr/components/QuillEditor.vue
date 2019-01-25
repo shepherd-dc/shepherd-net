@@ -59,7 +59,7 @@
         // console.log('editor ready!', editor)
       },
       onEditorChange({ quill, html, text }) {
-        console.log('editor change!', quill, html, text)
+        // console.log('editor change!', quill, html, text)
         this.content = html
         this.$emit('deliverContent', html)
       }

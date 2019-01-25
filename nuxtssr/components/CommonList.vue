@@ -47,19 +47,14 @@ export default {
   },
   data () {
     return {
-      width: '',
       islist: false,
       title1: '最新'
     }
   },
-  watch: {
+  computed: {
     width () {
-      this.width = window.innerWidth
+      return this.$store.state.width
     }
-  },
-  mounted() {
-    let width = window.innerWidth
-    this.width = width
   }
 }
 </script>

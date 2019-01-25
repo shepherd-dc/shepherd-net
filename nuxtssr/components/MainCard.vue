@@ -41,19 +41,10 @@ export default {
       default: () => {}
     }
   },
-  data () {
-    return {
-      width: ''
-    }
-  },
-  watch: {
+  computed: {
     width () {
-      this.width = window.innerWidth
+      return this.$store.state.width
     }
-  },
-  mounted() {
-    let width = window.innerWidth
-    this.width = width
   },
   methods: {
     routerTo (path) {

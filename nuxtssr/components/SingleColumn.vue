@@ -93,25 +93,13 @@ export default {
   },
   data() {
     return {
-      width: '',
       title1: '最新'
     }
   },
-  watch: {
-    width() {
-      this.width = window.innerWidth
+  computed: {
+    width () {
+      return this.$store.state.width
     }
-  },
-  async created() {
-    // let { data } = await this.$axios.get(
-    //   `${URL}/menu/sublist/${this.$route.params.item}`
-    // )
-    // console.log(this.$route)
-  },
-  mounted() {
-    let width = window.innerWidth
-    this.width = width
-    // console.log(this.column_data)
   },
   methods: {
     routerToDetail (id) {
