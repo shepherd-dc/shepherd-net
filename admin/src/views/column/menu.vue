@@ -1,45 +1,39 @@
 <template>
   <div class="app-container">
 
-    <el-table v-loading="listLoading" border fit highlight-current-row style="width: 100%">
+    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
 
-      <!-- <el-table-column align="center" label="ID" width="80">
+      <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="Date">
+      <el-table-column align="center" label="英文名">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.en_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="Author">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="Importance">
+      <!-- <el-table-column width="100px" label="Importance">
         <template slot-scope="scope">
           <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon"/>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
-      <el-table-column class-name="status-col" label="Status" width="110">
+      <!-- <el-table-column class-name="status-col" label="Status" width="110">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
-      <el-table-column min-width="300px" label="Title">
+      <el-table-column min-width="300px" label="菜单名">
         <template slot-scope="scope">
           <template v-if="scope.row.edit">
-            <el-input v-model="scope.row.title" class="edit-input" size="small"/>
+            <el-input v-model="scope.row.menu_name" class="edit-input" size="small"/>
             <el-button class="cancel-btn" size="small" icon="el-icon-refresh" type="warning" @click="cancelEdit(scope.row)">cancel</el-button>
           </template>
-          <span v-else>{{ scope.row.title }}</span>
+          <span v-else>{{ scope.row.menu_name }}</span>
         </template>
       </el-table-column>
 
@@ -48,17 +42,17 @@
           <el-button v-if="scope.row.edit" type="success" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(scope.row)">Ok</el-button>
           <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="scope.row.edit=!scope.row.edit">Edit</el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
 
     </el-table>
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+import { menuList } from '@/api/column'
 
 export default {
-  name: 'InlineEditTable',
+  name: 'InlineEditTablemenu',
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -84,28 +78,28 @@ export default {
   },
   methods: {
     async getList() {
-      // this.listLoading = true
-      const data = await fetchList()
-      // this.list = data
-      console.log(data)
-      // this.listLoading = false
+      this.listLoading = true
+      const data = await menuList()
+      this.list = data
+      // console.log(data)
+      this.listLoading = false
+    },
+    cancelEdit(row) {
+      row.title = row.originalTitle
+      row.edit = false
+      this.$message({
+        message: 'The title has been restored to the original value',
+        type: 'warning'
+      })
+    },
+    confirmEdit(row) {
+      row.edit = false
+      row.originalTitle = row.title
+      this.$message({
+        message: 'The title has been edited',
+        type: 'success'
+      })
     }
-    // cancelEdit(row) {
-    //   row.title = row.originalTitle
-    //   row.edit = false
-    //   this.$message({
-    //     message: 'The title has been restored to the original value',
-    //     type: 'warning'
-    //   })
-    // },
-    // confirmEdit(row) {
-    //   row.edit = false
-    //   row.originalTitle = row.title
-    //   this.$message({
-    //     message: 'The title has been edited',
-    //     type: 'success'
-    //   })
-    // }
   }
 }
 </script>

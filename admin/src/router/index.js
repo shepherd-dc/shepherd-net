@@ -39,14 +39,23 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/form',
+    path: '/column',
     component: Layout,
+    redirect: '/column/menu',
+    name: 'Column',
+    meta: { title: '栏目管理', icon: 'example' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: '栏目管理', icon: 'example' }
+        path: 'menu',
+        name: 'Menu',
+        component: () => import('@/views/column/menu'),
+        meta: { title: '主栏目', icon: 'form' }
+      },
+      {
+        path: 'submenu',
+        name: 'Submenu',
+        component: () => import('@/views/column/submenu'),
+        meta: { title: '子栏目', icon: 'form' }
       }
     ]
   },
@@ -88,7 +97,7 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  // mode: 'history', //后端支持可开
+  mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
