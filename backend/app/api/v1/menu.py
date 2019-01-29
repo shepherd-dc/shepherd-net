@@ -1,7 +1,7 @@
 import time
 
 from flask import jsonify, request
-from sqlalchemy import inspect
+from sqlalchemy import inspect, and_
 
 from app.libs.error_code import Success, ParameterException
 from app.libs.redprint import Redprint
@@ -18,10 +18,6 @@ def get_menu():
     nav = request.values.get('nav', '')
     menus = Menu.query.all()
 
-    for menu in menus:
-        for submenu in menu.submenu:
-            submenu.hide('menu_name')
-
     if nav=='nav':
         for menu in menus:
             for submenu in menu.submenu:
@@ -31,6 +27,33 @@ def get_menu():
         return ParameterException()
 
     return jsonify(menus)
+
+@api.route('/submenu')
+def get_submenu():
+    page_index = int(request.args.get('page', 1))
+    page_size = int(request.args.get('limit', 20))
+    menu_id = request.args.get('menu_id', '')
+    name = request.args.get('name', '')
+
+    submenus = Submenu.query
+
+    if name:
+        submenus = Submenu.query.filter(Submenu.name.like('%' + name + '%'))
+        # submenus = Submenu.query.filter(Submenu.name.like('%'+name+'%')).limit(page_size).offset((page_index-1)*page_size).all()
+
+    if menu_id:
+        submenus = submenus.filter(Submenu.menu_id == menu_id)
+        # submenus = Submenu.query.filter(and_(Submenu.menu_id == menu_id, Submenu.name.like('%' + name + '%'))).limit(page_size).offset(
+        #     (page_index - 1) * page_size).all()
+
+    total = submenus.count()
+    submenus = submenus.limit(page_size).offset((page_index - 1) * page_size).all()
+    data = {
+        "total": total,
+        "data": submenus
+    }
+
+    return jsonify(data)
 
 @api.route('/list/<en_name>')
 def get_list(en_name):
