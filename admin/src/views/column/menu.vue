@@ -15,18 +15,6 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column width="100px" label="Importance">
-        <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon"/>
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column class-name="status-col" label="Status" width="110">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column> -->
-
       <el-table-column min-width="300px" label="菜单名">
         <template slot-scope="scope">
           <template v-if="scope.row.edit">
@@ -45,6 +33,8 @@
       </el-table-column>
 
     </el-table>
+
+    <el-button size="small" icon="el-icon-plus" type="success" class="add-btn">添加</el-button>
   </div>
 </template>
 
@@ -79,7 +69,7 @@ export default {
   methods: {
     async getList() {
       this.listLoading = true
-      const data = await menuList()
+      const { data } = await menuList()
       this.list = data
       // console.log(data)
       this.listLoading = false
@@ -112,5 +102,10 @@ export default {
   position: absolute;
   right: 15px;
   top: 10px;
+}
+.add-btn {
+  margin: 20px 24px;
+  float: right;
+
 }
 </style>

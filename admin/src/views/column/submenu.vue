@@ -17,8 +17,7 @@
       border
       fit
       highlight-current-row
-      style="width: 100%;"
-      @sort-change="sortChange">
+      style="width: 100%;">
       <el-table-column label="ID" prop="id" sortable="custom" align="center" width="65">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -26,7 +25,7 @@
       </el-table-column>
       <el-table-column label="栏目名" width="110px" align="center">
         <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{ scope.row.name }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="主菜单" width="110px" align="center">
@@ -41,7 +40,7 @@
       </el-table-column>
       <el-table-column label="官方文档">
         <template slot-scope="scope">
-          <span>{{ scope.row.official_doc }}</span>
+          <span><a :href="scope.row.official_doc" style="color:#409EFF" target="_blank">{{ scope.row.official_doc }}</a></span>
         </template>
       </el-table-column>
       <el-table-column v-if="showReviewer" label="简介" min-width="300px">
@@ -51,14 +50,13 @@
       </el-table-column>
       <el-table-column label="状态" class-name="status-col" width="110px" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ '启用' }}</el-tag>
+          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status === 1 ? '启用' : '禁用' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'deleted')">删除
-          </el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -66,21 +64,37 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="类型" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <!-- <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key"/> -->
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+        <el-form-item label="主菜单" prop="menu_id">
+          <el-select v-model="temp.menu_id" class="filter-item" placeholder="Please select" style="width: 100%;">
+            <el-option v-for="item in menuOptions" :key="item.id" :label="item.menu_name" :value="item.id"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="日期" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date"/>
+        <el-form-item label="栏目名" prop="name">
+        <el-input v-model="temp.name" @blur="setPath"/></el-form-item>
+        <el-form-item label="官网" prop="official_doc">
+          <el-input v-model="temp.official_doc"/>
         </el-form-item>
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="temp.title"/>
+        <el-form-item label="简介" prop="description">
+          <el-input :autosize="{ minRows: 2, maxRows: 10}" v-model="temp.description" type="textarea"/>
+        </el-form-item>
+        <el-form-item label="图片">
+          <el-upload
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList2"
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="路由">
+          <el-input v-model="temp.path" :disabled="true"/>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item"/>
+            <el-option v-for="item in statusOptions" :key="item" :label="item===1?'启用':'禁用'" :value="item"/>
           </el-select>
         </el-form-item>
       </el-form>
@@ -90,30 +104,13 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel"/>
-        <el-table-column prop="pv" label="Pv"/>
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">确定</el-button>
-      </span>
-    </el-dialog>
-
   </div>
 </template>
 
 <script>
-import { menuList, submenuList } from '@/api/column'
+import { menuList, submenuList, menuDetail, saveSubmenu, deleteSubmenu } from '@/api/column'
 import waves from '@/directive/waves' // Waves directive
-import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-
-// // arr to obj ,such as { CN : "China", US : "USA" }
-// const calendarTypeKeyValue = this.calendarTypeOptions.reduce((acc, cur) => {
-//   acc[cur.key] = cur.display_name
-//   return acc
-// }, {})
 
 export default {
   name: 'ComplexTable',
@@ -122,9 +119,8 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
+        1: 'success',
+        0: 'danger'
       }
       return statusMap[status]
     }
@@ -147,16 +143,17 @@ export default {
       menuOptions: [],
       importanceOptions: [1, 2, 3],
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
+      statusOptions: [1, 0],
       showReviewer: false,
       temp: {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        menu_id: '',
+        name: '',
+        description: '',
+        official_doc: '',
+        pic: '',
+        path: '',
+        status: 1
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -164,14 +161,16 @@ export default {
         update: 'Edit',
         create: 'Create'
       },
-      dialogPvVisible: false,
-      pvData: [],
       rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        menu_id: [{ required: true, message: '请选择主菜单', trigger: 'change' }],
+        name: [{ required: true, message: '请输入栏目名', trigger: 'blur' }],
+        description: [{ required: true, message: 'title is required', trigger: 'blur' }],
+        official_doc: [{ required: true, message: 'title is required', trigger: 'blur' }],
+        pic: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
-      downloadLoading: false
+      downloadLoading: false,
+      fileList2: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+
     }
   },
   async created() {
@@ -181,7 +180,7 @@ export default {
   methods: {
     async getList() {
       this.listLoading = true
-      const data = await submenuList(this.listQuery)
+      const { data } = await submenuList(this.listQuery)
       this.list = data.data
       this.total = data.total
       this.listLoading = false
@@ -192,44 +191,24 @@ export default {
     },
     async getMenu() {
       this.listLoading = true
-      const menu_data = await menuList()
-      this.menuOptions = menu_data
+      const { data } = await menuList()
+      this.menuOptions = data
       this.listLoading = false
     },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
-      row.status = status
-    },
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+id'
-      } else {
-        this.listQuery.sort = '-id'
-      }
-      this.handleFilter()
-    },
     resetTemp() {
       this.temp = {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
+        menu_id: '',
+        name: '',
+        description: '',
+        official_doc: '',
+        pic: '',
+        path: '',
+        status: 1
       }
     },
     handleCreate() {
@@ -241,80 +220,75 @@ export default {
       })
     },
     createData() {
-      // this.$refs['dataForm'].validate((valid) => {
-      //   if (valid) {
-      //     this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      //     this.temp.author = 'vue-element-admin'
-      //     createArticle(this.temp).then(() => {
-      //       this.list.unshift(this.temp)
-      //       this.dialogFormVisible = false
-      //       this.$notify({
-      //         title: '成功',
-      //         message: '创建成功',
-      //         type: 'success',
-      //         duration: 2000
-      //       })
-      //     })
-      //   }
-      // })
+      this.$refs['dataForm'].validate(async(valid) => {
+        if (valid) {
+          this.temp.pic = '/card.jpg'
+          const { data } = await saveSubmenu(this.temp)
+          this.temp = data
+          this.list.unshift(this.temp)
+          this.dialogFormVisible = false
+          this.$notify({
+            title: '成功',
+            message: '创建成功',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
+    },
+    async setPath() {
+      if (this.temp.menu_id) {
+        const { data } = await menuDetail({ id: this.temp.menu_id })
+        this.temp.path = `${data.en_name}/${this.temp.name}`
+      }
     },
     handleUpdate(row) {
-      // this.temp = Object.assign({}, row) // copy obj
-      // this.temp.timestamp = new Date(this.temp.timestamp)
-      // this.dialogStatus = 'update'
-      // this.dialogFormVisible = true
-      // this.$nextTick(() => {
-      //   this.$refs['dataForm'].clearValidate()
-      // })
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     updateData() {
-      // this.$refs['dataForm'].validate((valid) => {
-      //   if (valid) {
-      //     const tempData = Object.assign({}, this.temp)
-      //     tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-      //     updateArticle(tempData).then(() => {
-      //       for (const v of this.list) {
-      //         if (v.id === this.temp.id) {
-      //           const index = this.list.indexOf(v)
-      //           this.list.splice(index, 1, this.temp)
-      //           break
-      //         }
-      //       }
-      //       this.dialogFormVisible = false
-      //       this.$notify({
-      //         title: '成功',
-      //         message: '更新成功',
-      //         type: 'success',
-      //         duration: 2000
-      //       })
-      //     })
-      //   }
-      // })
-    },
-    handleDelete(row) {
-      // this.$notify({
-      //   title: '成功',
-      //   message: '删除成功',
-      //   type: 'success',
-      //   duration: 2000
-      // })
-      // const index = this.list.indexOf(row)
-      // this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
-      // fetchPv(pv).then(response => {
-      //   this.pvData = response.data.pvData
-      //   this.dialogPvVisible = true
-      // })
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          saveSubmenu(tempData).then(() => {
+            for (const v of this.list) {
+              if (v.id === this.temp.id) {
+                const index = this.list.indexOf(v)
+                this.list.splice(index, 1, this.temp)
+                break
+              }
+            }
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
-      }))
+      })
+    },
+    async handleDelete(row) {
+      await deleteSubmenu({ id: row.id })
+      this.$notify({
+        title: '成功',
+        message: '删除成功',
+        type: 'success',
+        duration: 2000
+      })
+      const index = this.list.indexOf(row)
+      this.list.splice(index, 1)
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
     }
   }
 }

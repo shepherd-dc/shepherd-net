@@ -65,12 +65,14 @@ class MenuForm(BaseForm):
 
 
 class SubmenuForm(BaseForm):
+    id = IntegerField()
     name = StringField(validators=[DataRequired()])
     path = StringField(validators=[DataRequired()])
     pic = StringField(validators=[DataRequired()])
     menu_id = IntegerField(validators=[DataRequired()])
     description = StringField(validators=[DataRequired()])
     official_doc = StringField(validators=[DataRequired()])
+    status = IntegerField(validators=[DataRequired()])
 
 
 class LoginForm(BaseForm):

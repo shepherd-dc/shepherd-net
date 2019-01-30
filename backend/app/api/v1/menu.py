@@ -1,10 +1,11 @@
 import time
 
-from flask import jsonify, request
-from sqlalchemy import inspect, and_
+from flask import request
+from sqlalchemy import or_
 
 from app.libs.error_code import Success, ParameterException
 from app.libs.redprint import Redprint
+from app.libs.restful_json import restful_json
 from app.models.base import db
 from app.models.menu import Menu
 from app.models.submenu import Submenu
@@ -22,11 +23,49 @@ def get_menu():
         for menu in menus:
             for submenu in menu.submenu:
                 submenu.hide('pic')
-
     elif nav and nav != 'nav':
         return ParameterException()
 
-    return jsonify(menus)
+    return restful_json(menus)
+
+@api.route('/detail')
+def get_menu_detail():
+    id = request.values.get('id', '')
+    en_name = request.values.get('en_name', '')
+
+    menu = Menu.query.filter(or_(Menu.id==id, Menu.en_name==en_name)).first_or_404()
+
+    return restful_json(menu)
+
+@api.route('/add', methods=['POST'])
+def add_menu():
+    form = MenuForm().validate_for_api()
+    with db.auto_commit():
+        menu = Menu()
+        menu.menu_name = form.menu_name.data
+        menu.en_name = form.en_name.data
+        menu.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        db.session.add(menu)
+    return restful_json(menu)
+
+@api.route('/edit', methods=['PUT'])
+def edit_menu():
+    form = MenuForm().validate_for_api()
+    id = form.data.id
+    with db.auto_commit():
+        menu = Menu.query.get(id)
+        menu.menu_name = form.menu_name.data
+        menu.en_name = form.en_name.data
+    return Success()
+
+@api.route('/delete', methods=['DELETE'])
+def delete_menu():
+    data = request.get_json('id')
+    with db.auto_commit():
+        menu = Menu.query.get(data['id'])
+        db.session.delete(menu)
+    return Success()
+
 
 @api.route('/submenu')
 def get_submenu():
@@ -35,7 +74,7 @@ def get_submenu():
     menu_id = request.args.get('menu_id', '')
     name = request.args.get('name', '')
 
-    submenus = Submenu.query
+    submenus = Submenu.query.order_by(Submenu.id.desc())
 
     if name:
         submenus = Submenu.query.filter(Submenu.name.like('%' + name + '%'))
@@ -53,33 +92,32 @@ def get_submenu():
         "data": submenus
     }
 
-    return jsonify(data)
+    return restful_json(data)
 
-@api.route('/list/<en_name>')
-def get_list(en_name):
-    list = Menu.query.filter_by(en_name=en_name).first_or_404()
-    return jsonify(list)
+@api.route('/submenu/<name>')
+def get_submenu_detail(name):
+    submenu =Submenu.query.filter_by(name=name).first_or_404()
+    return restful_json(submenu)
 
-@api.route('/sublist/<name>')
-def get_sublist(name):
-    sublist =Submenu.query.filter_by(name=name).first_or_404()
-    return jsonify(sublist)
-
-@api.route('/add/menu', methods=['POST'])
-def add_menu():
-    form = MenuForm().validate_for_api()
-    with db.auto_commit():
-        menu = Menu()
-        menu.menu_name = form.menu_name.data
-        menu.en_name = form.en_name.data
-        menu.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-        db.session.add(menu)
-    return Success()
-
-@api.route('/add/submenu', methods=['POST'])
-def add_submenu():
+@api.route('/submenu/save', methods=['POST'])
+def save_submenu():
     form = SubmenuForm().validate_for_api()
     menu = Menu.query.filter_by(id=form.menu_id.data).first_or_404()
+
+    id = form.id.data
+    if id:
+        with db.auto_commit():
+            submenu = Submenu.query.get(id)
+            submenu.name = form.name.data
+            submenu.path = form.path.data
+            submenu.pic = form.pic.data
+            submenu.menu_id = form.menu_id.data
+            submenu.menu_name = menu.menu_name
+            submenu.description = form.description.data
+            submenu.official_doc = form.official_doc.data
+            submenu.status = form.status.data
+        return Success()
+
     with db.auto_commit():
         submenu = Submenu()
         submenu.name = form.name.data
@@ -89,6 +127,16 @@ def add_submenu():
         submenu.menu_name = menu.menu_name
         submenu.description = form.description.data
         submenu.official_doc = form.official_doc.data
+        submenu.status = form.status.data
         submenu.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         db.session.add(submenu)
+
+    return restful_json(submenu)
+
+@api.route('/submenu/delete', methods=['DELETE'])
+def delete_submenu():
+    data = request.get_json('id')
+    with db.auto_commit():
+        submenu = Submenu.query.get(data['id'])
+        db.session.delete(submenu)
     return Success()
