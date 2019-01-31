@@ -1,9 +1,10 @@
 import time
 
-from flask import jsonify, request
+from flask import request
 
 from app.libs.error_code import Success, DeleteSuccess
 from app.libs.redprint import Redprint
+from app.libs.restful_json import restful_json
 from app.libs.token_auth import auth
 from app.models.article import Article
 from app.models.base import db
@@ -18,26 +19,28 @@ api = Redprint('article')
 def article_list():
     menu_id = request.values.get('menu_id', '')
     column_id = request.values.get('column_id', '')
+    articles = Article.query.order_by(Article.create_time.desc())
+
     if menu_id and not column_id:
         menu = Menu.query.filter_by(id=menu_id).first_or_404()
         if menu:
-            articles = Article.query.filter_by(menu_id=menu_id).order_by(Article.create_time.desc()).all()
-            return jsonify(articles)
+            articles = articles.filter_by(menu_id=menu_id).all()
+            return restful_json(articles)
 
     if column_id:
         submenu = Submenu.query.filter_by(id=column_id).first_or_404()
         if submenu:
-            articles = Article.query.filter_by(column_id=column_id).order_by(Article.create_time.desc()).all()
-            return jsonify(articles)
+            articles = articles.filter_by(column_id=column_id).all()
+            return restful_json(articles)
 
-    articles = Article.query.order_by(Article.create_time.desc()).all()
-    return jsonify(articles)
+    articles = articles.all()
+    return restful_json(articles)
 
 
 @api.route('/<int:aid>', methods=['GET'])
 def get_article(aid):
     article = Article.query.filter_by(id=aid).first_or_404()
-    return jsonify(article)
+    return restful_json(article)
 
 
 @api.route('/publish', methods=['POST'])
@@ -55,7 +58,7 @@ def publish_article():
             "error_code": 100,
             "msg": "文章标题重复"
         }
-        return jsonify(data)
+        return restful_json(data)
     else:
         with db.auto_commit():
             article = Article()
@@ -82,7 +85,7 @@ def edit_article():
             "error_code": 100,
             "msg": "文章标题重复"
         }
-        return jsonify(data)
+        return restful_json(data)
     else:
         with db.auto_commit():
             article = Article()

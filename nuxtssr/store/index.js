@@ -24,7 +24,7 @@ const store = () => new Vuex.Store({
   actions: {
     async nuxtServerInit({ commit }, context) {
       let { data } = await context.$axios.get(`${URL}/menu`)
-      commit('ADD_MENUS', data)
+      commit('ADD_MENUS', data.data)
     },
     SetWidth ({ commit }, width) {
       commit('SET_WIDTH', width)

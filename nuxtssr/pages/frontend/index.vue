@@ -13,13 +13,13 @@
       list
     },
     async asyncData(context) {
-      let menu = await context.$axios.get(`${URL}/menu/list/frontend`)
-      let menu_id = menu.data.id
+      let menu = await context.$axios.get(`${URL}/menu/detail?en_name=frontend`)
+      let menu_id = menu.data.data.id
       let { data } = await context.$axios.get(`${URL}/article?menu_id=${menu_id}`)
       // console.log(data)
       return {
-        card_data: menu.data,
-        articles_data: data
+        card_data: menu.data.data,
+        articles_data: data.data
       }
     }
   }

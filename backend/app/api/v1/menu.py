@@ -78,12 +78,9 @@ def get_submenu():
 
     if name:
         submenus = Submenu.query.filter(Submenu.name.like('%' + name + '%'))
-        # submenus = Submenu.query.filter(Submenu.name.like('%'+name+'%')).limit(page_size).offset((page_index-1)*page_size).all()
 
     if menu_id:
         submenus = submenus.filter(Submenu.menu_id == menu_id)
-        # submenus = Submenu.query.filter(and_(Submenu.menu_id == menu_id, Submenu.name.like('%' + name + '%'))).limit(page_size).offset(
-        #     (page_index - 1) * page_size).all()
 
     total = submenus.count()
     submenus = submenus.limit(page_size).offset((page_index - 1) * page_size).all()

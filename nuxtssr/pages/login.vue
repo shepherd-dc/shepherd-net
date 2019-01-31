@@ -85,7 +85,7 @@
 
       return {
         ruleForm2: {
-          secret: '',
+          secret: 'admin',
           account: '',
           // vcode: ''
         },

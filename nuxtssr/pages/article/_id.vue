@@ -58,11 +58,11 @@
       // console.log(data)
       let articles = await context.$axios.get(`${URL}/article`)
       return {
-        article: data,
-        menuBread: data.menu_name,
-        submenuBread: data.column_name,
-        menu: data.en_name,
-        articles_data: articles.data
+        article: data.data,
+        menuBread: data.data.menu_name,
+        submenuBread: data.data.column_name,
+        menu: data.data.en_name,
+        articles_data: articles.data.data
       }
     },
     computed: {

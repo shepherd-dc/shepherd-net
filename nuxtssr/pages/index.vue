@@ -46,11 +46,9 @@ export default {
     }
   },
   async asyncData ({ app }) {
-    // let { data } = await app.$axios.get(`${URL}/menu`)
-    let articles = await app.$axios.get(`${URL}/article`)
+    let { data } = await app.$axios.get(`${URL}/article`)
     return {
-      // card_data: data,
-      articles_data: articles.data
+      articles_data: data.data
     }
   },
   // async fetch ({ app }) {
