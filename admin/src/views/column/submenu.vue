@@ -64,7 +64,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 90%; margin-left:50px;">
         <el-form-item label="主菜单" prop="menu_id">
           <el-select v-model="temp.menu_id" class="filter-item" placeholder="Please select" style="width: 100%;">
             <el-option v-for="item in menuOptions" :key="item.id" :label="item.menu_name" :value="item.id"/>
@@ -98,7 +98,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" style="width:96%">
         <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确定</el-button>
       </div>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { menuList, submenuList, menuDetail, saveSubmenu, deleteSubmenu } from '@/api/column'
+import { menuList, submenuList, menuDetail, saveSubmenu, deleteSubmenu, hardDeleteSubmenu } from '@/api/column'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -141,8 +141,6 @@ export default {
         name: undefined
       },
       menuOptions: [],
-      importanceOptions: [1, 2, 3],
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: [1, 0],
       showReviewer: false,
       temp: {
@@ -180,6 +178,7 @@ export default {
   methods: {
     async getList() {
       this.listLoading = true
+      this.listQuery.status = 0
       const { data } = await submenuList(this.listQuery)
       this.list = data.data
       this.total = data.total
@@ -223,16 +222,18 @@ export default {
       this.$refs['dataForm'].validate(async(valid) => {
         if (valid) {
           this.temp.pic = '/card.jpg'
-          const { data } = await saveSubmenu(this.temp)
-          this.temp = data
-          this.list.unshift(this.temp)
-          this.dialogFormVisible = false
-          this.$notify({
-            title: '成功',
-            message: '创建成功',
-            type: 'success',
-            duration: 2000
-          })
+          const data = await saveSubmenu(this.temp)
+          if (data.error_code === 0) {
+            this.temp = data.data
+            this.list.unshift(this.temp)
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+          }
         }
       })
     },
@@ -273,16 +274,31 @@ export default {
         }
       })
     },
-    async handleDelete(row) {
-      await deleteSubmenu({ id: row.id })
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
+    handleDelete(row) {
+      this.$confirm('此操作将删除该栏目, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        if (row.status === 1) {
+          await deleteSubmenu({ id: row.id })
+        } else {
+          await hardDeleteSubmenu({ id: row.id })
+        }
+        const index = this.list.indexOf(row)
+        this.list.splice(index, 1)
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
     },
     handleRemove(file, fileList) {
       console.log(file, fileList)

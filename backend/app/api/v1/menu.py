@@ -17,7 +17,7 @@ api = Redprint('menu')
 @api.route('')
 def get_menu():
     nav = request.values.get('nav', '')
-    menus = Menu.query.all()
+    menus = Menu.query.filter_by(status=1).all()
 
     if nav=='nav':
         for menu in menus:
@@ -50,20 +50,19 @@ def add_menu():
 
 @api.route('/edit', methods=['PUT'])
 def edit_menu():
-    form = MenuForm().validate_for_api()
-    id = form.data.id
+    data = request.get_json()
+    id = data['id']
     with db.auto_commit():
         menu = Menu.query.get(id)
-        menu.menu_name = form.menu_name.data
-        menu.en_name = form.en_name.data
+        menu.menu_name = data['menu_name']
     return Success()
 
-@api.route('/delete', methods=['DELETE'])
+@api.route('/delete', methods=['POST'])
 def delete_menu():
     data = request.get_json('id')
     with db.auto_commit():
         menu = Menu.query.get(data['id'])
-        db.session.delete(menu)
+        menu.status = 0
     return Success()
 
 
@@ -73,11 +72,15 @@ def get_submenu():
     page_size = int(request.args.get('limit', 20))
     menu_id = request.args.get('menu_id', '')
     name = request.args.get('name', '')
+    status = request.args.get('status', 1)
 
     submenus = Submenu.query.order_by(Submenu.id.desc())
 
+    if status == 1:
+        submenus = submenus.filter(Submenu.status == 1)
+
     if name:
-        submenus = Submenu.query.filter(Submenu.name.like('%' + name + '%'))
+        submenus = submenus.filter(Submenu.name.like('%' + name + '%'))
 
     if menu_id:
         submenus = submenus.filter(Submenu.menu_id == menu_id)
@@ -130,10 +133,18 @@ def save_submenu():
 
     return restful_json(submenu)
 
-@api.route('/submenu/delete', methods=['DELETE'])
+@api.route('/submenu/delete', methods=['POST', 'DELETE'])
 def delete_submenu():
     data = request.get_json('id')
-    with db.auto_commit():
-        submenu = Submenu.query.get(data['id'])
-        db.session.delete(submenu)
+    submenu = Submenu.query.get(data['id'])
+
+    if request.method == 'POST':
+        with db.auto_commit():
+            submenu.status = 0
+
+    if request.method == 'DELETE':
+        with db.auto_commit():
+            db.session.delete(submenu)
+
     return Success()
+

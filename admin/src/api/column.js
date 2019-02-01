@@ -1,9 +1,8 @@
-import URL from '@/globalurl'
 import request from '@/utils/request'
 
 export function menuList(query = '') {
   return request({
-    url: `${URL}/menu`,
+    url: `/menu`,
     method: 'get',
     params: query
   })
@@ -11,7 +10,7 @@ export function menuList(query = '') {
 
 export function submenuList(query = '') {
   return request({
-    url: `${URL}/menu/submenu`,
+    url: `/menu/submenu`,
     method: 'get',
     params: query
   })
@@ -19,15 +18,39 @@ export function submenuList(query = '') {
 
 export function menuDetail(query = '') {
   return request({
-    url: `${URL}/menu/detail`,
+    url: `/menu/detail`,
     method: 'get',
     params: query
   })
 }
 
+export function addMenu(data) {
+  return request({
+    url: `/menu/add`,
+    method: 'post',
+    data
+  })
+}
+
+export function editMenu(data) {
+  return request({
+    url: `/menu/edit`,
+    method: 'put',
+    data
+  })
+}
+
+export function deleteMenu(data) {
+  return request({
+    url: `/menu/delete`,
+    method: 'post',
+    data
+  })
+}
+
 export function saveSubmenu(data) {
   return request({
-    url: `${URL}/menu/submenu/save`,
+    url: `/menu/submenu/save`,
     method: 'post',
     data
   })
@@ -35,7 +58,15 @@ export function saveSubmenu(data) {
 
 export function deleteSubmenu(data) {
   return request({
-    url: `${URL}/menu/submenu/delete`,
+    url: `/menu/submenu/delete`,
+    method: 'post',
+    data
+  })
+}
+
+export function hardDeleteSubmenu(data) {
+  return request({
+    url: `/menu/submenu/delete`,
     method: 'delete',
     data
   })
