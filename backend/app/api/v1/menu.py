@@ -22,7 +22,7 @@ def get_menu():
     if nav=='nav':
         for menu in menus:
             for submenu in menu.submenu:
-                submenu.hide('pic')
+                submenu.hide('pic', 'description', 'official_doc', 'status')
     elif nav and nav != 'nav':
         return ParameterException()
 

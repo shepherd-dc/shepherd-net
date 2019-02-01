@@ -1,17 +1,8 @@
-// import URL from '@/globalurl'
 import request from '@/utils/request'
 
-// export function fetchList(query = '') {
-//   return request({
-//     url: `${URL}/article`,
-//     method: 'get',
-//     params: query
-//   })
-// }
-
-export function fetchList(query) {
+export function fetchList(query = '') {
   return request({
-    url: '/article/list',
+    url: `/article`,
     method: 'get',
     params: query
   })

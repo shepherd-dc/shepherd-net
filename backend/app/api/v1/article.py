@@ -2,7 +2,7 @@ import time
 
 from flask import request
 
-from app.libs.error_code import Success, DeleteSuccess
+from app.libs.error_code import Success, DeleteSuccess, ParameterException
 from app.libs.redprint import Redprint
 from app.libs.restful_json import restful_json
 from app.libs.token_auth import auth
@@ -17,24 +17,39 @@ api = Redprint('article')
 
 @api.route('', methods=['GET'])
 def article_list():
-    menu_id = request.values.get('menu_id', '')
-    column_id = request.values.get('column_id', '')
-    articles = Article.query.order_by(Article.create_time.desc())
+    page_index = int(request.args.get('page', 1))
+    page_size = int(request.args.get('limit', 20))
+    menu_id = request.args.get('menu_id', '')
+    column_id = request.args.get('column_id', '')
+    title = request.args.get('title', None)
+    order = int(request.args.get('order', 0))
+
+    articles = Article.query
+
+    if title:
+        articles = articles.filter(Article.title.like('%' + title + '%'))
 
     if menu_id and not column_id:
         menu = Menu.query.filter_by(id=menu_id).first_or_404()
         if menu:
-            articles = articles.filter_by(menu_id=menu_id).all()
-            return restful_json(articles)
+            articles = articles.filter_by(menu_id=menu_id)
 
     if column_id:
         submenu = Submenu.query.filter_by(id=column_id).first_or_404()
         if submenu:
-            articles = articles.filter_by(column_id=column_id).all()
-            return restful_json(articles)
+            articles = articles.filter_by(column_id=column_id)
 
-    articles = articles.all()
-    return restful_json(articles)
+    if order and order == 1:
+        articles = articles.order_by(Article.create_time.desc())
+
+    total = articles.count()
+    articles = articles.limit(page_size).offset((page_index - 1) * page_size).all()
+
+    data = {
+        "total": total,
+        "data": articles
+    }
+    return restful_json(data)
 
 
 @api.route('/<int:aid>', methods=['GET'])

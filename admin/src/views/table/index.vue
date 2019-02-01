@@ -1,13 +1,16 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.name" placeholder="栏目名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-select v-model="listQuery.menu_id" placeholder="主菜单" clearable class="filter-item" style="width: 130px" @change="handleFilter">
+      <el-input v-model="listQuery.title" placeholder="标题" style="width: 226px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+      <el-select ref="menu" v-model="listQuery.menu_id" placeholder="主栏目" clearable class="filter-item" style="width: 216px" @change="handleFilter">
         <el-option v-for="item in menuOptions" :key="item.id" :label="item.menu_name" :value="item.id"/>
       </el-select>
+      <el-select v-model="listQuery.column_id" placeholder="子栏目" clearable class="filter-item" style="width: 216px" @change="handleFilter">
+        <el-option-group v-for="group in menuOptions" :key="group.id" :label="group.menu_name">
+          <el-option v-for="item in group.submenu" :key="item.id" :label="item.name" :value="item.id+'-'+item.path"/>
+        </el-option-group>
+      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">简介</el-checkbox>
     </div>
 
     <el-table
@@ -24,34 +27,34 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="栏目名" width="110px" align="center">
+      <el-table-column label="时间" prop="time" sortable="custom" width="160px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.create_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="主菜单" width="110px" align="center">
+      <el-table-column label="主栏目" width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.menu_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="路由" width="150px">
+      <el-table-column label="子栏目" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.path }}</span>
+          <span>{{ scope.row.column_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="官方文档">
+      <el-table-column label="标题">
         <template slot-scope="scope">
-          <span><a :href="scope.row.official_doc" style="color:#409EFF" target="_blank">{{ scope.row.official_doc }}</a></span>
+          <span>{{ scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" label="简介" min-width="300px">
+      <el-table-column label="作者" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.description }}</span>
+          <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" class-name="status-col" width="110px" align="center">
+      <el-table-column label="推荐" class-name="status-col" width="110px" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status === 1 ? '启用' : '禁用' }}</el-tag>
+          <el-tag :type="scope.row.recommend | statusFilter">{{ scope.row.status === 1 ? '是' : '否' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -72,7 +75,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="栏目名" prop="name">
-        <el-input v-model="temp.name" @blur="setPath"/></el-form-item>
+        <el-input v-model="temp.name"/></el-form-item>
         <el-form-item label="官网" prop="official_doc">
           <el-input v-model="temp.official_doc"/>
         </el-form-item>
@@ -109,7 +112,8 @@
 </template>
 
 <script>
-import { menuList, submenuList, menuDetail, saveSubmenu, deleteSubmenu } from '@/api/column'
+import { fetchList } from '@/api/article'
+import { menuList } from '@/api/column'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -139,13 +143,13 @@ export default {
         page: 1,
         limit: 5,
         menu_id: undefined,
-        name: undefined
+        column_id: undefined,
+        title: undefined,
+        order: 1
       },
       menuOptions: [],
       importanceOptions: [1, 2, 3],
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: [1, 0],
-      showReviewer: false,
       temp: {
         id: undefined,
         menu_id: '',
@@ -181,7 +185,7 @@ export default {
   methods: {
     async getList() {
       this.listLoading = true
-      const { data } = await submenuList(this.listQuery)
+      const { data } = await fetchList(this.listQuery)
       this.list = data.data
       this.total = data.total
       this.listLoading = false
@@ -199,6 +203,20 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    sortChange(data) {
+      const { prop, order } = data
+      if (prop === 'id' || prop === 'time') {
+        this.sortByID(order)
+      }
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        this.listQuery.order = 0
+      } else {
+        this.listQuery.order = 1
+      }
+      this.handleFilter()
     },
     resetTemp() {
       this.temp = {
@@ -220,71 +238,71 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    createData() {
-      this.$refs['dataForm'].validate(async(valid) => {
-        if (valid) {
-          this.temp.pic = '/card.jpg'
-          const { data } = await saveSubmenu(this.temp)
-          this.temp = data
-          this.list.unshift(this.temp)
-          this.dialogFormVisible = false
-          this.$notify({
-            title: '成功',
-            message: '创建成功',
-            type: 'success',
-            duration: 2000
-          })
-        }
-      })
-    },
-    async setPath() {
-      if (this.temp.menu_id) {
-        const { data } = await menuDetail({ id: this.temp.menu_id })
-        this.temp.path = `${data.en_name}/${this.temp.name}`
-      }
-    },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          saveSubmenu(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
-    async handleDelete(row) {
-      await deleteSubmenu({ id: row.id })
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
-      })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
-    },
+    // createData() {
+    //   this.$refs['dataForm'].validate(async(valid) => {
+    //     if (valid) {
+    //       this.temp.pic = '/card.jpg'
+    //       const { data } = await saveSubmenu(this.temp)
+    //       this.temp = data
+    //       this.list.unshift(this.temp)
+    //       this.dialogFormVisible = false
+    //       this.$notify({
+    //         title: '成功',
+    //         message: '创建成功',
+    //         type: 'success',
+    //         duration: 2000
+    //       })
+    //     }
+    //   })
+    // },
+    // async setPath() {
+    //   if (this.temp.menu_id) {
+    //     const { data } = await menuDetail({ id: this.temp.menu_id })
+    //     this.temp.path = `${data.en_name}/${this.temp.name}`
+    //   }
+    // },
+    // handleUpdate(row) {
+    //   this.temp = Object.assign({}, row) // copy obj
+    //   this.dialogStatus = 'update'
+    //   this.dialogFormVisible = true
+    //   this.$nextTick(() => {
+    //     this.$refs['dataForm'].clearValidate()
+    //   })
+    // },
+    // updateData() {
+    //   this.$refs['dataForm'].validate((valid) => {
+    //     if (valid) {
+    //       const tempData = Object.assign({}, this.temp)
+    //       saveSubmenu(tempData).then(() => {
+    //         for (const v of this.list) {
+    //           if (v.id === this.temp.id) {
+    //             const index = this.list.indexOf(v)
+    //             this.list.splice(index, 1, this.temp)
+    //             break
+    //           }
+    //         }
+    //         this.dialogFormVisible = false
+    //         this.$notify({
+    //           title: '成功',
+    //           message: '更新成功',
+    //           type: 'success',
+    //           duration: 2000
+    //         })
+    //       })
+    //     }
+    //   })
+    // },
+    // async handleDelete(row) {
+    //   await deleteSubmenu({ id: row.id })
+    //   this.$notify({
+    //     title: '成功',
+    //     message: '删除成功',
+    //     type: 'success',
+    //     duration: 2000
+    //   })
+    //   const index = this.list.indexOf(row)
+    //   this.list.splice(index, 1)
+    // },
     handleRemove(file, fileList) {
       console.log(file, fileList)
     },
