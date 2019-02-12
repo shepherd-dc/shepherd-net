@@ -91,6 +91,7 @@ def publish_article():
 
 
 @api.route('/edit', methods=['POST'])
+@auth.login_required
 def edit_article():
     form = ArticleForm().validate_for_api()
     title = form.title.data
@@ -112,19 +113,18 @@ def edit_article():
         return Success()
 
 
-@api.route('/<int:aid>', methods=['DELETE'])
+@api.route('/delete', methods=['POST', 'DELETE'])
 @auth.login_required
-def delete_article(aid):
-    with db.auto_commit():
-        article = Article.query.filter_by(id=aid).first_or_404()
-        article.delete()
-    return DeleteSuccess()
+def delete_article():
+    data = request.get_json('id')
+    article = Article.query.filter_by(id=data['id']).first_or_404()
 
+    if request.method == 'POST':
+        with db.auto_commit():
+            article.status = 0
 
-@api.route('/<int:aid>', methods=['DELETE'])
-@auth.login_required
-def super_delete_article(aid):
-    with db.auto_commit():
-        article = Article.query.filter_by(id=aid).first_or_404()
-        article.delete()
+    if request.method == 'DELETE':
+        with db.auto_commit():
+            db.session.delete(article)
+
     return DeleteSuccess()

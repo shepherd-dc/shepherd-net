@@ -3,9 +3,10 @@ import time
 from flask import request
 from sqlalchemy import or_
 
-from app.libs.error_code import Success, ParameterException
+from app.libs.error_code import Success, ParameterException, DeleteSuccess
 from app.libs.redprint import Redprint
 from app.libs.restful_json import restful_json
+from app.libs.token_auth import auth
 from app.models.base import db
 from app.models.menu import Menu
 from app.models.submenu import Submenu
@@ -38,6 +39,7 @@ def get_menu_detail():
     return restful_json(menu)
 
 @api.route('/add', methods=['POST'])
+@auth.login_required
 def add_menu():
     form = MenuForm().validate_for_api()
     with db.auto_commit():
@@ -49,6 +51,7 @@ def add_menu():
     return restful_json(menu)
 
 @api.route('/edit', methods=['PUT'])
+@auth.login_required
 def edit_menu():
     data = request.get_json()
     id = data['id']
@@ -58,6 +61,7 @@ def edit_menu():
     return Success()
 
 @api.route('/delete', methods=['POST'])
+@auth.login_required
 def delete_menu():
     data = request.get_json('id')
     with db.auto_commit():
@@ -100,6 +104,7 @@ def get_submenu_detail(name):
     return restful_json(submenu)
 
 @api.route('/submenu/save', methods=['POST'])
+@auth.login_required
 def save_submenu():
     form = SubmenuForm().validate_for_api()
     menu = Menu.query.filter_by(id=form.menu_id.data).first_or_404()
@@ -134,6 +139,7 @@ def save_submenu():
     return restful_json(submenu)
 
 @api.route('/submenu/delete', methods=['POST', 'DELETE'])
+@auth.login_required
 def delete_submenu():
     data = request.get_json('id')
     submenu = Submenu.query.get(data['id'])
@@ -146,5 +152,5 @@ def delete_submenu():
         with db.auto_commit():
             db.session.delete(submenu)
 
-    return Success()
+    return DeleteSuccess()
 

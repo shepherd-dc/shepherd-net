@@ -43,41 +43,35 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/column/menu',
     name: 'Column',
-    meta: { title: '栏目管理', icon: 'example' },
+    meta: { title: '栏目管理', icon: 'table' },
     children: [
       {
         path: 'menu',
         name: 'Menu',
         component: () => import('@/views/column/menu'),
-        meta: { title: '主栏目', icon: 'form' }
+        meta: { title: '主栏目', icon: 'tree' }
       },
       {
         path: 'submenu',
         name: 'Submenu',
         component: () => import('@/views/column/submenu'),
-        meta: { title: '子栏目', icon: 'form' }
+        meta: { title: '子栏目', icon: 'tree' }
       }
     ]
   },
 
   {
-    path: '/example',
+    path: '/article',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
+    redirect: '/article/index',
+    name: 'Article',
     meta: { title: '文章管理', icon: 'form' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'index',
+        name: 'Index',
+        component: () => import('@/views/article/index'),
+        meta: { title: '文章列表', icon: 'example' }
       }
     ]
   },

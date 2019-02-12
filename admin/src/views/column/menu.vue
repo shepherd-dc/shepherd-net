@@ -153,9 +153,11 @@ export default {
         await deleteMenu({ id: row.id })
         const index = this.list.indexOf(row)
         this.list.splice(index, 1)
-        this.$message({
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
           type: 'success',
-          message: '删除成功!'
+          duration: 2000
         })
       }).catch(() => {
         this.$message({
