@@ -25,8 +25,8 @@
                       <div class="image">
                         <img :src="column_data.pic">
                       </div>
-                      <a/>
-                  </a></el-col>
+                    </a>
+                  </el-col>
                   <el-col :span="width > 1080 ? 16 : 24">
                     <div class="text-info">
                       <h4 class="detail-title">{{ column_data.name | capitalize }}

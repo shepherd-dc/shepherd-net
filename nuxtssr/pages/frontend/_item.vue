@@ -18,7 +18,7 @@
       let { data } = await context.$axios.get(`${URL}/article?column_id=${column_id}`)
       return {
         column_data: column.data.data,
-        articles_data: data.data
+        articles_data: data.data.data
       }
     }
   }

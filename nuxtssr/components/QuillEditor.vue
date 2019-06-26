@@ -13,6 +13,9 @@
 </template>
 
 <script>
+  import hljs from 'highlight.js'    // 语法高亮
+  // import 'highlight.js/styles/xcode.css'
+  import 'highlight.js/styles/monokai-sublime.css'
   export default {
     data () {
       return {
@@ -37,7 +40,10 @@
               // [{ 'align': [] }],
 
               // ['clean']                                         // remove formatting button
-            ]
+            ],
+            syntax: {
+              highlight: text => hljs.highlightAuto(text).value    // 语法高亮插件调用
+            }
           }
         }
       }

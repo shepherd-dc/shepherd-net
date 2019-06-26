@@ -31,7 +31,8 @@ module.exports = {
     'swiper/dist/css/swiper.css',
     'quill/dist/quill.snow.css',
     'quill/dist/quill.bubble.css',
-    'quill/dist/quill.core.css'
+    'quill/dist/quill.core.css',
+    'highlight.js/styles/monokai-sublime.css'
   ],
 
   /*

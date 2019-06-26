@@ -19,7 +19,7 @@
       // console.log(data)
       return {
         card_data: menu.data.data,
-        articles_data: data.data
+        articles_data: data.data.data
       }
     }
   }

@@ -62,7 +62,7 @@
         menuBread: data.data.menu_name,
         submenuBread: data.data.column_name,
         menu: data.data.en_name,
-        articles_data: articles.data.data
+        articles_data: articles.data.data.data
       }
     },
     computed: {
@@ -80,8 +80,8 @@
         this.$router.push({
           path: `/${this.menu}/${this.submenuBread}`
         })
-      }
-    },
+      },
+    }
   }
 </script>
 
@@ -107,8 +107,9 @@
   .content {
     padding: 30px;
     p {
-      margin-bottom: 12px;
-      line-height: 26px;
+      // margin-bottom: 12px;
+      font-family: "MicroSoft Yahei";
+      line-height: 36px;
       text-indent: 2rem;
         img {
         display: block;
@@ -117,6 +118,13 @@
         max-width: 850px;
       }
     }
+    h1, h2, h3, h4, h5, h6 {
+      margin-bottom: 16px;
+    }
+    li {
+      line-height: 36px;
+    }
+
   }
   .text {
     font-size: 14px;
@@ -149,8 +157,11 @@
     clear: both
   }
   pre.ql-syntax {
+    // background-color: #f6f8fa;
     background-color: #23241f;
-    color: #f8f8f2;
+    color: #e2edf8;
+    font-family: "Consolas, Courier New, monospace, MicroSoft Yahei";
+    line-height: 30px;
     padding: 16px;
     margin: 14px 0;
     overflow: auto;
