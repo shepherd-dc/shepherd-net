@@ -6,6 +6,7 @@ from wtforms.validators import email
 
 from app.libs.error_code import DeleteSuccess, Success
 from app.libs.redprint import Redprint
+from app.libs.restful_json import restful_json
 from app.libs.token_auth import auth
 from app.models.base import db
 
@@ -30,6 +31,23 @@ def get_user():
 def super_get_user(uid):
     user = User.query.filter_by(id=uid).first_or_404()
     return jsonify(user)
+
+
+@api.route('/list', methods=['GET'])
+@auth.login_required
+def super_get_user_list():
+    kw = request.args.get('kw', '')
+    page_index = int(request.args.get('page', 1))
+    page_size = int(request.args.get('limit', 20))
+
+    user = User.query
+
+    if kw:
+        user = user.filter(User.nickname.like('%' + kw + '%'))
+
+    user = user.filter_by(status=1).limit(page_size).offset((page_index - 1) * page_size).all()
+
+    return restful_json(user)
 
 
 @api.route('/email', methods=['POST'])

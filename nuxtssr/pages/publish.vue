@@ -110,7 +110,7 @@
         formData.column_id = column[0]
         let routePath = column[1]
         let { data } = await this.$axios.post(`${URL}/article/publish`, formData)
-        console.log(data)
+        // console.log(data)
         if (data.error_code === 0) {
           this.$router.replace({
             path: `/${routePath}`

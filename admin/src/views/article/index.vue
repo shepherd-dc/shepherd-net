@@ -99,7 +99,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 5,
+        limit: 10,
         menu_id: undefined,
         column_id: undefined,
         title: undefined,

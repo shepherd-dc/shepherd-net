@@ -7,6 +7,8 @@ const isDev = process.env.NODE_ENV === 'development'
 
 const URL = isDev ? LOCAL_URL : SERVER_URL
 
+// const URL = 'https://shepherdnet.top/v1'
+
 export default URL
 
 

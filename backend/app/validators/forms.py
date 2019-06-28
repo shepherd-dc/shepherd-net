@@ -83,6 +83,7 @@ class LoginForm(BaseForm):
 class ArticleForm(BaseForm):
     title = StringField(validators=[DataRequired()])
     author = StringField()
+    create_time = StringField()
     content = StringField(validators=[DataRequired()])
     column_id = IntegerField(validators=[DataRequired()])
 

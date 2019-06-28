@@ -54,7 +54,7 @@ export default {
     }
     return {
       loginForm: {
-        account: 'ceshi',
+        account: 'admin',
         secret: '123456'
       },
       loginRules: {

@@ -68,6 +68,8 @@ def publish_article():
     column_id = form.column_id.data
     column = Submenu.query.filter_by(id=column_id).first()
 
+    create_time = form.create_time.data
+
     if article_title:
         data = {
             "error_code": 100,
@@ -85,7 +87,12 @@ def publish_article():
             article.menu_id = column.menu_id
             article.en_name = column.menu.en_name
             article.menu_name = column.menu.menu_name
-            article.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+
+            if create_time:
+                article.create_time = create_time
+            else:
+                article.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+                
             db.session.add(article)
         return Success()
 

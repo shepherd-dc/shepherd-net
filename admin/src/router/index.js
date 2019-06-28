@@ -49,7 +49,7 @@ export const constantRouterMap = [
         path: 'menu',
         name: 'Menu',
         component: () => import('@/views/column/menu'),
-        meta: { title: '主栏目', icon: 'tree' }
+        meta: { title: '主栏目', icon: 'example' }
       },
       {
         path: 'submenu',
@@ -65,13 +65,19 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/article/index',
     name: 'Article',
-    meta: { title: '文章管理', icon: 'form' },
+    meta: { title: '文章管理', icon: 'documentation' },
     children: [
       {
         path: 'index',
         name: 'Index',
         component: () => import('@/views/article/index'),
-        meta: { title: '文章列表', icon: 'example' }
+        meta: { title: '文章列表', icon: 'list' }
+      },
+      {
+        path: 'create',
+        name: 'Create',
+        component: () => import('@/views/article/create'),
+        meta: { title: '创建文章', icon: 'form' }
       }
     ]
   },
