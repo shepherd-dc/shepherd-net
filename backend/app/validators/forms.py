@@ -86,5 +86,5 @@ class ArticleForm(BaseForm):
     create_time = StringField()
     content = StringField(validators=[DataRequired()])
     column_id = IntegerField(validators=[DataRequired()])
-
+    user_id = IntegerField()
 

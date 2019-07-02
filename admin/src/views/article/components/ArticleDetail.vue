@@ -14,7 +14,7 @@
 
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="6">
+                <el-col :span="8">
                   <el-form-item label="版块栏目:">
                     <el-select
                       v-model="postForm.column_id"
@@ -33,7 +33,7 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                   <span class="author">作者：</span>
                   <el-autocomplete
                     v-model="postForm.author"
@@ -42,17 +42,10 @@
                     @select="handleSelect"
                   />
                 </el-col>
-                <el-col :span="6">
-                  <el-form-item label-width="45px" label="用户:" class="postInfo-container-item">
-                    <el-select v-model="postForm.user_id" :remote-method="getRemoteUserList" :loading="loading" filterable remote placeholder="搜索用户">
-                      <el-option v-for="(item) in userListOptions" :key="item.id" :label="item.nickname" :value="item.id"/>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
 
-                <el-col :span="6">
+                <el-col :span="8">
                   <el-form-item label-width="80px" label="发布时间:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.create_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"/>
+                    <el-date-picker v-model="postForm.create_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"/>
                   </el-form-item>
                 </el-col>
 
@@ -78,7 +71,7 @@
         </el-form-item> -->
 
         <el-form-item class="quill-editor" prop="content">
-          <quill-editor @deliverContent="handleContent"/>
+          <quill-editor :is-edit="isEdit" @deliverContent="handleContent"/>
         </el-form-item>
 
         <!-- <el-form-item prop="image_uri" style="margin-bottom: 30px;">
@@ -100,8 +93,7 @@
 import QuillEditor from '@/components/Quilleditor/QuillEditor'
 import MDinput from '@/components/MDinput'
 import { fetchMenu } from '@/api/menu'
-// import { fetchArticle } from '@/api/article'
-import { createArticle } from '@/api/article'
+import { fetchArticle, createArticle, editArticle } from '@/api/article'
 import { fetchUserList } from '@/api/user'
 
 const defaultForm = {
@@ -159,11 +151,16 @@ export default {
     // contentShortLength() {
     //   return this.postForm.content_short.length
     // }
-    // lang() {
-    //   return this.$store.getters.language
+    // article_content() {
+    //   return this.$store.getters.content
     // }
   },
-  async created() {
+  watch: {
+    postForm() {
+      return this.postForm
+    }
+  },
+  created() {
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
@@ -171,31 +168,38 @@ export default {
       this.postForm = Object.assign({}, defaultForm)
     }
 
-    const data = await fetchMenu('nav')
-    // console.log(data)
-    if (data.error_code === 0) {
-      this.menus = data.data
+    var test = localStorage.getItem('menus')
+    if (!test) {
+      this.fetchMenu()
     }
+    this.menus = JSON.parse(test)
 
     // Why need to make a copy of this.$route here?
     // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
     // https://github.com/PanJiaChen/vue-element-admin/issues/1221
-    this.tempRoute = Object.assign({}, this.$route)
+    // this.tempRoute = Object.assign({}, this.$route)
+  },
+  mounted() {
+    // console.log(this.article_content)
   },
   methods: {
-    // fetchData(id) {
-    //   fetchArticle(id).then(response => {
-    //     this.postForm = response.data
-    //     // Just for test
-    //     this.postForm.title += `   Article Id:${this.postForm.id}`
-    //     // this.postForm.content_short += `   Article Id:${this.postForm.id}`
+    async fetchMenu() {
+      const { data } = await fetchMenu('nav')
+      localStorage.setItem('menus', JSON.stringify(data))
+      this.menus = data
+    },
+    async fetchData(id) {
+      const response = await fetchArticle(id)
+      this.postForm = response.data
+      this.$store.commit('FetchArticle', this.postForm)
 
-    //     // Set tagsview title
-    //     this.setTagsViewTitle()
-    //   }).catch(err => {
-    //     console.log(err)
-    //   })
-    // },
+      // Just for test
+      // this.postForm.title += `   Article Id:${this.postForm.id}`
+      // this.postForm.content_short += `   Article Id:${this.postForm.id}`
+
+      // Set tagsview title
+      // this.setTagsViewTitle()
+    },
     // setTagsViewTitle() {
     //   const title = this.lang === 'zh' ? '编辑文章' : 'Edit Article'
     //   const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
@@ -206,12 +210,18 @@ export default {
       this.$refs.postForm.validate(async(valid) => {
         if (valid) {
           this.loading = true
-          const data = await createArticle(this.postForm)
-          console.log(this.postForm)
+          // console.log(this.postForm)
+          if (this.postForm.id) {
+            var data = await editArticle(this.postForm)
+          } else {
+            data = await createArticle(this.postForm)
+          }
+
+          // console.log(this.postForm)
           if (data.error_code === 0) {
             this.$notify({
               title: '成功',
-              message: '发布文章成功',
+              message: '操作成功',
               type: 'success',
               duration: 2000
             })
@@ -246,20 +256,6 @@ export default {
       // })
       // this.postForm.status = 'draft'
     },
-    async getRemoteUserList(query) {
-      if (query !== '') {
-        this.loading = true
-        this.listQuery.kw = query
-        const listQuery = Object.assign({}, this.listQuery)
-        const data = await fetchUserList(listQuery)
-        if (data.error_code === 0) {
-          this.loading = false
-          this.userListOptions = data.data
-        } else {
-          this.userListOptions = []
-        }
-      }
-    },
     async querySearchAsync(queryString, cb) {
       this.listQuery.kw = queryString
       const listQuery = Object.assign({}, this.listQuery)
@@ -282,14 +278,14 @@ export default {
       }
     },
     handleSelect(item) {
-      console.log(item)
+      // console.log(item)
       this.postForm.author = item.value
       if (item.id) {
         this.postForm.author_id = item.id
       }
     },
     handleContent(html) {
-      console.log(html)
+      // console.log(html)
       this.postForm.content = html
     }
   }

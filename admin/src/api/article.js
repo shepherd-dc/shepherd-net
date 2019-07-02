@@ -10,17 +10,8 @@ export function fetchList(query = '') {
 
 export function fetchArticle(id) {
   return request({
-    url: '/article/detail',
-    method: 'get',
-    params: { id }
-  })
-}
-
-export function fetchPv(pv) {
-  return request({
-    url: '/article/pv',
-    method: 'get',
-    params: { pv }
+    url: `/article/${id}`,
+    method: 'get'
   })
 }
 
@@ -32,10 +23,10 @@ export function createArticle(data) {
   })
 }
 
-export function updateArticle(data) {
+export function editArticle(data) {
   return request({
-    url: '/article/update',
-    method: 'post',
+    url: '/article/edit',
+    method: 'put',
     data
   })
 }

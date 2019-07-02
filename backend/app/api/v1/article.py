@@ -1,6 +1,6 @@
 import time
 
-from flask import request
+from flask import request, g
 
 from app.libs.error_code import Success, DeleteSuccess, ParameterException
 from app.libs.redprint import Redprint
@@ -10,6 +10,7 @@ from app.models.article import Article
 from app.models.base import db
 from app.models.menu import Menu
 from app.models.submenu import Submenu
+from app.models.user import User
 from app.validators.forms import ArticleForm
 
 api = Redprint('article')
@@ -59,6 +60,7 @@ def get_article(aid):
 
 
 @api.route('/publish', methods=['POST'])
+@auth.login_required
 def publish_article():
     form = ArticleForm().validate_for_api()
 
@@ -67,6 +69,8 @@ def publish_article():
 
     column_id = form.column_id.data
     column = Submenu.query.filter_by(id=column_id).first()
+
+    user_id = form.user_id.data
 
     create_time = form.create_time.data
 
@@ -88,6 +92,11 @@ def publish_article():
             article.en_name = column.menu.en_name
             article.menu_name = column.menu.menu_name
 
+            if user_id:
+                article.user_id =user_id
+            else:
+                article.user_id = g.user.uid
+
             if create_time:
                 article.create_time = create_time
             else:
@@ -97,27 +106,20 @@ def publish_article():
         return Success()
 
 
-@api.route('/edit', methods=['POST'])
+@api.route('/edit', methods=['PUT'])
 @auth.login_required
 def edit_article():
-    form = ArticleForm().validate_for_api()
-    title = form.title.data
-    article = Article.query.filter_by(title=title).first()
-    if article:
-        data = {
-            "error_code": 100,
-            "msg": "文章标题重复"
-        }
-        return restful_json(data)
-    else:
-        with db.auto_commit():
-            article = Article()
-            article.title = form.title.data
-            article.author = form.author.data
-            article.content = form.content.data
-            article.column_id = form.column_id.data
-            db.session.add(article)
-        return Success()
+    data = request.get_json()
+    id = data['id']
+
+    with db.auto_commit():
+        article = Article.query.get(id)
+        article.title = data['title']
+        article.author = data['author']
+        article.content = data['content']
+        article.column_id = data['column_id']
+        article.create_time = data['create_time']
+    return Success()
 
 
 @api.route('/delete', methods=['POST', 'DELETE'])

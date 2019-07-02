@@ -3,6 +3,7 @@
     ref="myQuillEditor"
     v-model="content"
     :options="editorOption"
+    @ready="onEditorReady($event)"
     @blur="onEditorBlur($event)"
     @focus="onEditorFocus($event)"
     @change="onEditorChange($event)"/>
@@ -17,14 +18,21 @@ export default {
   components: {
     quillEditor
   },
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
-      content: '<p>I am Example</p>',
+      content: '',
       editorOption: {
         // some quill options
         modules: {
           toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
+            // [], // dropdown with defaults from theme
+            ['bold', 'italic', 'underline', 'strike', { 'color': [] }],
             ['blockquote', 'code-block'],
             [{ 'header': 1 }, { 'header': 2 }], // custom button values
             [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
@@ -35,11 +43,10 @@ export default {
             // [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
             // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-            // [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
             // [{ 'font': [] }],
             // [{ 'align': [] }],
 
-            // ['clean']                                         // remove formatting button
+            // ['clean'] // remove formatting button
           ],
           syntax: {
             highlight: text => hljs.highlightAuto(text).value // 语法高亮插件调用
@@ -48,11 +55,21 @@ export default {
       }
     }
   },
-  mounted() {
+  computed: {
+    // contentShortLength() {
+    //   return this.postForm.content_short.length
+    // }
+    article_content() {
+      return this.$store.getters.content
+    }
+  },
+  created() {
     // console.log('app init, my quill insrance object is:', this.myQuillEditor)
-    setTimeout(() => {
-      this.content = 'i am changed'
-    }, 3000)
+    console.log(this.article_content)
+    // console.log(this.isEdit)
+    // setTimeout(() => {
+    //   this.content = 'i am changed'
+    // }, 3000)
   },
   methods: {
     onEditorBlur(editor) {
@@ -63,6 +80,9 @@ export default {
     },
     onEditorReady(editor) {
       // console.log('editor ready!', editor)
+      if (this.isEdit) {
+        this.content = this.article_content
+      }
     },
     onEditorChange({ quill, html, text }) {
       // console.log('editor change!', quill, html, text)
@@ -84,5 +104,8 @@ export default {
   }
   .ql-container.ql-snow {
     border-radius: 0 0 4px 4px;
+  }
+  .ql-snow .ql-color-picker .ql-picker-label {
+    padding: 0 0 12px 4px;
   }
 </style>

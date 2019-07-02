@@ -110,8 +110,12 @@ export default {
     }
   },
   async created() {
-    await this.getMenu()
     await this.getList()
+    var test = localStorage.getItem('menus')
+    if (!test) {
+      this.getMenu()
+    }
+    this.menuOptions = JSON.parse(test)
   },
   methods: {
     async getList() {
@@ -128,6 +132,7 @@ export default {
     async getMenu() {
       this.listLoading = true
       const { data } = await menuList()
+      localStorage.setItem('menus', JSON.stringify(data))
       this.menuOptions = data
       this.listLoading = false
     },
@@ -180,7 +185,10 @@ export default {
       })
     },
     handleUpdate(row) {
-      console.log(row)
+      // console.log(row)
+      this.$router.push({
+        path: `/article/edit/${row.id}`
+      })
     }
   }
 }

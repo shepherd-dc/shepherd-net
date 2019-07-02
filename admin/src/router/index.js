@@ -78,6 +78,13 @@ export const constantRouterMap = [
         name: 'Create',
         component: () => import('@/views/article/create'),
         meta: { title: '创建文章', icon: 'form' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/article/edit'),
+        name: 'EditArticle',
+        meta: { title: '编辑文章', noCache: true },
+        hidden: true
       }
     ]
   },
