@@ -87,4 +87,6 @@ class ArticleForm(BaseForm):
     content = StringField(validators=[DataRequired()])
     column_id = IntegerField(validators=[DataRequired()])
     user_id = IntegerField()
+    recommend = IntegerField()
+    status = IntegerField()
 

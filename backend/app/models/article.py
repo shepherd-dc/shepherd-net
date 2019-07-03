@@ -20,5 +20,5 @@ class Article(Base):
 
     @orm.reconstructor
     def __init__(self):
-        self.fields = ['id', 'title', 'author', 'content', 'user_id',
+        self.fields = ['id', 'title', 'author', 'content', 'user_id', 'status',
                        'column_id', 'column_name', 'menu_id', 'menu_name', 'en_name', 'create_time', 'recommend']

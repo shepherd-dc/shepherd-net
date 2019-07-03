@@ -23,8 +23,8 @@ class SQLAlchemy(_SQLAlchemy):
 
 class MyQuery(BaseQuery):
     def filter_by(self, **kwargs):
-        if 'status' not in kwargs.keys():
-            kwargs['status'] = 1
+        # if 'status' not in kwargs.keys():
+        #     kwargs['status'] = 1
         return super(MyQuery, self).filter_by(**kwargs)
 
     def get_or_404(self, ident):
