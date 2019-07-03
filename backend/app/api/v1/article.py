@@ -91,6 +91,8 @@ def publish_article():
             article.menu_id = column.menu_id
             article.en_name = column.menu.en_name
             article.menu_name = column.menu.menu_name
+            article.recommend = form.recommend.data
+            article.status = form.status.data
 
             if user_id:
                 article.user_id =user_id
@@ -119,6 +121,8 @@ def edit_article():
         article.content = data['content']
         article.column_id = data['column_id']
         article.create_time = data['create_time']
+        article.status = data['status']
+        article.recommend = data['recommend']
     return Success()
 
 
