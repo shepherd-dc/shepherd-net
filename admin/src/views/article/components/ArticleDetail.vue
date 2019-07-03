@@ -14,7 +14,7 @@
 
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="8">
+                <el-col :span="6">
                   <el-form-item label="版块栏目:">
                     <el-select
                       v-model="postForm.column_id"
@@ -33,7 +33,7 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
                   <span class="author">作者：</span>
                   <el-autocomplete
                     v-model="postForm.author"
@@ -43,23 +43,25 @@
                   />
                 </el-col>
 
-                <el-col :span="8">
+                <el-col :span="6">
                   <el-form-item label-width="80px" label="发布时间:" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.create_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"/>
                   </el-form-item>
                 </el-col>
 
-                <!-- <el-col :span="6">
+                <el-col :span="6">
                   <el-form-item label-width="60px" label="推荐:" class="postInfo-container-item">
                     <el-rate
-                      v-model="postForm.importance"
+                      v-model="postForm.recommend"
                       :max="5"
                       :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
                       :low-threshold="1"
                       :high-threshold="3"
+                      show-score
+                      score-template=""
                       style="margin-top:8px;"/>
                   </el-form-item>
-                </el-col> -->
+                </el-col>
               </el-row>
             </div>
           </el-col>
@@ -88,8 +90,11 @@
         <el-form-item>
           <el-button
             type="success"
-            @click="submitForm">发表</el-button>
-          <el-button @click="resetForm">重置</el-button>
+            @click="submitForm">发 布</el-button>
+          <el-button
+            type="primary"
+            @click="draftForm">存草稿</el-button>
+          <el-button @click="resetForm">重 置</el-button>
         </el-form-item>
       </div>
     </el-form>
@@ -109,7 +114,7 @@ import { fetchArticle, createArticle, editArticle } from '@/api/article'
 import { fetchUserList } from '@/api/user'
 
 const defaultForm = {
-  status: 'draft',
+  status: 1,
   title: '',
   column_id: undefined,
   author: '',
@@ -117,6 +122,7 @@ const defaultForm = {
   user_id: undefined,
   create_time: undefined,
   content: '',
+  recommend: 0,
   id: undefined
 }
 
@@ -247,7 +253,7 @@ export default {
       this.$refs.postForm.validate(async(valid) => {
         if (valid) {
           this.loading = true
-          // console.log(this.postForm)
+          this.postForm.status = 1
           if (this.postForm.id) {
             var data = await editArticle(this.postForm)
           } else {
@@ -277,21 +283,34 @@ export default {
     resetForm() {
       this.postForm = {}
     },
-    draftForm() {
-      // if (this.postForm.title.length === 0) {
-      //   this.$message({
-      //     message: '请填写必要的标题和内容',
-      //     type: 'warning'
-      //   })
-      //   return
-      // }
-      // this.$message({
-      //   message: '保存成功',
-      //   type: 'success',
-      //   showClose: true,
-      //   duration: 1000
-      // })
-      // this.postForm.status = 'draft'
+    async draftForm() {
+      if (this.postForm.title.length === 0) {
+        this.$message({
+          message: '请填写必要的标题和内容',
+          type: 'warning'
+        })
+        return
+      }
+      this.postForm.status = 0
+      if (this.postForm.id) {
+        var data = await editArticle(this.postForm)
+      } else {
+        data = await createArticle(this.postForm)
+      }
+      if (data.error_code === 0) {
+        this.$message({
+          message: '保存成功',
+          type: 'success',
+          showClose: true,
+          duration: 1000
+        })
+        this.$router.replace({
+          path: `/article/index`
+        })
+      } else {
+        console.log('error submit!!')
+        return false
+      }
     },
     async querySearchAsync(queryString, cb) {
       this.listQuery.kw = queryString

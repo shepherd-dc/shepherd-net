@@ -52,9 +52,14 @@
           <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="状态" class-name="status-col" width="110px" align="center">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status === 1 ? '发布' : '草稿' }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="推荐" class-name="status-col" width="110px" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.recommend | statusFilter">{{ scope.row.status === 1 ? '是' : '否' }}</el-tag>
+          <el-tag :type="scope.row.recommend | statusFilter">{{ scope.row.recommend === 1 ? '是' : '否' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
