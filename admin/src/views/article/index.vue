@@ -59,7 +59,7 @@
       </el-table-column>
       <el-table-column label="推荐" class-name="status-col" width="110px" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.recommend | statusFilter">{{ scope.row.recommend === 1 ? '是' : '否' }}</el-tag>
+          <el-tag :type="scope.row.recommend | statusFilter">{{ scope.row.recommend === 0 ? '否' : '是' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -76,7 +76,7 @@
 
 <script>
 import { fetchList, deleteArticle } from '@/api/article'
-import { menuList } from '@/api/column'
+import { fetchMenu } from '@/api/menu'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -110,17 +110,21 @@ export default {
         title: undefined,
         order: 1
       },
-      menuOptions: [],
       statusOptions: [1, 0]
     }
   },
-  async created() {
-    await this.getList()
-    var test = localStorage.getItem('menus')
-    if (!test) {
+  computed: {
+    menuOptions() {
+      return this.$store.getters.menu
+    }
+  },
+  created() {
+    this.getList()
+    // var test = localStorage.getItem('menus')
+    if (!this.menuOptions.length) {
       this.getMenu()
     }
-    this.menuOptions = JSON.parse(test)
+    // this.menuOptions = JSON.parse(test)
   },
   methods: {
     async getList() {
@@ -136,9 +140,9 @@ export default {
     },
     async getMenu() {
       this.listLoading = true
-      const { data } = await menuList()
-      localStorage.setItem('menus', JSON.stringify(data))
-      this.menuOptions = data
+      const { data } = await fetchMenu('nav')
+      this.$store.commit('FetchMenu', data)
+      // localStorage.setItem('menus', JSON.stringify(data))
       this.listLoading = false
     },
     handleFilter() {

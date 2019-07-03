@@ -161,7 +161,6 @@ export default {
         title: [{ validator: validateRequire }],
         content: [{ validator: validateRequire }]
       },
-      menus: [],
       editorOption: {
         // some quill options
         modules: {
@@ -194,13 +193,8 @@ export default {
     // contentShortLength() {
     //   return this.postForm.content_short.length
     // }
-    // article_content() {
-    //   return this.$store.getters.content
-    // }
-  },
-  watch: {
-    postForm() {
-      return this.postForm
+    menus() {
+      return this.$store.getters.menu
     }
   },
   created() {
@@ -210,12 +204,11 @@ export default {
     } else {
       this.postForm = Object.assign({}, defaultForm)
     }
-
-    var test = localStorage.getItem('menus')
-    if (!test) {
+    // var test = localStorage.getItem('menus')
+    if (!this.menus.length) {
       this.fetchMenu()
     }
-    this.menus = JSON.parse(test)
+    // this.menus = JSON.parse(test)
 
     // Why need to make a copy of this.$route here?
     // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
@@ -228,8 +221,8 @@ export default {
   methods: {
     async fetchMenu() {
       const { data } = await fetchMenu('nav')
-      localStorage.setItem('menus', JSON.stringify(data))
-      this.menus = data
+      // localStorage.setItem('menus', JSON.stringify(data))
+      this.$store.commit('FetchMenu', data)
     },
     async fetchData(id) {
       const response = await fetchArticle(id)
