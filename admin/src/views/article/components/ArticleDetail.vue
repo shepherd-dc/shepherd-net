@@ -155,6 +155,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
+        status: 1,
         kw: ''
       },
       rules: {

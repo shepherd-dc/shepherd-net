@@ -37,6 +37,8 @@ def super_get_user(uid):
 @auth.login_required
 def super_get_user_list():
     kw = request.args.get('kw', '')
+    auth = request.args.get('auth', '')
+    status = request.args.get('status', '')
     page_index = int(request.args.get('page', 1))
     page_size = int(request.args.get('limit', 20))
 
@@ -45,7 +47,13 @@ def super_get_user_list():
     if kw:
         user = user.filter(User.nickname.like('%' + kw + '%'))
 
-    user = user.filter_by(status=1).limit(page_size).offset((page_index - 1) * page_size).all()
+    if auth:
+        user = user.filter_by(auth=auth)
+
+    if status:
+        user = user.filter_by(status=status)
+
+    user = user.limit(page_size).offset((page_index - 1) * page_size).all()
 
     return restful_json(user)
 
@@ -80,20 +88,21 @@ def get_nickname():
         return Success()
 
 
-@api.route('', methods=['DELETE'])
+@api.route('/delete', methods=['POST'])
 @auth.login_required
 def delete_user():
-    uid = g.user.uid
+    data = request.get_json('id')
+    user = User.query.filter_by(id=data['id']).first_or_404()
     with db.auto_commit():
-        user = User.query.filter_by(id=uid).first_or_404()
-        user.delete()
+        user.status = 0
     return DeleteSuccess()
 
 
-@api.route('/<int:uid>', methods=['DELETE'])
+@api.route('/delete', methods=['DELETE'])
 @auth.login_required
-def super_delete_user(uid):
+def super_delete_user():
+    data = request.get_json('id')
+    user = User.query.filter_by(id=data['id']).first_or_404()
     with db.auto_commit():
-        user = User.query.filter_by(id=uid).first_or_404()
-        user.delete()
+        db.session.delete(user)
     return DeleteSuccess()

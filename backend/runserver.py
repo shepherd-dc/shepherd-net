@@ -7,7 +7,7 @@ from app.libs.error_code import ServerException
 
 app = create_app()
 
-CORS(app, resources=r'/*')
+CORS(app, resources={r"/v1/*": {"origins": "*"}})
 
 
 @app.errorhandler(Exception)

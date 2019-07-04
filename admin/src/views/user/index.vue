@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.name" placeholder="栏目名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-select v-model="listQuery.menu_id" placeholder="主菜单" clearable class="filter-item" style="width: 130px" @change="handleFilter">
-        <el-option v-for="item in menuOptions" :key="item.id" :label="item.menu_name" :value="item.id"/>
+      <el-input v-model="listQuery.kw" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+      <el-select v-model="listQuery.auth" placeholder="角色权限" clearable class="filter-item" style="width: 130px" @change="handleFilter">
+        <el-option v-for="item in authOptions" :key="item.id" :label="item.name" :value="item.id"/>
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
@@ -35,7 +35,7 @@
       </el-table-column>
       <el-table-column label="权限" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.auth === 2 ? '管理员' : '普通用户' }}</span>
+          <span :style="scope.row.auth === 2 ? 'color:#409EFF' : ''">{{ scope.row.auth === 2 ? '管理员' : '普通用户' }}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="官方文档">
@@ -65,13 +65,13 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 90%; margin-left:50px;">
-        <el-form-item label="主菜单" prop="menu_id">
-          <el-select v-model="temp.menu_id" class="filter-item" placeholder="Please select" style="width: 100%;">
-            <el-option v-for="item in menuOptions" :key="item.id" :label="item.menu_name" :value="item.id"/>
+        <el-form-item label="角色权限" prop="menu_id">
+          <el-select v-model="temp.auth" class="filter-item" placeholder="Please select" style="width: 100%;">
+            <el-option v-for="item in authOptions" :key="item.id" :label="item.menu_name" :value="item.id"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="栏目名" prop="name">
-        <el-input v-model="temp.name" @blur="setPath"/></el-form-item>
+        <el-form-item label="用户名" prop="name">
+        <el-input v-model="temp.nickname" @blur="setPath"/></el-form-item>
         <el-form-item label="官网" prop="official_doc">
           <el-input v-model="temp.official_doc"/>
         </el-form-item>
@@ -108,8 +108,8 @@
 </template>
 
 <script>
-import { menuList, menuDetail, saveSubmenu, deleteSubmenu, hardDeleteSubmenu } from '@/api/column'
-import { fetchUserList } from '@/api/user'
+import { menuList, menuDetail, saveSubmenu } from '@/api/column'
+import { fetchUserList, deleteUser, hardDeleteUser } from '@/api/user'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -138,16 +138,19 @@ export default {
       listQuery: {
         page: 1,
         limit: 5,
-        menu_id: undefined,
-        name: undefined
+        kw: undefined,
+        auth: undefined
       },
-      menuOptions: [],
+      authOptions: [
+        { id: 1, name: '普通用户' },
+        { id: 2, name: '管理员' }
+      ],
       statusOptions: [1, 0],
       showReviewer: false,
       temp: {
         id: undefined,
-        menu_id: '',
-        name: '',
+        auth: 1,
+        nickname: '',
         description: '',
         official_doc: '',
         pic: '',
@@ -179,7 +182,6 @@ export default {
   methods: {
     async getList() {
       this.listLoading = true
-      this.listQuery.status = 0
       const { data } = await fetchUserList(this.listQuery)
       this.list = data
       // this.total = data.total
@@ -202,8 +204,8 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        menu_id: '',
-        name: '',
+        auth: 1,
+        nickname: '',
         description: '',
         official_doc: '',
         pic: '',
@@ -281,10 +283,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
+        console.log(row.status)
         if (row.status === 1) {
-          await deleteSubmenu({ id: row.id })
+          await deleteUser({ id: row.id })
         } else {
-          await hardDeleteSubmenu({ id: row.id })
+          await hardDeleteUser({ id: row.id })
         }
         const index = this.list.indexOf(row)
         this.list.splice(index, 1)
