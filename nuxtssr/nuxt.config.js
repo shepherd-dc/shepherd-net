@@ -48,6 +48,10 @@ module.exports = {
       src: "~plugins/nuxt-quill-plugin.js",
       ssr: false
     },
+    {
+      src: "~plugins/axios.js",
+      ssr: true
+    },
     '~plugins/filters.js'
   ],
 

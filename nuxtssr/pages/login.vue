@@ -114,8 +114,8 @@
             this.ruleForm2.type = 100
             let { data } = await this.$axios.post(`${URL}/token`,this.ruleForm2)
             if ( data.error_code === 0 ) {
-              localStorage.setItem('token', data.data.token)
-              this.$store.dispatch('USER_INFO', data)
+              this.$store.dispatch('Login', data.data.token)
+              // this.$store.dispatch('USER_INFO', data)
               this.$router.go(-1)
             } else if (data.error_code === 1002 || data.error_code === 1003) {
               alert(data.msg)

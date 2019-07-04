@@ -69,13 +69,13 @@ export const constantRouterMap = [
     children: [
       {
         path: 'index',
-        name: 'Index',
+        name: 'ArticleIndex',
         component: () => import('@/views/article/index'),
         meta: { title: '文章列表', icon: 'list' }
       },
       {
         path: 'create',
-        name: 'Create',
+        name: 'CreateArticle',
         component: () => import('@/views/article/create'),
         meta: { title: '创建文章', icon: 'form' }
       },
@@ -85,6 +85,22 @@ export const constantRouterMap = [
         name: 'EditArticle',
         meta: { title: '编辑文章', noCache: true },
         hidden: true
+      }
+    ]
+  },
+
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/index',
+    name: 'User',
+    meta: { title: '用户管理', icon: 'user' },
+    children: [
+      {
+        path: 'index',
+        name: 'UserIndex',
+        component: () => import('@/views/user/index'),
+        meta: { title: '用户管理', icon: 'peoples' }
       }
     ]
   },

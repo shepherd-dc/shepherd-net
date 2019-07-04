@@ -4,6 +4,7 @@ import URL from '~/globalurl'
 import getters from './getters/getters'
 import errorLog from './modules/errorLog'
 import userInfo from './modules/userInfo'
+import user from './modules/user'
 
 Vue.use(Vuex)
 
@@ -33,7 +34,8 @@ const store = () => new Vuex.Store({
   getters,
   modules: {
     errorLog,
-    userInfo
+    userInfo,
+    user
   }
 })
 

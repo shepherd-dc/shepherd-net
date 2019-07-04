@@ -34,14 +34,14 @@
       </el-row>
     </nav>
     <div class="login">
-      <div v-if="!token && !userInfo.token">
+      <div v-if="!token && !SNtoken">
         <span @click="routerToLogin()">登录</span> | <span @click="routerToRegister()">注册</span>
       </div>
-      <div v-if="token || userInfo.token">
+      <div v-if="token || SNtoken">
         <span
           class="publish-btn"
           @click="routerToPublish()">发帖</span>
-        <span>{{ userInfo.nickname || nickname }}</span> | <span @click="routerToLogout()">退出</span>
+        <span>{{ nickname || name }}</span> | <span @click="routerToLogout()">退出</span>
       </div>
     </div>
   </div>
@@ -50,7 +50,9 @@
 
 <script>
   import URL from '~/globalurl'
+  import { getToken, setToken, removeToken } from '~/utils/auth'
   import CommonNav from './CommonNav'
+  import { mapGetters } from 'vuex'
   export default {
     components: {
       CommonNav
@@ -60,27 +62,31 @@
         activeIndex: '1',
         isfold: false,
         token: '',
-        nickname: ''
+        name: ''
       }
     },
     computed: {
-      userInfo () {
-        return this.$store.state.userInfo.userInfo
-      },
-      width () {
-        return this.$store.state.width
-      }
+      ...mapGetters([
+        'width',
+        'SNtoken',
+        'nickname'
+      ])
     },
     async mounted () {
+      if (getToken()) {
+        this.token = getToken()
+      }
       let Width = window.innerWidth
       this.$store.dispatch('SetWidth', Width)
-      this.token = localStorage.getItem('token')
-      if (this.token) {
+      // this.token = localStorage.getItem('token')
+      if (!this.SNtoken && this.token) {
         let { data } = await this.$axios.post(`${URL}/token/secret`,{
           "token": this.token
         })
-        this.nickname = data.nickname
+        this.$store.commit('SET_TOKEN', data.token)
+        this.name = data.nickname
       }
+      console.log(this.SNtoken, this.nickname)
     },
     methods: {
       mouseenterHandler () {
@@ -100,7 +106,7 @@
         })
       },
       routerToLogout () {
-        this.$store.commit('LOGOUT')
+        this.$store.dispatch('LogOut')
         this.token = ''
         location = '/'
       },

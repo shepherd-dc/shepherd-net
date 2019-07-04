@@ -1,6 +1,7 @@
 const getters = {
   width: state => state.width,
   menus: state => state.menus,
-  userInfo: state => state.userInfo.userInfo
+  nickname: state => state.user.nickname,
+  SNtoken: state => state.user.token
 }
 export default getters
