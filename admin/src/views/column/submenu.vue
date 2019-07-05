@@ -18,7 +18,7 @@
       fit
       highlight-current-row
       style="width: 100%;">
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="65">
+      <el-table-column label="ID" align="center" width="65">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -162,9 +162,9 @@ export default {
       rules: {
         menu_id: [{ required: true, message: '请选择主菜单', trigger: 'change' }],
         name: [{ required: true, message: '请输入栏目名', trigger: 'blur' }],
-        description: [{ required: true, message: 'title is required', trigger: 'blur' }],
-        official_doc: [{ required: true, message: 'title is required', trigger: 'blur' }],
-        pic: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        description: [{ required: true, message: '请输入简介', trigger: 'blur' }],
+        official_doc: [{ required: true, message: '请输入官方文档地址', trigger: 'blur' }],
+        pic: [{ required: true, message: '请上传栏目图片', trigger: 'blur' }]
       },
       downloadLoading: false,
       fileList2: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]

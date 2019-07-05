@@ -15,6 +15,22 @@ export function userDetail(id) {
   })
 }
 
+export function checkUser(data) {
+  return request({
+    url: `/user/nickname`,
+    method: 'post',
+    data
+  })
+}
+
+export function checkAccount(data) {
+  return request({
+    url: `/user/email`,
+    method: 'post',
+    data
+  })
+}
+
 export function addUser(data) {
   return request({
     url: `/user/add`,

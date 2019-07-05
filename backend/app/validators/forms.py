@@ -81,6 +81,7 @@ class LoginForm(BaseForm):
 
 
 class ArticleForm(BaseForm):
+    id = IntegerField()
     title = StringField(validators=[DataRequired()])
     author = StringField()
     create_time = StringField()
@@ -90,3 +91,14 @@ class ArticleForm(BaseForm):
     recommend = IntegerField()
     status = IntegerField()
 
+
+class UserForm(BaseForm):
+    id = IntegerField()
+    auth = IntegerField(validators=[DataRequired()])
+    nickname = StringField(validators=[DataRequired()])
+    email = StringField(validators=[
+        Email(message='邮箱格式不正确')
+    ])
+    password = StringField(validators=[DataRequired()])
+    create_time = StringField()
+    status = IntegerField()

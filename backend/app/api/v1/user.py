@@ -1,5 +1,6 @@
 # from flask import Blueprint
 import json
+import time
 
 from flask import jsonify, g, request
 from wtforms.validators import email
@@ -13,7 +14,7 @@ from app.models.base import db
 from app.models.user import User
 
 # user = Blueprint('user', __name__)
-from app.validators.forms import NicknameForm, EmailForm
+from app.validators.forms import NicknameForm, EmailForm, UserForm
 
 api = Redprint('user')
 
@@ -41,6 +42,7 @@ def super_get_user_list():
     status = request.args.get('status', '')
     page_index = int(request.args.get('page', 1))
     page_size = int(request.args.get('limit', 20))
+    order = int(request.args.get('order', 0))
 
     user = User.query
 
@@ -53,9 +55,20 @@ def super_get_user_list():
     if status:
         user = user.filter_by(status=status)
 
+    if order and order == 1:
+        user = user.order_by(User.create_time.asc())
+    else:
+        user = user.order_by(User.create_time.desc())
+
+    total = user.count()
     user = user.limit(page_size).offset((page_index - 1) * page_size).all()
 
-    return restful_json(user)
+    data = {
+        "total": total,
+        "data": user
+    }
+
+    return restful_json(data)
 
 
 @api.route('/email', methods=['POST'])
@@ -86,6 +99,53 @@ def get_nickname():
         return jsonify(data)
     else:
         return Success()
+
+
+@api.route('/add', methods=['POST'])
+@auth.login_required
+def publish_article():
+    form = UserForm().validate_for_api()
+    email = form.email.data
+    nickname = form.nickname.data
+
+    user_nickname = User.query.filter_by(nickname=nickname).first()
+    user_email = User.query.filter_by(email=email).first()
+
+    if user_nickname:
+        data = {
+            "error_code": 101,
+            "msg": "昵称已注册"
+        }
+        return jsonify(data)
+
+    if user_email:
+        data = {
+            "error_code": 100,
+            "msg": "邮箱已注册"
+        }
+        return jsonify(data)
+
+    with db.auto_commit():
+        user = User()
+        user.nickname = nickname
+        user.email = email
+        user.auth =form.auth.data
+        user.password = form.password.data
+        user.create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        db.session.add(user)
+    return restful_json(user)
+
+
+@api.route('/edit', methods=['PUT'])
+@auth.login_required
+def edit_article():
+    data = request.get_json()
+    id = data['id']
+    with db.auto_commit():
+        user = User.query.get(id)
+        user.auth = data['auth']
+        user.status = data['status']
+    return Success()
 
 
 @api.route('/delete', methods=['POST'])

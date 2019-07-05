@@ -27,7 +27,7 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="时间" prop="time" sortable="custom" width="160px" align="center">
+      <el-table-column label="发布时间" prop="time" sortable="custom" width="160px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.create_time }}</span>
         </template>
@@ -108,7 +108,7 @@ export default {
         menu_id: undefined,
         column_id: undefined,
         title: undefined,
-        order: 1
+        order: 0
       },
       statusOptions: [1, 0]
     }
@@ -157,9 +157,9 @@ export default {
     },
     sortByID(order) {
       if (order === 'ascending') {
-        this.listQuery.order = 0
-      } else {
         this.listQuery.order = 1
+      } else {
+        this.listQuery.order = 0
       }
       this.handleFilter()
     },

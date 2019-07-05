@@ -41,7 +41,10 @@ def article_list():
             articles = articles.filter_by(column_id=column_id)
 
     if order and order == 1:
+        articles = articles.order_by(Article.create_time.asc())
+    else:
         articles = articles.order_by(Article.create_time.desc())
+
 
     total = articles.count()
     articles = articles.limit(page_size).offset((page_index - 1) * page_size).all()
@@ -111,18 +114,20 @@ def publish_article():
 @api.route('/edit', methods=['PUT'])
 @auth.login_required
 def edit_article():
-    data = request.get_json()
-    id = data['id']
+    form = ArticleForm().validate_for_api()
+    # data = request.get_json()
+    # id = data['id']
+    id = form.id.data
 
     with db.auto_commit():
         article = Article.query.get(id)
-        article.title = data['title']
-        article.author = data['author']
-        article.content = data['content']
-        article.column_id = data['column_id']
-        article.create_time = data['create_time']
-        article.status = data['status']
-        article.recommend = data['recommend']
+        article.title = form.title.data
+        article.author = form.author.data
+        article.content = form.content.data
+        article.column_id = form.column_id.data
+        article.create_time = form.create_time.data
+        article.status = form.status.data
+        article.recommend = form.recommend.data
     return Success()
 
 

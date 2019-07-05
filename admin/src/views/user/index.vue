@@ -7,7 +7,7 @@
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">简介</el-checkbox>
+      <!-- <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">简介</el-checkbox> -->
     </div>
 
     <el-table
@@ -17,10 +17,16 @@
       border
       fit
       highlight-current-row
-      style="width: 100%;">
+      style="width: 100%;"
+      @sort-change="sortChange">
       <el-table-column label="ID" prop="id" sortable="custom" align="center" width="65">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" prop="time" sortable="custom" width="160px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.create_time }}</span>
         </template>
       </el-table-column>
       <el-table-column label="昵称" width="110px" align="center">
@@ -61,36 +67,25 @@
       </el-table-column>
     </el-table>
 
-    <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" /> -->
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 90%; margin-left:50px;">
-        <el-form-item label="角色权限" prop="menu_id">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="90px" style="width: 90%; margin-left:50px;">
+        <el-form-item label="角色权限" prop="auth">
           <el-select v-model="temp.auth" class="filter-item" placeholder="Please select" style="width: 100%;">
-            <el-option v-for="item in authOptions" :key="item.id" :label="item.menu_name" :value="item.id"/>
+            <el-option v-for="item in authOptions" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户名" prop="name">
-        <el-input v-model="temp.nickname" @blur="setPath"/></el-form-item>
-        <el-form-item label="官网" prop="official_doc">
-          <el-input v-model="temp.official_doc"/>
+        <el-form-item v-show="dialogStatus==='create'" label="用户名" prop="nickname">
+        <el-input v-model="temp.nickname"/></el-form-item>
+        <el-form-item v-show="dialogStatus==='create'" label="邮箱" prop="email">
+          <el-input v-model="temp.email" type="email"/>
         </el-form-item>
-        <el-form-item label="简介" prop="description">
-          <el-input :autosize="{ minRows: 2, maxRows: 10}" v-model="temp.description" type="textarea"/>
+        <el-form-item v-show="dialogStatus==='create'" label="密码" prop="password">
+          <el-input v-model="temp.password" type="password"/>
         </el-form-item>
-        <el-form-item label="图片">
-          <el-upload
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :file-list="fileList2"
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture">
-            <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="路由">
-          <el-input v-model="temp.path" :disabled="true"/>
+        <el-form-item v-show="dialogStatus==='create'" label="确认密码" prop="repassword">
+          <el-input v-model="temp.repassword" type="password"/>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
@@ -108,8 +103,7 @@
 </template>
 
 <script>
-import { menuList, menuDetail, saveSubmenu } from '@/api/column'
-import { fetchUserList, deleteUser, hardDeleteUser } from '@/api/user'
+import { fetchUserList, checkUser, checkAccount, addUser, editUser, deleteUser, hardDeleteUser } from '@/api/user'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -130,6 +124,49 @@ export default {
     // }
   },
   data() {
+    var checkName = async(rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('昵称不能为空'))
+      } else {
+        const data = await checkUser({ nickname: this.temp.nickname })
+        if (data.error_code === 0) {
+          callback()
+        } else if (data.error_code === 101) {
+          return callback(new Error('昵称已注册'))
+        }
+      }
+    }
+    var checkEmail = async(rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
+      } else {
+        const data = await checkAccount({ email: this.temp.email })
+        if (data.error_code === 0) {
+          callback()
+        } else if (data.error_code === 100) {
+          return callback(new Error('邮箱已注册'))
+        }
+      }
+    }
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.temp.repassword !== '') {
+          this.$refs.dataForm.validateField('repassword')
+        }
+        callback()
+      }
+    }
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.temp.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       tableKey: 0,
       list: null,
@@ -139,7 +176,8 @@ export default {
         page: 1,
         limit: 5,
         kw: undefined,
-        auth: undefined
+        auth: undefined,
+        order: 0
       },
       authOptions: [
         { id: 1, name: '普通用户' },
@@ -151,10 +189,9 @@ export default {
         id: undefined,
         auth: 1,
         nickname: '',
-        description: '',
-        official_doc: '',
-        pic: '',
-        path: '',
+        email: '',
+        password: '',
+        repassword: '',
         status: 1
       },
       dialogFormVisible: false,
@@ -164,52 +201,58 @@ export default {
         create: 'Create'
       },
       rules: {
-        menu_id: [{ required: true, message: '请选择主菜单', trigger: 'change' }],
-        name: [{ required: true, message: '请输入栏目名', trigger: 'blur' }],
-        description: [{ required: true, message: 'title is required', trigger: 'blur' }],
-        official_doc: [{ required: true, message: 'title is required', trigger: 'blur' }],
-        pic: [{ required: true, message: 'title is required', trigger: 'blur' }]
-      },
-      downloadLoading: false,
-      fileList2: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
-
+        auth: [{ required: true, message: '请选择角色权限', trigger: 'change' }],
+        nickname: [{ required: true, validator: checkName, trigger: 'blur' }],
+        email: [
+          { required: true, validator: checkEmail, trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+        ],
+        password: [{ required: true, validator: validatePass, trigger: 'blur' }],
+        repassword: [{ required: true, validator: validatePass2, trigger: 'blur' }]
+      }
     }
   },
   async created() {
-    await this.getMenu()
     await this.getList()
   },
   methods: {
     async getList() {
       this.listLoading = true
       const { data } = await fetchUserList(this.listQuery)
-      this.list = data
-      // this.total = data.total
+      this.list = data.data
+      this.total = data.total
       this.listLoading = false
       // // Just to simulate the time of the request
       // setTimeout(() => {
       //   this.listLoading = false
       // }, 1.5 * 1000)
     },
-    async getMenu() {
-      this.listLoading = true
-      const { data } = await menuList()
-      this.menuOptions = data
-      this.listLoading = false
-    },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    sortChange(data) {
+      const { prop, order } = data
+      if (prop === 'id' || prop === 'time') {
+        this.sortByID(order)
+      }
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        this.listQuery.order = 1
+      } else {
+        this.listQuery.order = 0
+      }
+      this.handleFilter()
     },
     resetTemp() {
       this.temp = {
         id: undefined,
         auth: 1,
         nickname: '',
-        description: '',
-        official_doc: '',
-        pic: '',
-        path: '',
+        email: '',
+        password: '',
+        repassword: '',
         status: 1
       }
     },
@@ -224,8 +267,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate(async(valid) => {
         if (valid) {
-          this.temp.pic = '/card.jpg'
-          const data = await saveSubmenu(this.temp)
+          // console.log(this.temp)
+          const data = await addUser(this.temp)
           if (data.error_code === 0) {
             this.temp = data.data
             this.list.unshift(this.temp)
@@ -240,12 +283,6 @@ export default {
         }
       })
     },
-    async setPath() {
-      if (this.temp.menu_id) {
-        const { data } = await menuDetail({ id: this.temp.menu_id })
-        this.temp.path = `${data.en_name}/${this.temp.name}`
-      }
-    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.dialogStatus = 'update'
@@ -254,28 +291,25 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          saveSubmenu(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
+    async updateData() {
+      const tempData = Object.assign({}, this.temp)
+      const data = await editUser(tempData)
+      if (data.error_code === 0) {
+        for (const v of this.list) {
+          if (v.id === this.temp.id) {
+            const index = this.list.indexOf(v)
+            this.list.splice(index, 1, this.temp)
+            break
+          }
         }
-      })
+        this.dialogFormVisible = false
+        this.$notify({
+          title: '成功',
+          message: '更新成功',
+          type: 'success',
+          duration: 2000
+        })
+      }
     },
     handleDelete(row) {
       this.$confirm('此操作将删除该栏目, 是否继续?', '提示', {
@@ -303,12 +337,6 @@ export default {
           message: '已取消删除'
         })
       })
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview(file) {
-      console.log(file)
     }
   }
 }
