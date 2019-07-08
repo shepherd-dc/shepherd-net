@@ -8,6 +8,11 @@ TOKEN_EXPIRATION = 7 * 24 * 3600
 REMEMBER_COOKIE_DURATION = timedelta(days=7)
 PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 
+UPLOAD_IMAGE_FOLDER = '/uploads/images'
+UPLOAD_FILE_FOLDER = '/uploads/files'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+MAX_CONTENT_LENGTH = 10 * 1024 * 1024
+
 # dialect+driver://username:password@host:port/database
 DIALECT = 'mysql'
 DRIVER = 'cymysql'

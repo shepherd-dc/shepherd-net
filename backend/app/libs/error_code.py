@@ -74,5 +74,12 @@ class DuplicateGift(APIException):
     msg = 'the current book has already in gift'
 
 
+class FileSizeLimit(APIException):
+    code = 413
+    error_code = 2002
+    msg = '附件大小不能超过12M'
+
+
+
 
 

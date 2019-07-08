@@ -1,4 +1,5 @@
-from wtforms import StringField, IntegerField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import StringField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, length, Email, Regexp, ValidationError
 
 from app.libs.enums import ClientTypeEnum
@@ -102,3 +103,9 @@ class UserForm(BaseForm):
     password = StringField(validators=[DataRequired()])
     create_time = StringField()
     status = IntegerField()
+
+
+class UploadForm(BaseForm):
+    photo = FileField('Upload Image', validators=[FileRequired(), FileAllowed(['jpg','jpeg','png','gif'])])
+    submit = SubmitField()
+

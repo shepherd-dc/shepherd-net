@@ -80,11 +80,12 @@
         </el-form-item>
         <el-form-item label="图片">
           <el-upload
-            :on-preview="handlePreview"
+            :on-success="handleSuccess"
             :on-remove="handleRemove"
             :file-list="fileList2"
+            :limit="1"
             class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="/v1/upload/image"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
@@ -109,6 +110,7 @@
 
 <script>
 import { menuList, submenuList, menuDetail, saveSubmenu, deleteSubmenu, hardDeleteSubmenu } from '@/api/column'
+import { deleteImage } from '@/api/menu'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -167,7 +169,7 @@ export default {
         pic: [{ required: true, message: '请上传栏目图片', trigger: 'blur' }]
       },
       downloadLoading: false,
-      fileList2: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+      fileList2: []
 
     }
   },
@@ -221,7 +223,6 @@ export default {
     createData() {
       this.$refs['dataForm'].validate(async(valid) => {
         if (valid) {
-          this.temp.pic = '/card.jpg'
           const data = await saveSubmenu(this.temp)
           if (data.error_code === 0) {
             this.temp = data.data
@@ -301,10 +302,12 @@ export default {
       })
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      deleteImage(file.response.data.filename)
+      // console.log(file, fileList)
     },
-    handlePreview(file) {
-      console.log(file)
+    async handleSuccess(response, file, fileList) {
+      // console.log(response, file)
+      this.temp.pic = response.data.url + '/' + response.data.filename
     }
   }
 }

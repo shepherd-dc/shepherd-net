@@ -11,7 +11,7 @@ class Submenu(Base):
     name = Column(String(50), nullable=False)
     menu_name = Column(String(50))
     path = Column(String(50), nullable=False)
-    pic = Column(String(50), nullable=False)
+    pic = Column(String(512), nullable=False)
     menu_id = Column(Integer, ForeignKey('menu.id'))
     description = Column(Text(), nullable=False)
     official_doc = Column(String(100), nullable=False)

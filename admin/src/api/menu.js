@@ -6,3 +6,17 @@ export function fetchMenu(query = '') {
     method: 'get'
   })
 }
+
+export function fetchImage(filename) {
+  return request({
+    url: `/upload/image/${filename}`,
+    method: 'get'
+  })
+}
+
+export function deleteImage(filename) {
+  return request({
+    url: `/upload/image/${filename}`,
+    method: 'delete'
+  })
+}

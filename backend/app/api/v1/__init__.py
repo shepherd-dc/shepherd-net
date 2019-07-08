@@ -1,5 +1,5 @@
 from flask import Blueprint
-from app.api.v1 import user, book, client, token, gift, menu, article
+from app.api.v1 import user, book, client, token, gift, menu, article, upload
 
 
 def create_blueprint_v1():
@@ -14,5 +14,6 @@ def create_blueprint_v1():
     gift.api.register(bp_v1)
     menu.api.register(bp_v1)
     article.api.register(bp_v1)
+    upload.api.register(bp_v1)
 
     return bp_v1

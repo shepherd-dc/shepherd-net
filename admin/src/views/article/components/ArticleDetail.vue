@@ -312,7 +312,7 @@ export default {
       const data = await fetchUserList(listQuery)
       const userListOptions = []
       if (data.error_code === 0) {
-        data.data.map((v) => {
+        data.data.data.map((v) => {
           userListOptions.push(
             Object.assign({}, v, { value: v.nickname })
           )
