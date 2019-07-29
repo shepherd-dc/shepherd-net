@@ -78,7 +78,7 @@
         <el-form-item label="简介" prop="description">
           <el-input :autosize="{ minRows: 2, maxRows: 10}" v-model="temp.description" type="textarea"/>
         </el-form-item>
-        <el-form-item label="图片">
+        <el-form-item label="图片" prop="pic">
           <el-upload
             :on-success="handleSuccess"
             :on-remove="handleRemove"
@@ -166,7 +166,7 @@ export default {
         name: [{ required: true, message: '请输入栏目名', trigger: 'blur' }],
         description: [{ required: true, message: '请输入简介', trigger: 'blur' }],
         official_doc: [{ required: true, message: '请输入官方文档地址', trigger: 'blur' }],
-        pic: [{ required: true, message: '请上传栏目图片', trigger: 'blur' }]
+        pic: [{ required: true, message: '请上传栏目图片', trigger: 'change' }]
       },
       downloadLoading: false,
       fileList2: []
