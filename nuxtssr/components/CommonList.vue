@@ -10,15 +10,12 @@
               :card_data="card_data"
               :islist="islist"/>
             <article-list :articles_data="list"/>
-            <div
-              class="page-container">
-              <pagination
-                v-show="total>10"
-                :total="total"
-                :page.sync="listQuery.page"
-                :limit.sync="listQuery.limit"
-                @pagination="getList" />
-            </div>
+            <pagination
+              v-show="total>10"
+              :total="total"
+              :page.sync="listQuery.page"
+              :limit.sync="listQuery.limit"
+              @pagination="getList" />
           </el-col>
           <el-col
             v-if="width > 1080"

@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div class="article-detail">
     <el-row
       :gutter="width > 1080 ? 10 : 0"
       type="flex">
@@ -7,7 +7,7 @@
         <el-card class="box-card">
           <div
             slot="header"
-            class="head">
+            class="article-head">
             <el-breadcrumb separator=">">
               <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
               <el-breadcrumb-item><a @click.stop="routerBreadMenu">{{ menuBread }}</a></el-breadcrumb-item>
@@ -15,11 +15,11 @@
               <el-breadcrumb-item>{{ article.title }}</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-          <div class="content">
-            <h2 class="title">
+          <div class="article-content">
+            <h2 class="article-title">
               {{ article.title }}
             </h2>
-            <div class="author">
+            <div class="article-author">
               <!-- <span>{{ article.author }} - {{ article.updatetime }}</span> -->
             </div>
             <div
@@ -86,25 +86,25 @@
 </script>
 
 <style lang="less">
-  .detail {
+  .article-detail {
     padding-top: 80px;
     max-width: 1280px;
     margin: 0 auto;
   }
-  .head {
+  .article-head {
     padding: 0 30px;
     font-size: 14px;
   }
-  .title {
+  .article-title {
     text-align: center;
     line-height: 56px;
   }
-  .author {
+  .article-author {
     text-align: center;
     line-height: 36px;
     margin-bottom: 40px;
   }
-  .content {
+  .article-content {
     padding: 30px;
     p {
       // margin-bottom: 12px;
