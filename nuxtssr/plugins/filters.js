@@ -15,7 +15,7 @@ let formatDate = (date, fmt) => {
   for (let k in o) {
     if (new RegExp(`(${k})`).test(fmt)) {
       let str = o[k] + ''
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str))
+      fmt = fmt.replace(RegExp.$1, str)
     }
   }
   return fmt
@@ -24,12 +24,19 @@ let formatDate = (date, fmt) => {
 let capitalize = (value) => {
   if (!value) return ''
   value = value.toString()
-  return value.charAt(0).toUpperCase() + value.slice(1)
+  return value==='php' ? 'PHP': value.charAt(0).toUpperCase() + value.slice(1)
+}
+
+let strSlice = (val, num) => {
+  if (!val) return ''
+  val = val.toString()
+  return val.length > num ? val.slice(0, num) + '...' : val
 }
 
 let filters = {
   formatDate,
-  capitalize
+  capitalize,
+  strSlice
 }
 
 Object.keys(filters).forEach(key => {

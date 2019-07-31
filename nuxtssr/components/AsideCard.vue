@@ -4,9 +4,12 @@
       slot="header"
       class="clearfix">
       <span>{{ aside_title }}</span>
-      <el-button
-        style="float: right; padding: 3px 0"
-        type="text">更多</el-button>
+      <router-link to="/article">
+        <el-button
+          v-if="show_more"
+          style="float: right; padding: 3px 0"
+          type="text">更多</el-button>
+      </router-link>
     </div>
     <div
       v-for="data in aside_data"
@@ -28,7 +31,11 @@ export default {
     aside_data: {
       type: Array,
       default: () => {}
-    }
+    },
+    show_more: {
+      type: Boolean,
+      default: true
+    },
   },
   methods: {
     routerToDetail (id) {

@@ -2,7 +2,8 @@
   <div>
     <single-column
       :column_data="column_data"
-      :articles_data="articles_data"/>
+      :articles_data="articles_data"
+      :column_id="column_id"/>
   </div>
 </template>
 <script>
@@ -18,7 +19,8 @@
       let { data } = await context.$axios.get(`${URL}/article?column_id=${column_id}`)
       return {
         column_data: column.data.data,
-        articles_data: data.data.data
+        articles_data: data.data.data,
+        column_id: column_id.toString()
       }
     }
   }

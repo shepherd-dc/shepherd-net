@@ -19,7 +19,7 @@ api = Redprint('article')
 @api.route('', methods=['GET'])
 def article_list():
     page_index = int(request.args.get('page', 1))
-    page_size = int(request.args.get('limit', 20))
+    page_size = int(request.args.get('limit', 10))
     menu_id = request.args.get('menu_id', '')
     column_id = request.args.get('column_id', '')
     title = request.args.get('title', None)

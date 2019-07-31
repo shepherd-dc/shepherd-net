@@ -11,7 +11,7 @@
             <el-breadcrumb separator=">">
               <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
               <el-breadcrumb-item><a @click.stop="routerBreadMenu">{{ menuBread }}</a></el-breadcrumb-item>
-              <el-breadcrumb-item><a @click.stop="routerBreadSubmenu">{{ submenuBread }}</a></el-breadcrumb-item>
+              <el-breadcrumb-item><a @click.stop="routerBreadSubmenu">{{ submenuBread | capitalize }}</a></el-breadcrumb-item>
               <el-breadcrumb-item>{{ article.title }}</el-breadcrumb-item>
             </el-breadcrumb>
           </div>

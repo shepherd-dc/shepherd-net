@@ -1,7 +1,7 @@
 <template>
   <div>
     <common-header class="position-fixed"/>
-    <nuxt/>
+    <nuxt class="default-content-container"/>
     <common-footer/>
   </div>
 </template>
@@ -77,5 +77,9 @@ a {
   z-index: 999;
   background-color: #333;
   width: 100%;
+}
+
+.default-content-container {
+  min-height: 91.5vh;
 }
 </style>

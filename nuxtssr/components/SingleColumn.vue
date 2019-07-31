@@ -54,7 +54,13 @@
                 </el-row>
               </div>
             </el-card>
-            <article-list :articles_data="articles_data"/>
+            <article-list :articles_data="list"/>
+            <pagination
+              v-show="total>10"
+              :total="total"
+              :page.sync="listQuery.page"
+              :limit.sync="listQuery.limit"
+              @pagination="getList" />
           </el-col>
           <el-col
             v-if="width > 1080"
@@ -74,12 +80,14 @@ import URL from "~/globalurl"
 import PicCard from "~/components/PicCard"
 import AsideCard from "~/components/AsideCard"
 import ArticleList from "~/components/ArticleList"
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
   components: {
     PicCard,
     AsideCard,
-    ArticleList
+    ArticleList,
+    Pagination
   },
   props: {
     column_data: {
@@ -89,17 +97,32 @@ export default {
     articles_data: {
       type: Array,
       default: () => {}
+    },
+    column_id: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
-      title1: '最新'
+      title1: '最新',
+      total: 10,
+      list: [],
+      listQuery: {
+        page: 1,
+        limit: 10,
+        column_id: this.column_id
+      }
     }
   },
   computed: {
     width () {
       return this.$store.state.width
     }
+  },
+  created(){
+    // this.list = [...this.articles_data]
+    this.getList()
   },
   methods: {
     routerToDetail (id) {
@@ -111,6 +134,13 @@ export default {
       this.$router.push({
         path: `/${this.column_data.path.split('/')[0]}`
       })
+    },
+    async getList() {
+      const { data }= await this.$axios.get(`${URL}/article`, {
+        params: {...this.listQuery}
+      })
+      this.list = data.data.data
+      this.total = data.data.total
     }
   },
 }

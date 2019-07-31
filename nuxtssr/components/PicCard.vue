@@ -11,9 +11,9 @@
         <div class="text-info">
           <h4
             class="detail-title"
-            @click="routerTo(sub_data.path, sub_data.name)">{{ sub_data.name }}</h4>
+            @click="routerTo(sub_data.path, sub_data.name)">{{ sub_data.name | capitalize }}</h4>
           <div class="bottom clearfix">
-            <time class="time">2018-12-7</time>
+            <time class="time">{{ sub_data.description | strSlice(25) }}</time>
             <el-button
               v-if="issublist"
               type="text"

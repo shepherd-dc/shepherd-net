@@ -60,6 +60,9 @@ export default {
       'menus',
       'width'
     ])
+  },
+  mounted () {
+    console.log(this.menus)
   }
 }
 </script>

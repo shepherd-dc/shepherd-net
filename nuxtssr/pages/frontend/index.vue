@@ -2,7 +2,8 @@
   <div>
     <list
       :card_data="card_data"
-      :articles_data="articles_data"/>
+      :articles_data="articles_data"
+      :menu_id="menu_id"/>
   </div>
 </template>
 <script>
@@ -19,7 +20,8 @@
       // console.log(data)
       return {
         card_data: menu.data.data,
-        articles_data: data.data.data
+        articles_data: data.data.data,
+        menu_id: menu_id.toString()
       }
     }
   }

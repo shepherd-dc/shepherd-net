@@ -33,7 +33,7 @@
         </el-col>
       </el-row>
     </nav>
-    <div class="login">
+    <!-- <div class="login">
       <div v-if="!token && !SNtoken">
         <span @click="routerToLogin()">登录</span> | <span @click="routerToRegister()">注册</span>
       </div>
@@ -43,7 +43,7 @@
           @click="routerToPublish()">发帖</span>
         <span>{{ nickname || name }}</span> | <span @click="routerToLogout()">退出</span>
       </div>
-    </div>
+    </div> -->
   </div>
 
 </template>

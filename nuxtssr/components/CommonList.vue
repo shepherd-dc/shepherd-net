@@ -9,7 +9,16 @@
             <main-card
               :card_data="card_data"
               :islist="islist"/>
-            <article-list :articles_data="articles_data"/>
+            <article-list :articles_data="list"/>
+            <div
+              class="page-container">
+              <pagination
+                v-show="total>10"
+                :total="total"
+                :page.sync="listQuery.page"
+                :limit.sync="listQuery.limit"
+                @pagination="getList" />
+            </div>
           </el-col>
           <el-col
             v-if="width > 1080"
@@ -29,11 +38,14 @@ import URL from '~/globalurl'
 import MainCard from '~/components/MainCard'
 import AsideCard from '~/components/AsideCard'
 import ArticleList from '~/components/ArticleList'
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+
 export default {
   components: {
     MainCard,
     AsideCard,
-    ArticleList
+    ArticleList,
+    Pagination
   },
   props: {
     card_data: {
@@ -43,17 +55,41 @@ export default {
     articles_data: {
       type: Array,
       default: () => {}
+    },
+    menu_id: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
       islist: false,
-      title1: '最新'
+      title1: '最新',
+      total: 10,
+      list: [],
+      listQuery: {
+        page: 1,
+        limit: 10,
+        menu_id: this.menu_id
+      }
     }
   },
   computed: {
     width () {
       return this.$store.state.width
+    }
+  },
+  created(){
+    // this.list = [...this.articles_data]
+    this.getList()
+  },
+  methods: {
+    async getList() {
+      const { data }= await this.$axios.get(`${URL}/article`, {
+        params: {...this.listQuery}
+      })
+      this.list = data.data.data
+      this.total = data.data.total
     }
   }
 }
@@ -67,5 +103,8 @@ export default {
     max-width: 1280px;
     margin: 10px auto;
     padding-top: 10px;
+  }
+  .page-container {
+    margin: 0 auto;
   }
 </style>

@@ -8,14 +8,16 @@
     <div
       v-for="article in articles_data"
       :key="article.id"
-      class="text item"
+      class="text item list"
       @click="routerToDetail(article.id)">
-      {{ article.title }}
+      <h4>{{ article.title }}</h4>
+      <span class="time">{{ article.create_time }}</span>
     </div>
   </el-card>
 </template>
 
 <script>
+import URL from "~/globalurl"
 export default {
   props: {
     articles_data: {
@@ -58,4 +60,16 @@ export default {
 .box-card {
   width: 100%;
 }
+
+.list {
+  display: flex;
+  justify-content: space-between;
+  h4 {
+    font-weight: normal;
+  }
+  .time {
+    color: #999;
+  }
+}
+
 </style>
