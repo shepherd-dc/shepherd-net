@@ -18,7 +18,13 @@ api = Redprint('menu')
 @api.route('')
 def get_menu():
     nav = request.values.get('nav', '')
-    menus = Menu.query.filter_by(status=1).all()
+    type = request.values.get('type', '')
+    menus = Menu.query
+
+    if type:
+        menus = menus.all()
+    else:
+        menus = menus.filter_by(status=1).all()
 
     if nav=='nav':
         for menu in menus:
@@ -60,13 +66,24 @@ def edit_menu():
         menu.menu_name = data['menu_name']
     return Success()
 
-@api.route('/delete', methods=['POST'])
+@api.route('/disable', methods=['POST'])
+@auth.login_required
+def disable_menu():
+    data = request.get_json()
+    id = data['id']
+    type = data['type']
+    with db.auto_commit():
+        menu = Menu.query.get(id)
+        menu.status = type
+    return Success()
+
+@api.route('/delete', methods=['DELETE'])
 @auth.login_required
 def delete_menu():
-    data = request.get_json('id')
+    data = request.get_json()
     with db.auto_commit():
         menu = Menu.query.get(data['id'])
-        menu.status = 0
+        db.session.delete(menu)
     return Success()
 
 
