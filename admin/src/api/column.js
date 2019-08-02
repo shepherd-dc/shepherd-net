@@ -40,10 +40,18 @@ export function editMenu(data) {
   })
 }
 
+export function disableMenu(data) {
+  return request({
+    url: `/menu/disable`,
+    method: 'post',
+    data
+  })
+}
+
 export function deleteMenu(data) {
   return request({
     url: `/menu/delete`,
-    method: 'post',
+    method: 'delete',
     data
   })
 }

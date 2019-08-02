@@ -17,7 +17,7 @@
 
       <el-table-column min-width="300px" label="菜单名">
         <template slot-scope="scope">
-          <template v-if="!scope.row.status">
+          <template v-if="scope.row.btn">
             <el-input v-model="scope.row.menu_name" class="edit-input" size="small"/>
             <el-button class="cancel-btn" size="small" icon="el-icon-refresh" type="warning" @click="cancelEdit(scope.row)">取消</el-button>
           </template>
@@ -25,11 +25,19 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="200">
+      <el-table-column label="状态" class-name="status-col" width="110px" align="center">
         <template slot-scope="scope">
-          <el-button v-if="!scope.row.status" type="success" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(scope.row)">确定</el-button>
-          <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="scope.row.status=!scope.row.status">编辑</el-button>
-          <el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
+          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status === 1 ? '启用' : '禁用' }}</el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="操作" width="300">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.btn" type="success" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(scope.row)">确定</el-button>
+          <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="scope.row.btn=!scope.row.btn">编辑</el-button>
+          <el-button v-if="scope.row.status" size="small" type="warning" icon="el-icon-error" @click="handleDisable(scope.row)">禁用</el-button>
+          <el-button v-else size="small" type="success" icon="el-icon-success" @click="handleEnable(scope.row)">启用</el-button>
+          <el-button size="small" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
 
@@ -56,10 +64,19 @@
 </template>
 
 <script>
-import { menuList, addMenu, editMenu, deleteMenu } from '@/api/column'
+import { menuList, addMenu, editMenu, deleteMenu, disableMenu } from '@/api/column'
 
 export default {
   name: 'InlineEditTablemenu',
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        1: 'success',
+        0: 'danger'
+      }
+      return statusMap[status]
+    }
+  },
   data() {
     return {
       list: null,
@@ -86,12 +103,16 @@ export default {
   methods: {
     async getList() {
       this.listLoading = true
-      const { data } = await menuList()
-      this.list = data
+      const { data } = await menuList({ type: 1 })
+      this.list = data.map(v => {
+        v.btn = 0
+        return v
+      })
+      console.log(this.list)
       this.listLoading = false
     },
     cancelEdit(row) {
-      row.status = 1
+      row.btn = 0
       this.$message({
         message: '取消修改',
         type: 'warning'
@@ -103,7 +124,7 @@ export default {
         menu_name: row.menu_name
       })
       if (data.error_code === 0) {
-        row.status = 1
+        row.btn = 0
         this.$message({
           message: '修改成功',
           type: 'success'
@@ -163,6 +184,48 @@ export default {
         this.$message({
           type: 'info',
           message: '已取消删除'
+        })
+      })
+    },
+    handleEnable(row) {
+      this.$confirm('此操作将启用该菜单, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        await disableMenu({ id: row.id, type: 1 })
+        this.getList()
+        this.$notify({
+          title: '成功',
+          message: '启用成功',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    handleDisable(row) {
+      this.$confirm('此操作将禁用该菜单, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        await disableMenu({ id: row.id, type: 0 })
+        this.getList()
+        this.$notify({
+          title: '成功',
+          message: '禁用成功',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
         })
       })
     }
