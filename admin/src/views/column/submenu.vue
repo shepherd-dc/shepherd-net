@@ -81,13 +81,12 @@
         <el-form-item label="图片" prop="pic">
           <el-upload
             :on-success="handleSuccess"
-            :before-remove="beforeRemove"
             :on-remove="handleRemove"
             :on-exceed="handleExceed"
             :file-list="fileList2"
             :limit="1"
             class="upload-demo"
-            action="/v1/upload/image"
+            action="http://127.0.0.1:5051/v1/upload/image"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
@@ -310,13 +309,10 @@ export default {
         })
       })
     },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除图片吗？`)
-    },
-    handleRemove(file, fileList) {
-      deleteImage(file.response.data.filename)
+    async handleRemove(file, fileList) {
+      console.log(file, fileList)
+      await deleteImage(file.name)
       this.fileList2 = []
-      // console.log(file, fileList)
     },
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择1个文件`)
@@ -329,7 +325,7 @@ export default {
         name: name,
         url: url + '/' + name
       }
-      this.fileList2.push(fileItem)
+      this.fileList2 = [fileItem]
       this.temp.pic = url + '/' + name
     }
   }
