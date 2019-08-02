@@ -81,7 +81,9 @@
         <el-form-item label="图片" prop="pic">
           <el-upload
             :on-success="handleSuccess"
+            :before-remove="beforeRemove"
             :on-remove="handleRemove"
+            :on-exceed="handleExceed"
             :file-list="fileList2"
             :limit="1"
             class="upload-demo"
@@ -214,6 +216,7 @@ export default {
     },
     handleCreate() {
       this.resetTemp()
+      this.fileList2 = []
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -248,6 +251,12 @@ export default {
       this.temp = Object.assign({}, row) // copy obj
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
+      const filename = row.pic.split('/')
+      const name = filename[(filename.length) - 1]
+      this.fileList2 = [{
+        name: name,
+        url: row.pic
+      }]
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
@@ -301,13 +310,27 @@ export default {
         })
       })
     },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除图片吗？`)
+    },
     handleRemove(file, fileList) {
       deleteImage(file.response.data.filename)
+      this.fileList2 = []
       // console.log(file, fileList)
     },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择1个文件`)
+    },
     async handleSuccess(response, file, fileList) {
-      // console.log(response, file)
-      this.temp.pic = response.data.url + '/' + response.data.filename
+      // console.log(response, file, fileList)
+      const name = response.data.filename
+      const url = response.data.url
+      const fileItem = {
+        name: name,
+        url: url + '/' + name
+      }
+      this.fileList2.push(fileItem)
+      this.temp.pic = url + '/' + name
     }
   }
 }
