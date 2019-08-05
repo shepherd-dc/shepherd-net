@@ -86,7 +86,7 @@
             :file-list="fileList2"
             :limit="1"
             class="upload-demo"
-            action="http://127.0.0.1:5051/v1/upload/image"
+            action="/v1/upload/image"
             list-type="picture">
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
@@ -310,7 +310,7 @@ export default {
       })
     },
     async handleRemove(file, fileList) {
-      console.log(file, fileList)
+      // console.log(file, fileList)
       await deleteImage(file.name)
       this.fileList2 = []
     },
