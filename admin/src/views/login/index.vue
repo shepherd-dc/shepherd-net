@@ -54,8 +54,8 @@ export default {
     }
     return {
       loginForm: {
-        account: 'admin',
-        secret: '123456'
+        account: '',
+        secret: ''
       },
       loginRules: {
         account: [{ required: true, trigger: 'blur', validator: validateUsername }],
