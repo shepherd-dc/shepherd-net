@@ -42,7 +42,7 @@ let strSlice = (val, num) => {
   if (val.length < textLength) {
     newStr = val.slice(0, num)
   } else {
-    newStr = val.slice(0, num*2+2)
+    newStr = val.slice(0, num*2)
   }
   return val.length > num ? newStr + '...' : newStr
 }
